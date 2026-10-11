@@ -1,0 +1,213 @@
+{
+ "updated": "2026-10-11T15:20:21+02:00",
+ "files": [
+  {
+   "path": "Barcelona42/Arreglos.md",
+   "name": "Arreglos"
+  },
+  {
+   "path": "Barcelona42/libft/libft - Anexo comparativo.md",
+   "name": "libft - Anexo comparativo"
+  },
+  {
+   "path": "Barcelona42/libft/libft - Índice.md",
+   "name": "libft - Índice"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 1 - Libc/ft_atoi.md",
+   "name": "ft_atoi"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 1 - Libc/ft_bzero.md",
+   "name": "ft_bzero"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 1 - Libc/ft_calloc.md",
+   "name": "ft_calloc"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 1 - Libc/ft_isalnum.md",
+   "name": "ft_isalnum"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 1 - Libc/ft_isalpha.md",
+   "name": "ft_isalpha"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 1 - Libc/ft_isascii.md",
+   "name": "ft_isascii"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 1 - Libc/ft_isdigit.md",
+   "name": "ft_isdigit"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 1 - Libc/ft_isprint.md",
+   "name": "ft_isprint"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 1 - Libc/ft_memchr.md",
+   "name": "ft_memchr"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 1 - Libc/ft_memcmp.md",
+   "name": "ft_memcmp"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 1 - Libc/ft_memcpy.md",
+   "name": "ft_memcpy"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 1 - Libc/ft_memmove.md",
+   "name": "ft_memmove"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 1 - Libc/ft_memset.md",
+   "name": "ft_memset"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 1 - Libc/ft_strchr.md",
+   "name": "ft_strchr"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 1 - Libc/ft_strdup.md",
+   "name": "ft_strdup"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 1 - Libc/ft_strlcat.md",
+   "name": "ft_strlcat"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 1 - Libc/ft_strlcpy.md",
+   "name": "ft_strlcpy"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 1 - Libc/ft_strlen.md",
+   "name": "ft_strlen"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 1 - Libc/ft_strncmp.md",
+   "name": "ft_strncmp"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 1 - Libc/ft_strnstr.md",
+   "name": "ft_strnstr"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 1 - Libc/ft_strrchr.md",
+   "name": "ft_strrchr"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 1 - Libc/ft_tolower.md",
+   "name": "ft_tolower"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 1 - Libc/ft_toupper.md",
+   "name": "ft_toupper"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 2 - Adicionales/ft_itoa.md",
+   "name": "ft_itoa"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 2 - Adicionales/ft_putchar_fd.md",
+   "name": "ft_putchar_fd"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 2 - Adicionales/ft_putendl_fd.md",
+   "name": "ft_putendl_fd"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 2 - Adicionales/ft_putnbr_fd.md",
+   "name": "ft_putnbr_fd"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 2 - Adicionales/ft_putstr_fd.md",
+   "name": "ft_putstr_fd"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 2 - Adicionales/ft_split.md",
+   "name": "ft_split"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 2 - Adicionales/ft_striteri.md",
+   "name": "ft_striteri"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 2 - Adicionales/ft_strjoin.md",
+   "name": "ft_strjoin"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 2 - Adicionales/ft_strmapi.md",
+   "name": "ft_strmapi"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 2 - Adicionales/ft_strtrim.md",
+   "name": "ft_strtrim"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 2 - Adicionales/ft_substr.md",
+   "name": "ft_substr"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 3 - Listas/ft_lstadd_back.md",
+   "name": "ft_lstadd_back"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 3 - Listas/ft_lstadd_front.md",
+   "name": "ft_lstadd_front"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 3 - Listas/ft_lstclear.md",
+   "name": "ft_lstclear"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 3 - Listas/ft_lstdelone.md",
+   "name": "ft_lstdelone"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 3 - Listas/ft_lstiter.md",
+   "name": "ft_lstiter"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 3 - Listas/ft_lstlast.md",
+   "name": "ft_lstlast"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 3 - Listas/ft_lstmap.md",
+   "name": "ft_lstmap"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 3 - Listas/ft_lstnew.md",
+   "name": "ft_lstnew"
+  },
+  {
+   "path": "Barcelona42/libft/Parte 3 - Listas/ft_lstsize.md",
+   "name": "ft_lstsize"
+  },
+  {
+   "path": "Barcelona42/memory_alocation/segmentos_de_memoria_en_c.md",
+   "name": "segmentos_de_memoria_en_c"
+  },
+  {
+   "path": "Notas/Cheatsheet Makefiles y librerías estáticas en C.md",
+   "name": "Cheatsheet Makefiles y librerías estáticas en C"
+  },
+  {
+   "path": "Notas/cheatsheets/Vim-Cheetsheet.md",
+   "name": "Vim-Cheetsheet"
+  },
+  {
+   "path": "Notas/La Norma.md",
+   "name": "La Norma"
+  },
+  {
+   "path": "Notas/stdarg.h_variadic_functions.md",
+   "name": "stdarg.h_variadic_functions"
+  },
+  {
+   "path": "Notas/¿Comó usar printf?.md",
+   "name": "¿Comó usar printf?"
+  }
+ ]
+}

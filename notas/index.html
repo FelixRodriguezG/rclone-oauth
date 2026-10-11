@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Notas de 42</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+<style>
+:root {
+	--bg: #fbfbfa; --panel: #f2f2ef; --fg: #1f2328; --muted: #656d76; --line: #d8dadd;
+	--accent: #0b63ce; --code-bg: #f0f1f3; --hover: #e6e8ea;
+	--c-note: #0b63ce; --c-info: #0b63ce; --c-tip: #1a7f37; --c-warning: #bf6a02;
+	--c-quote: #6e7781; --c-danger: #cf222e; --c-example: #8250df;
+	--sidebar: 300px;
+}
+@media (prefers-color-scheme: dark) {
+	:root {
+		--bg: #141517; --panel: #1b1c1f; --fg: #e6e7e9; --muted: #9198a1; --line: #30333a;
+		--accent: #6aa8ff; --code-bg: #202226; --hover: #26282d;
+		--c-note: #6aa8ff; --c-info: #6aa8ff; --c-tip: #4ac26b; --c-warning: #e3a33a;
+		--c-quote: #9198a1; --c-danger: #ff7b72; --c-example: #b392f0;
+	}
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--fg); }
+body { font: 16px/1.65 system-ui, -apple-system, "Segoe UI", sans-serif; }
+a { color: var(--accent); }
+button { font: inherit; }
+
+.layout { display: grid; grid-template-columns: var(--sidebar) 1fr; min-height: 100vh; }
+aside {
+	position: sticky; top: 0; height: 100vh; overflow-y: auto;
+	background: var(--panel); border-right: 1px solid var(--line); padding: 16px 12px;
+}
+.brand { display: block; font-weight: 700; font-size: 1.05rem; color: var(--fg); text-decoration: none; padding: 4px 8px 12px; }
+#search {
+	width: 100%; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px;
+	background: var(--bg); color: var(--fg); margin-bottom: 12px;
+}
+.tree details { margin-left: 8px; }
+.tree > details { margin-left: 0; }
+.tree summary { cursor: pointer; padding: 3px 6px; border-radius: 6px; color: var(--muted); font-size: .9rem; font-weight: 600; }
+.tree summary:hover { background: var(--hover); }
+.tree a {
+	display: block; padding: 3px 8px 3px 20px; border-radius: 6px; color: var(--fg);
+	text-decoration: none; font-size: .92rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.tree a:hover { background: var(--hover); }
+.tree a.active { background: var(--hover); color: var(--accent); font-weight: 600; }
+.download {
+	display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 8px;
+	background: var(--accent); color: #fff; text-decoration: none; font-weight: 600; font-size: .92rem;
+}
+.download.ghost { background: transparent; color: var(--accent); border: 1px solid var(--line); }
+aside .download { width: 100%; justify-content: center; margin-top: 16px; }
+
+main { min-width: 0; padding: 40px 48px 80px; }
+article { max-width: 780px; margin: 0 auto; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.crumbs { color: var(--muted); font-size: .88rem; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 20px; }
+.tag { font-size: .78rem; padding: 2px 8px; border-radius: 999px; background: var(--hover); color: var(--muted); }
+
+article h1 { font-size: 2rem; line-height: 1.25; margin: .2em 0 .6em; }
+article h2 { font-size: 1.4rem; margin-top: 2em; padding-bottom: .25em; border-bottom: 1px solid var(--line); }
+article h3 { font-size: 1.15rem; margin-top: 1.6em; }
+article :is(h1,h2,h3,h4) { scroll-margin-top: 16px; }
+article img { max-width: 100%; }
+article hr { border: 0; border-top: 1px solid var(--line); margin: 2em 0; }
+article table { border-collapse: collapse; display: block; overflow-x: auto; max-width: 100%; margin: 1em 0; font-size: .93rem; }
+article th, article td { border: 1px solid var(--line); padding: 6px 10px; text-align: left; vertical-align: top; }
+article th { background: var(--panel); }
+article code { font: .88em/1.5 ui-monospace, "SF Mono", Menlo, Consolas, monospace; background: var(--code-bg); padding: .15em .35em; border-radius: 4px; }
+article pre { background: var(--code-bg); padding: 14px 16px; border-radius: 8px; overflow-x: auto; }
+article pre code { background: none; padding: 0; font-size: .86rem; }
+article pre code.hljs { background: none; padding: 0; }
+article blockquote { margin: 1em 0; padding: .2em 1em; border-left: 3px solid var(--line); color: var(--muted); }
+a.broken { color: var(--muted); text-decoration: underline dotted; cursor: help; }
+
+.callout { --c: var(--c-note); margin: 1em 0; padding: 10px 14px; border-radius: 8px; border-left: 4px solid var(--c);
+	background: color-mix(in srgb, var(--c) 9%, transparent); }
+.callout-title { font-weight: 650; color: var(--c); margin-bottom: 4px; }
+.callout > :last-child { margin-bottom: 0; }
+.callout[data-type=info], .callout[data-type=todo] { --c: var(--c-info); }
+.callout[data-type=tip], .callout[data-type=hint], .callout[data-type=success], .callout[data-type=check], .callout[data-type=done] { --c: var(--c-tip); }
+.callout[data-type=warning], .callout[data-type=caution], .callout[data-type=attention], .callout[data-type=question], .callout[data-type=faq], .callout[data-type=help] { --c: var(--c-warning); }
+.callout[data-type=quote], .callout[data-type=cite] { --c: var(--c-quote); }
+.callout[data-type=danger], .callout[data-type=error], .callout[data-type=bug], .callout[data-type=failure], .callout[data-type=fail] { --c: var(--c-danger); }
+.callout[data-type=example] { --c: var(--c-example); }
+
+.home h1 { margin-bottom: .2em; }
+.lead { color: var(--muted); margin-top: 0; }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin: 24px 0; }
+.card { display: block; padding: 16px; border: 1px solid var(--line); border-radius: 10px; color: var(--fg); text-decoration: none; background: var(--panel); }
+.card:hover { border-color: var(--accent); }
+.card b { display: block; font-size: 1.05rem; }
+.card span { color: var(--muted); font-size: .88rem; }
+
+#menu { display: none; }
+@media (max-width: 860px) {
+	.layout { grid-template-columns: 1fr; }
+	aside { position: fixed; inset: 0 auto 0 0; width: min(85vw, 320px); z-index: 10; transform: translateX(-100%); transition: transform .2s; }
+	body.open aside { transform: none; box-shadow: 0 0 0 100vmax rgba(0,0,0,.35); }
+	main { padding: 64px 16px 64px; }
+	#menu { display: block; position: fixed; top: 12px; left: 12px; z-index: 11; padding: 6px 12px; border-radius: 8px;
+		border: 1px solid var(--line); background: var(--panel); color: var(--fg); }
+}
+</style>
+</head>
+<body>
+<button id="menu" aria-label="Abrir índice">☰ Notas</button>
+<div class="layout">
+	<aside>
+		<a class="brand" href="#/">📓 Notas de 42</a>
+		<input id="search" type="search" placeholder="Buscar nota…" aria-label="Buscar nota">
+		<nav class="tree" id="tree"></nav>
+		<a class="download" href="notas-obsidian.zip" download>⬇ Descargar todo (.zip)</a>
+	</aside>
+	<main><article id="content"><p>Cargando…</p></article></main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>
+const CONTENT = 'content/';
+let manifest = null;
+const byName = new Map();   // nombre de nota (sin .md, minúsculas) → [rutas]
+
+const enc = (p) => p.split('/').map(encodeURIComponent).join('/');
+const esc = (s) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const slug = (s) => s.trim().toLowerCase().replace(/[^\p{L}\p{N}\s-]/gu, '').replace(/\s/g, '-');
+const dir = (p) => p.includes('/') ? p.slice(0, p.lastIndexOf('/')) : '';
+const vault = (p) => p.split('/')[0];
+
+// Resuelve un wikilink como Obsidian: por nombre, prefiriendo la misma bóveda.
+function resolve(target, from) {
+	const t = target.trim().replace(/\.md$/i, '');
+	if (t.includes('/')) {
+		const full = manifest.files.find((f) => f.path.replace(/\.md$/i, '').endsWith(t));
+		if (full) return full.path;
+	}
+	const hits = byName.get(t.split('/').pop().toLowerCase()) || [];
+	return hits.find((p) => vault(p) === vault(from)) || hits[0] || null;
+}
+
+function parseFrontmatter(src) {
+	const m = src.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?/);
+	if (!m) return { body: src, tags: [] };
+	const yaml = m[1];
+	let tags = [];
+	const inline = yaml.match(/^tags:\s*\[(.*)\]\s*$/m);
+	if (inline) tags = inline[1].split(',');
+	else {
+		const block = yaml.match(/^tags:\s*\r?\n((?:\s+-\s*.*\r?\n?)+)/m);
+		if (block) tags = block[1].split('\n').map((l) => l.replace(/^\s*-\s*/, ''));
+	}
+	tags = tags.map((t) => t.trim().replace(/^["']|["']$/g, '')).filter(Boolean);
+	return { body: src.slice(m[0].length), tags };
+}
+
+// Convierte la sintaxis de Obsidian fuera de los bloques de código.
+function obsidianToMd(src, from) {
+	return src.split(/(^```[\s\S]*?^```)/m).map((part, i) => {
+		if (i % 2) return part;
+		const codes = [];
+		part = part.replace(/`[^`\n]+`/g, (c) => `\u0000${codes.push(c) - 1}\u0000`);
+		part = part.replace(/(!?)\[\[([^\]]+?)\]\]/g, (_, bang, inner) => {
+			const [rawTarget, alias] = inner.split(/\\?\|/);
+			const [target, heading] = rawTarget.split('#');
+			if (bang) {
+				const img = resolve(target, from) || (dir(from) ? dir(from) + '/' : '') + target;
+				return `![${alias || target}](${CONTENT}${enc(img)})`;
+			}
+			const label = alias || (heading && !target ? heading : target);
+			if (!target && heading) return `[${label}](#${slug(heading)})`;
+			const path = resolve(target, from);
+			if (!path) return `<a class="broken" title="Nota no publicada">${esc(label)}</a>`;
+			return `[${label}](#/${enc(path)}${heading ? '::' + slug(heading) : ''})`;
+		});
+		return part.replace(/\u0000(\d+)\u0000/g, (_, n) => codes[n]);
+	}).join('');
+}
+
+// > [!tipo] Título  →  caja de callout
+function renderCallouts(root) {
+	root.querySelectorAll('blockquote').forEach((bq) => {
+		const p = bq.firstElementChild;
+		if (!p || p.tagName !== 'P') return;
+		const m = p.innerHTML.match(/^\s*\[!([\w-]+)\][+-]?[ \t]*([^\n]*)(?:\n|<br>)?([\s\S]*)$/);
+		if (!m) return;
+		const type = m[1].toLowerCase();
+		const box = document.createElement('div');
+		box.className = 'callout';
+		box.dataset.type = type;
+		const title = document.createElement('div');
+		title.className = 'callout-title';
+		title.innerHTML = m[2].trim() || type.charAt(0).toUpperCase() + type.slice(1);
+		box.append(title);
+		if (m[3].trim()) { p.innerHTML = m[3]; } else { p.remove(); }
+		box.append(...bq.childNodes);
+		bq.replaceWith(box);
+	});
+}
+
+function buildTree(filter = '') {
+	const q = filter.trim().toLowerCase();
+	const root = {};
+	for (const f of manifest.files) {
+		if (!f.path.endsWith('.md')) continue;
+		if (q && !f.path.toLowerCase().includes(q)) continue;
+		const parts = f.path.split('/');
+		let node = root;
+		for (const d of parts.slice(0, -1)) node = (node[d] ||= {});
+		(node['\u0000files'] ||= []).push(f);
+	}
+	const render = (node, depth) => {
+		let html = '';
+		for (const name of Object.keys(node).filter((k) => k !== '\u0000files').sort((a, b) => a.localeCompare(b, 'es'))) {
+			html += `<details${q || depth === 0 ? ' open' : ''}><summary>${esc(name)}</summary>${render(node[name], depth + 1)}</details>`;
+		}
+		for (const f of (node['\u0000files'] || []).sort((a, b) => a.name.localeCompare(b.name, 'es', { numeric: true }))) {
+			html += `<a href="#/${enc(f.path)}" data-path="${esc(f.path)}" title="${esc(f.name)}">${esc(f.name)}</a>`;
+		}
+		return html;
+	};
+	document.getElementById('tree').innerHTML = render(root, 0) || '<p class="crumbs">Sin resultados</p>';
+	markActive();
+}
+
+function markActive() {
+	const cur = currentPath();
+	document.querySelectorAll('.tree a').forEach((a) => {
+		const on = a.dataset.path === cur;
+		a.classList.toggle('active', on);
+		if (on) for (let d = a.parentElement; d && d.tagName === 'DETAILS'; d = d.parentElement.closest('details')) d.open = true;
+	});
+}
+
+function currentPath() {
+	const h = decodeURIComponent(location.hash.replace(/^#\/?/, ''));
+	return h.split('::')[0];
+}
+
+function home() {
+	const vaults = [...new Set(manifest.files.map((f) => vault(f.path)))];
+	const count = (v) => manifest.files.filter((f) => f.path.startsWith(v + '/') && f.path.endsWith('.md')).length;
+	const first = (v) => {
+		const idx = manifest.files.find((f) => f.path.startsWith(v + '/') && /índice|index|readme/i.test(f.name));
+		return idx || manifest.files.find((f) => f.path.startsWith(v + '/') && f.path.endsWith('.md'));
+	};
+	const updated = new Date(manifest.updated).toLocaleString('es-ES', { dateStyle: 'long', timeStyle: 'short' });
+	document.title = 'Notas de 42';
+	document.getElementById('content').innerHTML = `
+		<div class="home">
+			<h1>Notas de 42</h1>
+			<p class="lead">Apuntes de estudio del cursus de 42 Barcelona, escritos en Obsidian. Actualizado el ${esc(updated)}.</p>
+			<div class="cards">${vaults.map((v) => `
+				<a class="card" href="#/${enc(first(v).path)}"><b>${esc(v)}</b><span>${count(v)} notas</span></a>`).join('')}
+			</div>
+			<p><a class="download" href="notas-obsidian.zip" download>⬇ Descargar todas las notas (.zip)</a></p>
+			<p class="crumbs">El .zip contiene los archivos Markdown originales: ábrelo como bóveda en Obsidian o léelo con cualquier editor.</p>
+		</div>`;
+}
+
+async function show() {
+	const path = currentPath();
+	const anchor = decodeURIComponent(location.hash).split('::')[1];
+	document.body.classList.remove('open');
+	markActive();
+	if (!path) return home();
+	const file = manifest.files.find((f) => f.path === path);
+	const out = document.getElementById('content');
+	if (!file) { out.innerHTML = '<h1>Nota no encontrada</h1><p><a href="#/">Volver al inicio</a></p>'; return; }
+	const res = await fetch(CONTENT + enc(path));
+	const { body, tags } = parseFrontmatter(await res.text());
+	const html = DOMPurify.sanitize(marked.parse(obsidianToMd(body, path)), { ADD_ATTR: ['target'] });
+	const crumbs = path.split('/').slice(0, -1).map(esc).join(' / ');
+	out.innerHTML = `
+		<div class="toolbar">
+			<span class="crumbs">${crumbs}</span>
+			<a class="download ghost" href="${CONTENT + enc(path)}" download="${esc(file.name)}.md">⬇ .md</a>
+		</div>
+		${tags.length ? `<div class="tags">${tags.map((t) => `<span class="tag">#${esc(t)}</span>`).join('')}</div>` : ''}
+		<div id="note">${html}</div>`;
+	const note = document.getElementById('note');
+	if (!note.querySelector('h1')) note.insertAdjacentHTML('afterbegin', `<h1>${esc(file.name)}</h1>`);
+	renderCallouts(note);
+	note.querySelectorAll('h1,h2,h3,h4,h5,h6').forEach((h) => { h.id ||= slug(h.textContent); });
+	note.querySelectorAll('pre code').forEach((c) => hljs.highlightElement(c));
+	note.querySelectorAll('a[href]').forEach((a) => {
+		const href = a.getAttribute('href');
+		if (/^https?:/.test(href)) { a.target = '_blank'; a.rel = 'noopener'; return; }
+		if (href.startsWith('#') && !href.startsWith('#/')) {
+			a.addEventListener('click', (e) => {
+				e.preventDefault();
+				document.getElementById(decodeURIComponent(href.slice(1)))?.scrollIntoView({ behavior: 'smooth' });
+			});
+		} else if (/\.md(#.*)?$/i.test(href) && !href.startsWith('#')) {
+			const target = resolve(decodeURIComponent(href.split('#')[0]).split('/').pop(), path);
+			if (target) a.setAttribute('href', '#/' + enc(target));
+		}
+	});
+	document.title = `${file.name} · Notas de 42`;
+	if (anchor) document.getElementById(anchor)?.scrollIntoView();
+	else window.scrollTo(0, 0);
+}
+
+document.getElementById('menu').addEventListener('click', () => document.body.classList.toggle('open'));
+document.getElementById('search').addEventListener('input', (e) => buildTree(e.target.value));
+window.addEventListener('hashchange', show);
+
+fetch('manifest.json').then((r) => r.json()).then((m) => {
+	manifest = m;
+	for (const f of m.files) {
+		if (!f.path.endsWith('.md')) continue;
+		const k = f.name.toLowerCase();
+		byName.set(k, [...(byName.get(k) || []), f.path]);
+	}
+	buildTree();
+	show();
+}).catch(() => {
+	document.getElementById('content').innerHTML = '<h1>No se pudo cargar el índice de notas</h1>';
+});
+</script>
+</body>
+</html>
