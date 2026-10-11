@@ -124,8 +124,8 @@ Estas banderas solo se piden en el **bonus** de ft_printf.
 > 4. **Promoción de tipos**: con `va_arg`, `char` y `short` llegan como `int`. Pide siempre `va_arg(args, int)` para `%c`.
 
 - ft_printf usa las macros de `<stdarg.h>`: `va_start`, `va_arg` y `va_end` (y `va_copy` si la necesitas). Ver [[stdarg y funciones variádicas]].
-- Para escribir se usa `write`, igual que en `ft_putchar_fd` y `ft_putnbr_fd` de libft.
+- Para escribir se usa `write`, igual que en [[ft_putchar_fd]] y [[ft_putnbr_fd]] de libft.
 
 ## Relacionadas
 
-[[stdarg y funciones variádicas]] · [[La Norma]]
+[[stdarg y funciones variádicas]] · [[Control de errores en C]] · [[ft_putstr_fd]] · [[La Norma]]

@@ -93,4 +93,4 @@ Para trabajar con tu `.c` y tu `.h` al mismo tiempo:
 
 ## Relacionadas
 
-[[La Norma]] · [[Makefile y librerías estáticas]]
+[[La Norma]] · [[Makefile y librerías estáticas]] · [[Depurar con gdb]]

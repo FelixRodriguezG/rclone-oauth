@@ -112,4 +112,4 @@ En ft_printf recorres la cadena de formato carácter a carácter. Cada vez que e
 
 ## Relacionadas
 
-[[printf]] · [[La Norma]]
+[[printf]] · [[Depurar con gdb]] · [[La Norma]]

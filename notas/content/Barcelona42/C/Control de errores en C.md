@@ -78,7 +78,7 @@ char	**dup_all(char **src, size_t n)
 ```
 
 > [!note] Sin `goto`
-> En C es habitual limpiar con `goto cleanup;`, pero la Norma de 42 prohíbe `goto`. La alternativa es una **función auxiliar de limpieza** que libere y devuelva `NULL`, para poder escribir `return (free_partial(arr, i));` en una sola línea.
+> En C es habitual limpiar con `goto cleanup;`, pero la [[La Norma|Norma]] de 42 prohíbe `goto`. La alternativa es una **función auxiliar de limpieza** que libere y devuelva `NULL`, para poder escribir `return (free_partial(arr, i));` en una sola línea.
 
 ## 3. Llamadas al sistema: `-1` y `errno`
 
@@ -146,7 +146,7 @@ Algunos errores no avisan: el número simplemente da la vuelta.
 
 ## 6. Informar del error y salir
 
-- Los mensajes de error van a la **salida de error (fd 2)**, no a la estándar: `ft_putstr_fd("Error\n", 2);`. Así no se mezclan con la salida normal del programa.
+- Los mensajes de error van a la **salida de error (fd 2)**, no a la estándar: `ft_putstr_fd("Error\n", 2);` (ver [[ft_putstr_fd]]). Así no se mezclan con la salida normal del programa.
 - El código de salida le dice al sistema si todo fue bien: `return (EXIT_SUCCESS);` (0) o `return (EXIT_FAILURE);` (1), definidos en `<stdlib.h>`.
 - Muchos subjects piden un mensaje exacto, por ejemplo `"Error\n"`. Respétalo al pie de la letra.
 - Antes de salir por un error, **libera lo que tengas reservado**: el sistema recupera la memoria al terminar, pero valgrind lo marcará y en la evaluación cuenta como leak.
@@ -186,4 +186,4 @@ código de salida: 1
 
 ## Relacionadas
 
-[[Depurar con gdb]] · [[Segmentos de memoria en C]] · [[Arrays en C]] · [[libft - Anexo comparativo]]
+[[Depurar con gdb]] · [[Segmentos de memoria en C]] · [[Arrays en C]] · [[La Norma]] · [[libft - Anexo comparativo]]

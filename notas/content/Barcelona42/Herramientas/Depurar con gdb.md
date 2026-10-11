@@ -20,7 +20,7 @@ cc -Wall -Wextra -Werror -g -O0 main.c -o prog
 - **`-O0`** desactiva las optimizaciones, para que el código ejecutado coincida con el que escribiste. Si optimizas, gdb muestra variables como `<optimized out>`.
 
 > [!warning] No entregues con `-g`
-> Úsalo solo mientras depuras. El Makefile que entregas debe tener las banderas que pide el subject.
+> Úsalo solo mientras depuras. El Makefile que entregas debe tener las banderas que pide el subject (ver [[Makefile y librerías estáticas]]).
 
 ## 2. Arrancar
 
@@ -261,4 +261,4 @@ Cuando termines, vuelve a compilar normal con `make re`.
 
 ## Relacionadas
 
-[[Control de errores en C]] · [[Segmentos de memoria en C]] · [[Arrays en C]]
+[[Control de errores en C]] · [[Segmentos de memoria en C]] · [[Makefile y librerías estáticas]] · [[Vim]]

@@ -1,6 +1,10 @@
 {
- "updated": "2026-10-11T15:35:59+02:00",
+ "updated": "2026-10-11T15:43:39+02:00",
  "files": [
+  {
+   "path": "Barcelona42/42/La Norma.md",
+   "name": "La Norma"
+  },
   {
    "path": "Barcelona42/C/Arrays en C.md",
    "name": "Arrays en C"
@@ -10,12 +14,28 @@
    "name": "Control de errores en C"
   },
   {
+   "path": "Barcelona42/C/printf.md",
+   "name": "printf"
+  },
+  {
    "path": "Barcelona42/C/Segmentos de memoria en C.md",
    "name": "Segmentos de memoria en C"
   },
   {
+   "path": "Barcelona42/C/stdarg y funciones variádicas.md",
+   "name": "stdarg y funciones variádicas"
+  },
+  {
    "path": "Barcelona42/Herramientas/Depurar con gdb.md",
    "name": "Depurar con gdb"
+  },
+  {
+   "path": "Barcelona42/Herramientas/Makefile y librerías estáticas.md",
+   "name": "Makefile y librerías estáticas"
+  },
+  {
+   "path": "Barcelona42/Herramientas/Vim.md",
+   "name": "Vim"
   },
   {
    "path": "Barcelona42/Inicio.md",
@@ -200,30 +220,6 @@
   {
    "path": "Barcelona42/libft/Parte 3 - Listas/ft_lstsize.md",
    "name": "ft_lstsize"
-  },
-  {
-   "path": "Notas/42/La Norma.md",
-   "name": "La Norma"
-  },
-  {
-   "path": "Notas/C/printf.md",
-   "name": "printf"
-  },
-  {
-   "path": "Notas/C/stdarg y funciones variádicas.md",
-   "name": "stdarg y funciones variádicas"
-  },
-  {
-   "path": "Notas/Herramientas/Makefile y librerías estáticas.md",
-   "name": "Makefile y librerías estáticas"
-  },
-  {
-   "path": "Notas/Herramientas/Vim.md",
-   "name": "Vim"
-  },
-  {
-   "path": "Notas/Inicio.md",
-   "name": "Inicio"
   }
  ]
 }

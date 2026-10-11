@@ -152,5 +152,9 @@ La `norminette` no revisa el Makefile: lo revisa quien te evalúa.
 
 Más detalle en [[Makefile y librerías estáticas]].
 
+## Relacionadas
+
+[[Arrays en C]] · [[Control de errores en C]] · [[Vim]] · [[Makefile y librerías estáticas]]
+
 ---
-*Fuente: La Norma, versión 4 (PDF oficial de 42, en español), copia en la bóveda Barcelona42, carpeta `Normativa 42/es.norm-2.pdf`. Repositorio de la norminette: https://github.com/42School/norminette*
+*Fuente: La Norma, versión 4 (PDF oficial de 42, en español): [[Normativa 42/es.norm-2.pdf|es.norm-2.pdf]]. Repositorio de la norminette: https://github.com/42School/norminette*

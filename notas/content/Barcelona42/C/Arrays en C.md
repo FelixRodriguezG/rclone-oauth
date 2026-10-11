@@ -38,7 +38,7 @@ dirección  0x1000      0x1004      0x1008      0x100C
 | `char s[] = "hola";` | `{'h', 'o', 'l', 'a', '\0'}`: **5** bytes, incluye el `'\0'` |
 
 > [!note] La Norma de 42
-> La Norma de 42 **prohíbe declarar e inicializar en la misma línea** dentro de una función, así que en tus proyectos se declara arriba y se rellena después:
+> La [[La Norma|Norma de 42]] **prohíbe declarar e inicializar en la misma línea** dentro de una función, así que en tus proyectos se declara arriba y se rellena después:
 > ```c
 > int	arr[4];
 >
@@ -155,4 +155,4 @@ No confundir con un **array de punteros** como el que devuelve [[ft_split]] (`ch
 
 ## Relacionadas
 
-[[Segmentos de memoria en C]] · [[libft - Anexo comparativo]] · [[ft_calloc]] · [[ft_split]]
+[[Segmentos de memoria en C]] · [[Control de errores en C]] · [[La Norma]] · [[libft - Anexo comparativo]] · [[ft_calloc]] · [[ft_split]]

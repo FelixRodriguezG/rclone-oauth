@@ -114,6 +114,8 @@ typedef struct s_list
 - Sin leaks, y ninguna función debe crashear salvo en casos de comportamiento indefinido.
 - Hace falta un `README.md` (primera línea en cursiva: *Este proyecto ha sido creado como parte del currículo de 42 por <login>*).
 
+Más detalle en [[La Norma]] y [[Makefile y librerías estáticas]].
+
 ## Progreso
 
 Cada nota tiene la propiedad `estado` (`hecho` / `pendiente`). Cámbiala al terminar una función.
