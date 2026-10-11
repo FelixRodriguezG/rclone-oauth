@@ -1,4 +1,9 @@
-# Estándar 42 / Libft
+---
+tags: [42, makefile, make, ar, libft]
+---
+# Makefile y librerías estáticas
+
+[[Inicio|← Inicio]] · Herramientas
 
 Esta guía cubre desde los conceptos esenciales hasta los errores más comunes que causan suspensos automáticos en las evaluaciones de 42 (como el temido relink o fallos de tabulación).
 
@@ -51,7 +56,8 @@ objetivo: prerrequisito1 prerrequisito2
 
 ## 3. El Tabulador: La Regla de Oro que no perdona
 
-> ⚠️ **Make fue creado en 1976 y exige estrictamente un caracter de tabulación real (`\t`) al inicio de cada línea de comando.**
+> [!warning] Make exige un tabulador real
+> Make fue creado en 1976 y exige estrictamente un carácter de tabulación real (`\t`) al inicio de cada línea de comando.
 
 * Si usas **4 espacios** en vez de una tabulación, Make fallará inmediatamente con:
   ```text
@@ -152,6 +158,9 @@ OBJS = $(SRCS:.c=.o)
 # Transforma automáticamente cada 'srcs/archivo.c' en 'srcs/archivo.o'
 ```
 
+> [!warning] Nada de comodines
+> La Norma exige que **todos los archivos fuente estén nombrados explícitamente**. Están prohibidos `SRCS = *.c` y `$(wildcard src/*.c)`, aunque funcionen.
+
 ---
 
 ## 8. La Bandera -I y la Detección Real de Cambios en Headers
@@ -177,7 +186,7 @@ HEADER = includes/libft.h
 
 ## 9. Librerías Estáticas y el Comando ar
 
-Una librería estática (`.a`) es simplemente un archivo comprimido o contenedor que empaqueta múltiples binarios objeto (`.o`) juntos.
+Una librería estática (`.a`) es simplemente un **archivo contenedor** (no comprimido) que empaqueta múltiples binarios objeto (`.o`) juntos.
 
 Para generarla en 42 usamos:
 ```makefile
@@ -210,7 +219,8 @@ Para indicarle a Make que un objetivo es una **acción** y no un archivo real de
 
 ## 11. El Relink: Qué es, por qué suspende y cómo evitarlo
 
-> 🛑 **Causa directa de 0 en Moulinette y evaluaciones entre compañeros.**
+> [!danger] Proyecto no funcional
+> Según la [[La Norma|Norma]], si el Makefile hace relink el proyecto se considera **no funcional**: es un 0 directo en la evaluación.
 
 ### ¿Qué es el relink?
 Hacer relink significa que Make ejecuta comandos de compilación o empaquetado **cuando nada en el código ha cambiado**.
@@ -322,7 +332,6 @@ CFLAGS      = -Wall -Wextra -Werror
 AR          = ar rcs
 RM          = rm -f
 
-HE
 INC_DIR     = includes
 SRC_DIR     = src
 
@@ -424,23 +433,30 @@ OBJS_BONUS      = $(SRCS_BONUS:.c=.o)
 all: $(NAME)
 
 # Regla estándar: solo compila la parte obligatoria
-$(NAME): $(OBJS_MANDATORY)$(AR) $@ $^
+$(NAME): $(OBJS_MANDATORY)
+	$(AR) $@ $^
 
 # Regla bonus: depende del archivo centinela .bonus
 bonus: .bonus
 
 # .bonus depende de los objetos obligatorios Y de los bonus
 # Si ninguno ha cambiado, touch no se ejecuta y no hay relink
-.bonus: $(OBJS_MANDATORY) $(OBJS_BONUS)$(AR) $(NAME)$^
+.bonus: $(OBJS_MANDATORY) $(OBJS_BONUS)
+	$(AR) $(NAME) $^
 	@touch .bonus
 
-%.o: %.c $(HEADER)$(CC) $(CFLAGS)$(INCLUDES) -c $< -o$@
+%.o: %.c $(HEADER)
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
-	$(RM) $(OBJS_MANDATORY)$(OBJS_BONUS) .bonus
+	$(RM) $(OBJS_MANDATORY) $(OBJS_BONUS) .bonus
 
 fclean: clean
-	$(RM)$(NAME)
+	$(RM) $(NAME)
 
 re: fclean all
 ```
+
+## Relacionadas
+
+[[La Norma]] · [[Vim]]

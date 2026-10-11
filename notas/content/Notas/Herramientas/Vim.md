@@ -1,6 +1,11 @@
-# 📚 Cheatsheet: Vim & 42 Cursus
+---
+tags: [42, vim, herramientas, cheatsheet]
+---
+# Vim
 
-> **Nota:** Puedes usar este cheatsheet directamente en Obsidian o copiar los bloques de código para tu `.vimrc` en el Mac del cluster.
+[[Inicio|← Inicio]] · Herramientas
+
+> Cheatsheet de Vim para el cursus de 42. Copia el bloque de configuración en tu `~/.vimrc` del Mac del cluster.
 
 ## ⚙️ 1. Configuración del `.vimrc` (Para 42)
 Copia este contenido en tu archivo `~/.vimrc`:
@@ -9,7 +14,7 @@ Copia este contenido en tu archivo `~/.vimrc`:
 syntax on
 filetype plugin indent on
 
-" --- CONFIGURACIÓN DE 42 ---
+" --- CONFIGURACIÓN DE 42 (datos para la cabecera :Stdheader / F1) ---
 let $USER = 'felixrod'
 let $MAIL = 'tu_login@student.42barcelona.com'
 
@@ -36,11 +41,21 @@ set encoding=utf-8    " Evita caracteres raros
 autocmd BufWritePre *.c,*.h %s/\s\+$//e  " Borra espacios al final al guardar
 autocmd BufWritePost ~/.vimrc source %   " Recarga el vimrc al guardarlo
 ```
+
+> [!tip] Cabecera de 42
+> Con `$USER` y `$MAIL` configurados, `:Stdheader` (o `F1`) inserta la cabecera obligatoria de la [[La Norma|Norma]] y la actualiza al guardar.
+
 ## ⌨️ 2. Modos de Vim
 * `Esc` -> **Modo Normal**: Moverse, borrar, ejecutar comandos.
 * `i` -> **Modo Inserción**: Escribir código.
 * `v` / `V` -> **Modo Visual**: Seleccionar texto o líneas.
 * `:` -> **Modo Comando**: Guardar, salir, ejecutar terminal.
+
+### Guardar y salir
+* `:w` -> Guardar.
+* `:q` -> Salir (falla si hay cambios sin guardar).
+* `:wq` o `:x` -> Guardar y salir.
+* `:q!` -> Salir **descartando** los cambios.
 
 ## 🚀 3. Movimientos Rápidos
 * `h`, `j`, `k`, `l` -> Izquierda, abajo, arriba, derecha.
@@ -63,7 +78,7 @@ Para trabajar con tu `.c` y tu `.h` al mismo tiempo:
 
 * `:sp [archivo]` -> Divide la pantalla horizontalmente.
 * `:vsp [archivo]` -> Divide la pantalla verticalmente (¡perfecto para 42!).
-* `Ctrl + w` + flechas -> Moverse entre las divisiones.
+* `Ctrl + w` + flechas (o `h`/`j`/`k`/`l`) -> Moverse entre las divisiones.
 * `:q` -> Cerrar división actual.
 * `:tabnew [archivo]` -> Abrir en una pestaña nueva.
 * `gt` / `gT` -> Cambiar de pestaña (siguiente / anterior).
@@ -73,4 +88,9 @@ Para trabajar con tu `.c` y tu `.h` al mismo tiempo:
 ## 🔍 6. Búsqueda y Compilación
 * `/palabra` -> Buscar texto (pulsa `n` para la siguiente coincidencia).
 * `:%s/antiguo/nuevo/g` -> Reemplazar texto globalmente.
-* `!make` -> Ejecutar comandos de la shell sin salir de Vim.
+* `:!make` -> Ejecutar un comando de la shell sin salir de Vim (aquí, compilar).
+* `:!norminette %` -> Pasar la norminette al archivo actual (`%` = archivo abierto).
+
+## Relacionadas
+
+[[La Norma]] · [[Makefile y librerías estáticas]]

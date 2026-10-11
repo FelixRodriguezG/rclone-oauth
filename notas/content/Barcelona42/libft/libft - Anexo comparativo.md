@@ -76,7 +76,7 @@ tags: [libft, anexo]
 - **toupper / tolower:** si el carácter no es letra del caso contrario, lo devuelven **sin cambios** (no hace falta comprobarlo antes).
 - **strmapi vs striteri:** son la pareja «copia vs en el sitio».
   - [[ft_strmapi]] ✅ conserva el original, ✅ funciona con literales (`"hola"`), ❌ cuesta un `malloc` y hay que hacer `free`.
-  - [[ft_striteri]] ✅ sin memoria extra, ❌ destruye el original, ❌ **crashea con literales** (están en memoria de solo lectura, ver [[segmentos_de_memoria_en_c]]).
+  - [[ft_striteri]] ✅ sin memoria extra, ❌ destruye el original, ❌ **crashea con literales** (están en memoria de solo lectura, ver [[Segmentos de memoria en C]]).
   - Ambas pasan el **índice** a `f`, así que puedes hacer transformaciones que dependen de la posición (alternar mayúsculas, etc.).
 
 ## 3. Inicializar memoria

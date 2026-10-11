@@ -1,5 +1,4 @@
 ---
-title: Segmentos de Memoria en C
 date: 2026-10-04
 tags:
   - c
@@ -10,15 +9,18 @@ tags:
   - cursus
   - low-level
 ---
+# Segmentos de memoria en C
 
-> [!summary] Resumen Ejecutivo
-> El espacio de direcciones virtuales de un proceso en C está segmentado en **5 regiones principales** más la región de entorno:
+[[Inicio|← Inicio]] · C
+
+> [!summary] Resumen
+> El espacio de direcciones virtual de un proceso en C se divide en **5 segmentos principales**, más la zona de argumentos y entorno en la parte alta:
 > 1. **Argumentos / Entorno (`argc`, `argv`, `envp`):** Cúspide del espacio de direcciones del usuario.
 > 2. **STACK (Pila):** Memoria LIFO de alta velocidad para marcos de función, variables locales y parámetros. Crece hacia abajo.
 > 3. **HEAP (Montículo):** Memoria dinámica administrada manualmente (`malloc`/`free`). Crece hacia arriba.
 > 4. **BSS:** Variables globales/estáticas **NO inicializadas** (o igualadas a cero). El SO las inicializa en 0.
 > 5. **DATA:** Variables globales/estáticas **inicializadas** con un valor distinto de cero.
-> 6. **TEXT (Code):** Código máquina ejecutable y literales de cadena (*string literals*). Solo lectura.
+> 6. **TEXT (Code) y RODATA:** Código máquina ejecutable y datos de solo lectura, como los literales de cadena (*string literals*).
 
 ---
 
@@ -33,6 +35,8 @@ Representación gráfica de la disposición de la memoria de un proceso de 32/64
   |                  STACK                  |  <-- Crece hacia abajo (Direcciones Menores)
   |                    |                    |      Estructura LIFO (Frame Pointer / Stack Pointer)
   |                    v                    |
+  |                                         |
+  |       mmap / librerías compartidas      |  <-- libc.so, malloc grandes, etc.
   |                                         |
   |                    ^                    |
   |                    |                    |
@@ -73,7 +77,7 @@ Representación gráfica de la disposición de la memoria de un proceso de 32/64
       int local = 42;          // 'local' vive en el Stack Frame de funcion()
   }                            // Al salir, el Stack Pointer se ajusta y se liberan
   ```
-- **Riesgo:** [[Stack Overflow]] (por recursión infinita o arreglos gigantes en el Stack como `int array[1000000]`).
+- **Riesgo:** *Stack overflow*, por recursión infinita o [[Arrays en C|arrays]] gigantes en el Stack como `int array[1000000]` (ver la sección 6.B).
 
 ### 2.3. Segmento Heap (Memoria Dinámica)
 - **Propósito:** Almacenamiento de variables y estructuras cuyo tamaño o duración no se conocen en tiempo de compilación.
@@ -88,7 +92,7 @@ Representación gráfica de la disposición de la memoria de un proceso de 32/64
       ptr = NULL;                              // Buenísimo evitar dangling pointers
   }
   ```
-- **Riesgo:** [[Fugas de Memoria]] (*Memory Leaks*), *Use-After-Free*, *Double Free*.
+- **Riesgo:** fugas de memoria (*memory leaks*), *use-after-free*, *double free* (ver la sección 6).
 
 ### 2.4. Segmento BSS (*Block Started by Symbol*)
 - **Propósito:** Variables globales y variables estáticas (`static`) que **NO han sido inicializadas explícitamente** por el programador (o inicializadas a cero).
@@ -109,12 +113,12 @@ Representación gráfica de la disposición de la memoria de un proceso de 32/64
   ```
 
 ### 2.6. Segmento Text (Code Segment)
-- **Propósito:** Contiene el código en instrucciones máquina compiladas que ejecuta el procesador, así como las cadenas de texto literales (*string literals*).
+- **Propósito:** Contiene el código en instrucciones máquina compiladas que ejecuta el procesador. Junto a él está la sección **`.rodata`** (*read-only data*), donde van los literales de cadena (*string literals*) y las constantes globales. Técnicamente `.rodata` no es TEXT, pero también es de solo lectura y en la práctica se agrupan.
 - **Permisos:** **Read-Only** (Solo lectura) y **Executable** (Ejecutable).
 - **Protección:** Cualquier intento de escribir en este segmento provocará una interrupción por fallo de protección de memoria (**Segmentation Fault / SIGSEGV**).
 - **Ejemplo en C:**
   ```c
-  char *str = "Hola 42"; // "Hola 42" es una constante en TEXT.
+  char *str = "Hola 42"; // "Hola 42" es una constante en .rodata (solo lectura).
                          // 'str' es un puntero en el Stack/Data apuntando a TEXT.
   ```
 
@@ -134,12 +138,12 @@ Representación gráfica de la disposición de la memoria de un proceso de 32/64
 
 ### 3.2. Relación con Especificadores de Almacenamiento en C (*Storage Classes*)
 
-- **`static` (Local):** Cambia la ubicación de la variable local del **Stack** al segmento **DATA** (si tiene valor initial != 0) o **BSS** (si no). Preserva su valor entre llamadas a la función.
+- **`static` (Local):** Cambia la ubicación de la variable local del **Stack** al segmento **DATA** (si tiene valor inicial != 0) o **BSS** (si no). Preserva su valor entre llamadas a la función.
 - **`static` (Global):** Mantiene la variable en **DATA/BSS**, pero restringe su visibilidad únicamente al archivo fuente actual (*Translation Unit*).
 - **`const`:** 
   - `const` global inicializada: Suele almacenarse en una sección de solo lectura dentro de **TEXT** (`.rodata`).
   - `const` local: Vive en el **Stack**, impidiendo su modificación a nivel de compilador.
-- **`register`:** Pide al compilador almacenar la variable directamente en un **registro de la CPU** (como `EAX`/`RAX`) en lugar del Stack. No se puede obtener su dirección de memoria (`&var`).
+- **`register`:** Sugiere al compilador guardar la variable en un **registro de la CPU** (como `EAX`/`RAX`) en lugar del Stack. Los compiladores modernos lo ignoran y deciden solos; lo único que garantiza es que no puedes obtener su dirección (`&var`).
 - **`extern`:** Indica que la variable reside en **DATA/BSS** pero está definida en otro archivo objeto.
 
 ---
@@ -257,7 +261,7 @@ nm programa_demo | grep -E "g_global|g_static"
 `Valgrind` simula un entorno sintético para rastrear cada lectura, escritura y asignación en el Heap/Stack.
 
 ```bash
-# Comando completo recomendatorio para desarrollo/42
+# Comando completo recomendado para desarrollo en 42
 valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./programa_demo
 ```
 
@@ -308,9 +312,8 @@ void leak_ejemplo(void) {
 
 ---
 
-## 7. Enlaces Relacionados y Backlinks
-- [[Punteros en C]]
-- [[Gestión de Memoria Dinámica]]
-- [[Valgrind y Depuración]]
-- [[Makefile y Compilación]]
-- [[Arquitectura de Computadores]]
+## 7. Relacionadas
+
+- [[Arrays en C]]: arrays locales en el Stack, literales de solo lectura.
+- [[libft - Anexo comparativo]]: qué funciones de libft reservan memoria en el Heap.
+- [[ft_calloc]] · [[ft_strdup]] · [[ft_split]]: ejemplos de reserva y liberación en el Heap.

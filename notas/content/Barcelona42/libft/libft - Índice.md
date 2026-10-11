@@ -3,6 +3,8 @@ tags: [libft, indice]
 ---
 # libft — Índice
 
+[[Inicio|← Inicio]]
+
 Documentación de todas las funciones de **libft**. En la Parte 1 se cita literalmente el `man` de la función original (en inglés) con su traducción al español. La Parte 2 y la Parte 3 no tienen función original: se citan literalmente del subject (v19.3).
 
 > [!tip] Anexo
