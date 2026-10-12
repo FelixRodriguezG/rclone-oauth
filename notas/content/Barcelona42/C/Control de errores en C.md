@@ -186,4 +186,4 @@ código de salida: 1
 
 ## Relacionadas
 
-[[Depurar con gdb]] · [[Segmentos de memoria en C]] · [[Arrays en C]] · [[La Norma]] · [[libft - Anexo comparativo]]
+[[Depurar con gdb]] · [[Segmentos de memoria en C]] · [[Arrays en C]] · [[Carácter nulo y puntero NULL]] · [[La Norma]] · [[libft - Anexo comparativo]]

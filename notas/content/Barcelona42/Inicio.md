@@ -18,6 +18,7 @@ Apuntes del cursus de 42 Barcelona.
 ## C
 
 - [[Arrays en C]]: declaración, índices, `sizeof`, arrays y punteros, cadenas.
+- [[Carácter nulo y puntero NULL]]: `'\0'` vs `NULL`, en qué casilla va cada uno y qué dice el compilador si los mezclas.
 - [[Segmentos de memoria en C]]: stack, heap, BSS, DATA y TEXT, y los errores de memoria típicos.
 - [[Control de errores en C]]: comprobar `malloc` y llamadas al sistema, liberar al fallar, `errno` y `perror`.
 - [[printf]]: especificadores, banderas y casos límite para ft_printf.

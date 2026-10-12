@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-11T15:43:39+02:00",
+ "updated": "2026-10-13T00:17:20+02:00",
  "files": [
   {
    "path": "Barcelona42/42/La Norma.md",
@@ -8,6 +8,10 @@
   {
    "path": "Barcelona42/C/Arrays en C.md",
    "name": "Arrays en C"
+  },
+  {
+   "path": "Barcelona42/C/Carácter nulo y puntero NULL.md",
+   "name": "Carácter nulo y puntero NULL"
   },
   {
    "path": "Barcelona42/C/Control de errores en C.md",
@@ -44,6 +48,10 @@
   {
    "path": "Barcelona42/libft/libft - Anexo comparativo.md",
    "name": "libft - Anexo comparativo"
+  },
+  {
+   "path": "Barcelona42/libft/libft - Suite de tests.md",
+   "name": "libft - Suite de tests"
   },
   {
    "path": "Barcelona42/libft/libft - Índice.md",

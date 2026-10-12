@@ -99,7 +99,7 @@ Por eso hay que **pasar el tamaño aparte** (igual que [[ft_memset]], [[ft_memcp
 
 ## Cadenas: arrays de `char`
 
-Una cadena en C es un array de `char` que **termina en `'\0'`**. Hay dos formas de crearla y no son equivalentes:
+Una cadena en C es un array de `char` que **termina en `'\0'`** (no confundir con `NULL`: ver [[Carácter nulo y puntero NULL]]). Hay dos formas de crearla y no son equivalentes:
 
 ```c
 char	s1[] = "hola";   // array de 5 bytes en el stack: se puede modificar
@@ -155,4 +155,4 @@ No confundir con un **array de punteros** como el que devuelve [[ft_split]] (`ch
 
 ## Relacionadas
 
-[[Segmentos de memoria en C]] · [[Control de errores en C]] · [[La Norma]] · [[libft - Anexo comparativo]] · [[ft_calloc]] · [[ft_split]]
+[[Segmentos de memoria en C]] · [[Control de errores en C]] · [[Carácter nulo y puntero NULL]] · [[La Norma]] · [[libft - Anexo comparativo]] · [[ft_calloc]] · [[ft_split]]

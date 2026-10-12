@@ -10,6 +10,10 @@ Documentación de todas las funciones de **libft**. En la Parte 1 se cita litera
 > [!tip] Anexo
 > [[libft - Anexo comparativo]] — funciones agrupadas por uso y comparadas entre sí (pros, contras y cuándo usar cada una).
 
+> [!info] Conceptos clave
+> - [[Carácter nulo y puntero NULL]] — `'\0'` termina cadenas; `NULL` termina arrays de punteros (`ft_split`) y listas (Parte 3).
+> - [[libft - Suite de tests]] — cómo ejecutar los tests, valgrind y norminette, y cómo añadir tests nuevos.
+
 ## Parte 1 — Funciones de la libc
 
 ### Caracteres
@@ -87,7 +91,7 @@ typedef struct s_list
 ```
 
 - `content`: los datos contenidos en el nodo. Usar `void *` permite almacenar cualquier tipo de dato.
-- `next`: la dirección del siguiente nodo, o NULL si el nodo actual es el último de la lista.
+- `next`: la dirección del siguiente nodo, o NULL si el nodo actual es el último de la lista (ver [[Carácter nulo y puntero NULL]]).
 
 | Función | Externas | Descripción |
 |---|---|---|

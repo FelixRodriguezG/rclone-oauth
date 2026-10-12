@@ -314,6 +314,7 @@ void leak_ejemplo(void) {
 
 ## 7. Relacionadas
 
+- [[Carácter nulo y puntero NULL]]: `'\0'` termina cadenas, `NULL` indica «sin memoria» o fin de un array de punteros.
 - [[Arrays en C]]: arrays locales en el Stack, literales de solo lectura.
 - [[libft - Anexo comparativo]]: qué funciones de libft reservan memoria en el Heap.
 - [[ft_calloc]] · [[ft_strdup]] · [[ft_split]]: ejemplos de reserva y liberación en el Heap.

@@ -53,11 +53,12 @@ char **ft_split(char const *s, char c);
 
 - Delimitadores consecutivos, al principio o al final no generan cadenas vacías: `ft_split("  a  b ", ' ')` → `{"a", "b", NULL}`.
 - Si un `malloc` intermedio falla, libera **todo** lo reservado antes de devolver NULL (por eso se permite `free`).
+- Cada palabra termina en `'\0'` y el array termina en `NULL`: no los confundas, ver [[Carácter nulo y puntero NULL]].
 - Estructura típica: contar palabras → reservar array → reservar cada palabra con `ft_substr`.
 
 ## Relacionadas
 
-[[ft_substr]] · [[ft_strchr]]
+[[ft_substr]] · [[ft_strchr]] · [[Carácter nulo y puntero NULL]] · [[Control de errores en C]]
 
 ---
 *Descripción, parámetros y valor devuelto copiados literalmente del Subject libft v19.3 (es.subject_libft.pdf). Citas de `man`: Linux man-pages 5.10 (Ubuntu 22.04), con traducción propia.*
