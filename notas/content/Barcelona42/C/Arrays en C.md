@@ -5,7 +5,15 @@ tags: [c, arrays, memoria, punteros]
 
 [[Inicio|← Inicio]] · C
 
-> Un array es una **colección de elementos del mismo tipo** guardados en **posiciones de memoria contiguas** (uno detrás de otro), a los que se accede por su **índice**.
+> Un array es una **colección de elementos del mismo tipo** guardados en **posiciones de memoria contiguas** (uno detrás de otro), a los que se accede por su **índice**. Sirve para guardar «muchos de lo mismo» (notas, letras de una cadena, píxeles…) sin declarar una variable por cada uno.
+
+| Término | Qué significa |
+|---|---|
+| **Elemento** | Cada una de las casillas del array (`arr[0]`, `arr[1]`…) |
+| **Índice** | El número de la casilla. Empieza en **0** |
+| **Contiguo** | Pegados en memoria, sin huecos entre un elemento y el siguiente |
+| **`sizeof`** | Operador que da el tamaño en bytes de una variable o tipo (devuelve un `size_t`, ver [[Tipos enteros y conversiones]]) |
+| **Comportamiento indefinido** (*undefined behavior*, UB) | Algo que el estándar de C no define: puede funcionar, crashear o fallar solo a veces |
 
 ## Declaración
 
@@ -59,7 +67,7 @@ arr[4] = 50;          // ❌ fuera de rango: comportamiento indefinido
 ```
 
 > [!danger] C no comprueba los límites
-> Escribir en `arr[4]` **no da error al compilar** y puede que tampoco al ejecutar: pisa la memoria de al lado (otra variable, la dirección de retorno…). Es la causa típica de bugs raros y segfaults. Usa `valgrind` o `-fsanitize=address` para detectarlo.
+> Escribir en `arr[4]` **no da error al compilar** y puede que tampoco al ejecutar: pisa la memoria de al lado (otra variable, la dirección de retorno…). Es la causa típica de bugs raros y segfaults. Para detectarlo compila con `-fsanitize=address -g` o pasa `valgrind` (ver [[Valgrind y sanitizers]]). Ojo: valgrind detecta bien los desbordamientos en el heap, pero casi nunca en arrays del stack; para esos usa `-fsanitize=address`.
 
 ## Tamaño con `sizeof`
 
@@ -74,7 +82,7 @@ Esto **solo funciona donde el array está declarado**. Al pasarlo a una función
 
 ## Arrays y punteros: parecidos, pero no iguales
 
-Al usar un array en casi cualquier expresión, **se convierte en un puntero a su primer elemento** (*array decay*): `arr` vale `&arr[0]`.
+Al usar un array en casi cualquier expresión, **se convierte en un puntero a su primer elemento** (*array decay*, «decaimiento»): `arr` vale `&arr[0]`. Las excepciones son `sizeof(arr)` y `&arr`, donde sigue siendo el array entero. Si los punteros aún te bailan, repasa [[Punteros en C]].
 
 | | `int arr[4];` | `int *p;` |
 |---|---|---|
@@ -106,12 +114,15 @@ char	s1[] = "hola";   // array de 5 bytes en el stack: se puede modificar
 char	*s2 = "hola";    // puntero a un literal de solo lectura
 ```
 
+> [!note] Norma
+> Estos ejemplos declaran e inicializan en la misma línea para que se lean mejor; norminette lo marcaría dentro de una función. En un proyecto, declara arriba y asigna después.
+
 ```c
 s1[0] = 'H';   // ✅ "Hola"
 s2[0] = 'H';   // ❌ segfault: el literal está en memoria de solo lectura
 ```
 
-Ver [[Segmentos de memoria en C]] y el aviso de [[ft_striteri]] en el [[libft - Anexo comparativo|anexo de libft]].
+Un *literal de cadena* es el texto entre comillas que escribes en el código; se guarda en una zona de solo lectura del programa. Ver [[Segmentos de memoria en C]] y el aviso de [[ft_striteri]] en el [[libft - Anexo comparativo|anexo de libft]].
 
 > [!warning] Error clásico: olvidar el `'\0'`
 > Para guardar una cadena de longitud `n` necesitas **`n + 1`** bytes. Si reservas `ft_strlen(s)` en vez de `ft_strlen(s) + 1`, la copia no termina y funciones como [[ft_strlen]] siguen leyendo fuera.
@@ -155,4 +166,13 @@ No confundir con un **array de punteros** como el que devuelve [[ft_split]] (`ch
 
 ## Relacionadas
 
-[[Segmentos de memoria en C]] · [[Control de errores en C]] · [[Carácter nulo y puntero NULL]] · [[La Norma]] · [[libft - Anexo comparativo]] · [[ft_calloc]] · [[ft_split]]
+[[Punteros en C]] · [[Segmentos de memoria en C]] · [[Carácter nulo y puntero NULL]] · [[Tipos enteros y conversiones]] · [[Control de errores en C]] · [[Valgrind y sanitizers]] · [[La Norma]] · [[libft - Anexo comparativo]] · [[ft_calloc]] · [[ft_split]]
+
+## Referencias
+
+- [Array declaration — cppreference](https://en.cppreference.com/w/c/language/array) — declaración, conversión de array a puntero, arrays como parámetros.
+- [Array initialization — cppreference](https://en.cppreference.com/w/c/language/array_initialization) — inicialización parcial con ceros y tamaño deducido.
+- [String literals — cppreference](https://en.cppreference.com/w/c/language/string_literal) — modificar un literal es comportamiento indefinido.
+- [Borrador del estándar C11 (N1570)](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf) — §6.5.2.1 (`E1[E2]` es `*((E1)+(E2))`), §6.3.2.1p3 (decay), §6.7.9 (inicialización).
+- [Beej's Guide to C — Arrays](https://beej.us/guide/bgc/html/split/arrays.html) — explicación introductoria.
+- La Norma v4 (`Normativa 42/es.norm-2.pdf`) — prohíbe los VLA y declarar e inicializar en la misma línea.

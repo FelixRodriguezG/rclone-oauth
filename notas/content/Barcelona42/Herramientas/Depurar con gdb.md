@@ -28,12 +28,13 @@ Llenar el código de `printf` funciona, pero cada prueba exige editar, recompila
 | **Paso** (*step*) | Ejecutar **una sola línea** y volver a parar |
 | **Pila de llamadas** (*call stack*) | La lista de funciones que se están ejecutando: `main` llamó a `f`, que llamó a `g`… |
 | **Frame** (marco) | Cada función de esa lista, con sus propias variables |
-| **Segfault** (`SIGSEGV`) | El programa intentó acceder a memoria que no le pertenece (p. ej. un puntero `NULL`) y el sistema lo mató |
+| **Segfault** (`SIGSEGV`) | El programa intentó acceder a memoria que no le pertenece (p. ej. un puntero `NULL`) y el sistema lo mató con esa señal |
 | **Símbolos de depuración** | La información que añade `-g`: qué línea del código es cada instrucción y cómo se llaman tus variables |
+| **Optimización** | Cambios que hace el compilador para que el programa vaya más rápido (reordenar o eliminar instrucciones). Ver [[Cómo compila C]] |
 
 ---
 
-## 1. ⚠️ Paso obligatorio: compilar con `-g`
+## Paso obligatorio: compilar con `-g`
 
 > [!danger] Sin `-g`, gdb está ciego
 > **Antes de depurar tienes que compilar con la bandera `-g`.** Es el error más común: si te lo saltas, gdb no puede enseñarte tu código, ni tus variables, ni los números de línea.
@@ -49,7 +50,7 @@ cc -Wall -Wextra -Werror -g -O0 main.c -o prog
 
 ### Qué pasa si se te olvida
 
-El mismo programa (el del [[#3. Caso 1: el programa crashea (segfault)|caso 1]]), primero **sin** `-g`:
+El mismo programa (el del [[#Caso 1: el programa crashea (segfault)|caso 1]]), primero **sin** `-g`:
 
 ```text
 $ cc -Wall -Wextra -Werror count.c -o count
@@ -87,19 +88,19 @@ Program received signal SIGSEGV, Segmentation fault.
 
 ### Reglas para no equivocarte
 
-1. **Todos los archivos con `-g`**, también tu librería. Si tu programa usa `libft.a` y la libft se compiló sin `-g`, gdb no podrá entrar en tus funciones `ft_` (ver el [[#8. Problemas típicos y cómo resolverlos|problema 3]]).
+1. **Todos los archivos con `-g`**, también tu librería. Si tu programa usa `libft.a` y la libft se compiló sin `-g`, gdb no podrá entrar en tus funciones `ft_` (ver el [[#Problemas típicos y cómo resolverlos|problema 3]]).
 2. **Si cambias el código, recompila** antes de volver a lanzar gdb. Si no, gdb ejecuta la versión vieja y te enseña líneas que ya no coinciden.
 3. **En un proyecto con Makefile**, puedes añadir `-g` sin tocar el Makefile pasándolo desde la terminal. Haz `fclean` antes, para que se recompile todo:
    ```bash
    make fclean
    make CFLAGS="-Wall -Wextra -Werror -g"
    ```
-   Si tu Makefile pone más cosas en `CFLAGS` (como `-I.` en tu libft), inclúyelas también.
+   Funciona porque una variable que escribes en la línea de comandos **sustituye** a la del Makefile. Por eso, si tu Makefile pone más cosas en `CFLAGS` (como `-I.` en tu libft), inclúyelas también: si no, se pierden.
 4. **Lo normal es no dejar `-g` en el Makefile que entregas**: usa las banderas que pida el subject (ver [[Makefile y librerías estáticas]]).
 
 ---
 
-## 2. Los comandos imprescindibles
+## Los comandos imprescindibles
 
 Con estos diez puedes depurar casi cualquier cosa. Entre paréntesis, su abreviatura:
 
@@ -124,7 +125,7 @@ Con estos diez puedes depurar casi cualquier cosa. Entre paréntesis, su abrevia
 
 ---
 
-## 3. Caso 1: el programa crashea (segfault)
+## Caso 1: el programa crashea (segfault)
 
 Este programa cuenta cuántas `'a'` hay en el primer argumento:
 
@@ -175,7 +176,7 @@ Program received signal SIGSEGV, Segmentation fault.
 8		while (*s)
 ```
 
-gdb para justo en la línea que crashea, la 8, y nos da una pista enorme: **`s=0x0`**. `0x0` es `NULL`, y `*s` intenta leer la dirección 0.
+gdb para justo en la línea que crashea, la 8, y nos da una pista enorme: **`s=0x0`**. `0x0` es `NULL` (ver [[Carácter nulo y puntero NULL]]), y `*s` intenta leer la dirección 0, que ningún programa puede leer (ver [[Punteros en C]]).
 
 **Paso 2: ¿quién llamó con `NULL`?** `backtrace` muestra la pila de llamadas. La de arriba (`#0`) es donde estamos; las de abajo, quién nos llamó:
 
@@ -207,7 +208,7 @@ $2 = 0x0
 
 ---
 
-## 4. Caso 2: el programa no crashea, pero da un resultado incorrecto
+## Caso 2: el programa no crashea, pero da un resultado incorrecto
 
 Es el caso más habitual y el más difícil, porque no hay ningún mensaje que te diga dónde mirar. Este programa debería contar las palabras de `"hola que tal"` (3):
 
@@ -306,7 +307,7 @@ Ahora devuelve `3`.
 
 ---
 
-## 5. Más herramientas útiles
+## Más herramientas útiles
 
 ### Ver variables
 
@@ -365,9 +366,9 @@ count_char (s=0x7fffffffe39f "anana", c=97 'a') at count.c:12
 
 ---
 
-## 6. Depurar tu libft con tus tests
+## Depurar tu libft con tus tests
 
-Tu Makefile de libft tiene un `test_runner`. Para depurarlo, recompila **todo** con `-g`, incluida la librería (`-I.` es porque tu Makefile ya lo pone en `CFLAGS`):
+Tu Makefile de libft tiene un `test_runner` (ver [[libft - Suite de tests]]). Para depurarlo, recompila **todo** con `-g`, incluida la librería (`-I.` es porque tu Makefile ya lo pone en `CFLAGS`):
 
 ```bash
 make fclean
@@ -388,25 +389,25 @@ Cuando termines, vuelve a compilar normal con `make re`.
 
 ---
 
-## 7. Método general para depurar
+## Método general para depurar
 
 1. **Reproduce el fallo** siempre con la misma entrada. Si no lo puedes repetir, no puedes comprobar si lo has arreglado.
 2. **Compila con `-g`** (y `-O0`).
-3. **¿Crashea?** → `run`, `bt`, `frame N`, `p`. Ver el [[#3. Caso 1: el programa crashea (segfault)|caso 1]].
-4. **¿Resultado incorrecto?** → hipótesis, `break` donde debería pasar, `p`/`display`, y busca el primer valor inesperado. Ver el [[#4. Caso 2: el programa no crashea, pero da un resultado incorrecto|caso 2]].
+3. **¿Crashea?** → `run`, `bt`, `frame N`, `p`. Ver el [[#Caso 1: el programa crashea (segfault)|caso 1]].
+4. **¿Resultado incorrecto?** → hipótesis, `break` donde debería pasar, `p`/`display`, y busca el primer valor inesperado. Ver el [[#Caso 2: el programa no crashea, pero da un resultado incorrecto|caso 2]].
 5. **¿Una variable cambia y no sabes dónde?** → `watch`.
-6. **¿Problemas de memoria** (leaks, leer fuera de un array)? gdb no los detecta bien: usa `valgrind` o `-fsanitize=address` (ver [[Control de errores en C]]).
+6. **¿Problemas de memoria** (leaks, leer fuera de un array)? gdb no los detecta bien: usa `valgrind` o `-fsanitize=address` (ver [[Valgrind y sanitizers]] y [[Control de errores en C]]).
 7. **Cuando lo arregles, prueba otra vez todos los casos**, no solo el que fallaba.
 
 ---
 
-## 8. Problemas típicos y cómo resolverlos
+## Problemas típicos y cómo resolverlos
 
 | # | Lo que ves | Por qué pasa | Qué hacer |
 |---|---|---|---|
 | 1 | `(No debugging symbols found in ./prog)` | Compilaste sin `-g` | Recompila **todo** con `-g` |
 | 2 | `No symbol "n" in current context.` | El programa aún no se está ejecutando, o estás en otra función | Haz `run` primero, o cambia de función con `frame N` |
-| 3 | `step` no entra en tu función `ft_...`, la ejecuta de golpe | Esa función (o tu `libft.a`) se compiló **sin `-g`**: gdb se salta las funciones sin símbolos | Recompila la librería con `-g` (sección 6) |
+| 3 | `step` no entra en tu función `ft_...`, la ejecuta de golpe | Esa función (o tu `libft.a`) se compiló **sin `-g`**: gdb se salta las funciones sin símbolos | Recompila la librería con `-g` (ver [[#Depurar tu libft con tus tests]]) |
 | 4 | `step` te mete dentro de `printf` o `malloc` | Has entrado en una función de la libc | Escribe `finish` para salir, y usa `next` en esas líneas |
 | 5 | Un breakpoint nunca para, o ves `<optimized out>` | Compilaste con optimizaciones (`-O2`…), y el compilador ha reordenado o eliminado código | Compila con `-O0` |
 | 6 | Las líneas que enseña gdb no coinciden con tu código | Cambiaste el código y no recompilaste | Recompila y vuelve a abrir gdb |
@@ -441,4 +442,15 @@ En los Mac de 42 se usa `lldb`. Se compila igual (**con `-g`**) y el método es 
 
 ## Relacionadas
 
-[[Control de errores en C]] · [[Segmentos de memoria en C]] · [[Makefile y librerías estáticas]] · [[Vim]]
+[[Valgrind y sanitizers]] · [[Cómo compila C]] · [[Punteros en C]] · [[Control de errores en C]] · [[Segmentos de memoria en C]] · [[Makefile y librerías estáticas]] · [[libft - Suite de tests]] · [[Vim]]
+
+## Referencias
+
+- [Debugging with GDB](https://sourceware.org/gdb/current/onlinedocs/gdb/) — manual oficial: `run`, `next`, `step`, `print`, `display`, `info locals`.
+- [GDB: Breakpoints](https://sourceware.org/gdb/current/onlinedocs/gdb/Breakpoints.html) y [Setting Watchpoints](https://sourceware.org/gdb/current/onlinedocs/gdb/Set-Watchpoints.html) — breakpoints condicionales y `watch`.
+- [GDB: Backtraces](https://sourceware.org/gdb/current/onlinedocs/gdb/Backtrace.html) — `bt` y `frame`.
+- [GDB: TUI](https://sourceware.org/gdb/current/onlinedocs/gdb/TUI.html) — el modo visual `gdb -tui`.
+- [GCC: Options for Debugging Your Program](https://gcc.gnu.org/onlinedocs/gcc/Debugging-Options.html) — qué hace `-g`.
+- [GCC: Options That Control Optimization](https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html) — `-O0` es el nivel por defecto.
+- [GDB to LLDB command map](https://lldb.llvm.org/use/map.html) — tabla de equivalencias gdb ↔ lldb.
+- Las salidas de ejemplo se obtuvieron con gdb en Ubuntu 22.04; las direcciones (`0x...`) cambian de una máquina a otra.

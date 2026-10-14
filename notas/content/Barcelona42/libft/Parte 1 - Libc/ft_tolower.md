@@ -9,7 +9,24 @@ estado: hecho
 
 [[libft - Índice|← Índice]] · Parte 1 · Caracteres
 
-> Mayúscula → minúscula
+> Mayúscula → minúscula. Si `c` es una letra mayúscula devuelve su minúscula; cualquier otro valor lo devuelve sin tocar.
+
+## Explicación sencilla
+
+| Entrada | Salida |
+|---|---|
+| `'A'` (65) | `'a'` (97) |
+| `'Z'` (90) | `'z'` (122) |
+| `'a'` | `'a'` (ya es minúscula) |
+| `'5'` | `'5'` |
+| `EOF` (−1) | −1 |
+
+Es la inversa de [[ft_toupper]]: en ASCII la minúscula está 32 posiciones por encima de la mayúscula.
+
+```text
+ 'A' 'B' 'C' ... 'Z'        'a' 'b' 'c' ... 'z'
+  65  66  67 ...  90   +32   97  98  99 ... 122
+```
 
 ## Prototipo
 
@@ -57,13 +74,31 @@ Consultar: `man 3 tolower`
 > [!note] Traducción
 > El valor devuelto es el de la letra convertida, o c si la conversión no fue posible.
 
+## Cómo implementarla
+
+```text
+si c está entre 'A' y 'Z' → devolver c + ('a' - 'A')     (es decir, c + 32)
+si no                     → devolver c tal cual
+```
+
 ## Puntos clave y casos límite
 
 - Cualquier valor que no sea `'A'`–`'Z'` se devuelve sin cambios.
 
+### Errores típicos
+
+- **Sumar 32 sin comprobar el rango**: `ft_tolower('5')` devolvería `'U'` (53 + 32 = 85).
+- **Devolver 0 cuando no es mayúscula**: hay que devolver `c` intacto.
+- **Cambiar el tipo de retorno a `char`**: el prototipo es `int`.
+
 ## Relacionadas
 
-[[ft_toupper]] · [[ft_isalpha]]
+[[ft_toupper]] · [[ft_isalpha]] · [[Tipos enteros y conversiones]]
 
----
-*Fuente de las citas: `man 3 tolower` — Linux man-pages 5.10 (Ubuntu 22.04). Texto en inglés copiado literalmente del manual; la traducción es propia. Requisitos copiados literalmente del Subject libft v19.3 (es.subject_libft.pdf). En los Mac de 42 (man de BSD/macOS) la redacción puede variar.*
+## Referencias
+
+- `man 3 tolower` — Linux man-pages 5.10 (Ubuntu 22.04): las citas en inglés están copiadas literalmente del manual; la traducción es propia.
+- [tolower(3) — man7.org](https://man7.org/linux/man-pages/man3/tolower.3.html) — versión en línea del manual de Linux (puede ser más reciente que la de Ubuntu 22.04).
+- [ascii(7) — man7.org](https://man7.org/linux/man-pages/man7/ascii.7.html) — tabla ASCII con los códigos de cada carácter.
+- Subject de libft v19.3 (`es.subject_libft.pdf`) — requisitos copiados literalmente.
+- En los Mac de 42 (man de BSD/macOS) la redacción del manual puede variar.

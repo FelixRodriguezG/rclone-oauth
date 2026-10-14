@@ -1,14 +1,18 @@
 ---
-tags: [42, vim, herramientas, cheatsheet]
+tags: [herramientas, vim, editor, cheatsheet]
 ---
 # Vim
 
 [[Inicio|← Inicio]] · Herramientas
 
-> Cheatsheet de Vim para el cursus de 42. Copia el bloque de configuración en tu `~/.vimrc` del Mac del cluster.
+> **Vim** es un editor de texto que funciona dentro de la terminal y se maneja solo con el teclado. Está instalado en los ordenadores de 42 y trae la cabecera oficial de 42. Esta nota es una chuleta: una configuración (`~/.vimrc`) que ayuda a cumplir la [[La Norma|Norma]] y los atajos que más se usan.
 
-## ⚙️ 1. Configuración del `.vimrc` (Para 42)
-Copia este contenido en tu archivo `~/.vimrc`:
+> [!tip] Para empezar desde cero
+> Escribe `vimtutor` en la terminal: es un tutorial interactivo de unos 30 minutos que viene con Vim.
+
+## Configuración del `.vimrc` para 42
+
+El fichero `~/.vimrc` (en tu carpeta personal; el `.` del principio lo hace oculto) se lee cada vez que abres Vim. Copia este contenido en él:
 
 ```vim
 syntax on
@@ -42,55 +46,87 @@ autocmd BufWritePre *.c,*.h %s/\s\+$//e  " Borra espacios al final al guardar
 autocmd BufWritePost ~/.vimrc source %   " Recarga el vimrc al guardarlo
 ```
 
-> [!tip] Cabecera de 42
-> Con `$USER` y `$MAIL` configurados, `:Stdheader` (o `F1`) inserta la cabecera obligatoria de la [[La Norma|Norma]] y la actualiza al guardar.
+Qué aporta cada bloque respecto a la Norma:
 
-## ⌨️ 2. Modos de Vim
-* `Esc` -> **Modo Normal**: Moverse, borrar, ejecutar comandos.
-* `i` -> **Modo Inserción**: Escribir código.
-* `v` / `V` -> **Modo Visual**: Seleccionar texto o líneas.
-* `:` -> **Modo Comando**: Guardar, salir, ejecutar terminal.
+| Bloque | Regla de la Norma que te ayuda a cumplir |
+|---|---|
+| `noexpandtab`, `tabstop=4` | Indentar con **tabulaciones reales** de 4 de ancho (y el `Makefile` también necesita tabs, ver [[Makefile y librerías estáticas]]) |
+| `colorcolumn=81` | Una línea de color en la columna 81 marca el límite de **80 columnas** |
+| `autocmd BufWritePre … %s/\s\+$//e` | Al guardar un `.c` o `.h`, borra los **espacios y tabs al final de línea** (prohibidos) |
+| `$USER` / `$MAIL` | Los datos que pone la **cabecera de 42** |
+
+> [!note] Vocabulario
+> - **`autocmd`**: un comando que Vim ejecuta solo cuando ocurre un evento. `BufWritePre` = «justo antes de guardar»; `BufWritePost` = «justo después».
+> - **`%s/\s\+$//e`**: sustitución en todo el fichero (`%`) de «uno o más espacios en blanco al final de línea» (`\s\+$`) por nada. La `e` evita un error si no encuentra ninguno.
+
+> [!tip] Cabecera de 42
+> Con `$USER` y `$MAIL` configurados, `:Stdheader` (o `F1`) inserta la cabecera obligatoria de la [[La Norma|Norma]] y la actualiza al guardar. En los ordenadores de 42 ya viene instalada; en tu ordenador personal tienes que instalar el plugin [42header](https://github.com/42Paris/42header). Ese plugin también acepta `let g:user42 = '...'` y `let g:mail42 = '...'`, que no tocan las variables de entorno `$USER` y `$MAIL`.
+
+## Modos de Vim
+
+Vim tiene **modos**: la misma tecla hace cosas distintas según el modo en que estés. Es lo que más confunde al principio. Si no sabes en qué modo estás, pulsa `Esc` para volver al Normal.
+
+* `Esc` → **modo Normal**: moverse, borrar, ejecutar comandos.
+* `i` → **modo Inserción**: escribir código.
+* `v` / `V` → **modo Visual**: seleccionar texto (por caracteres / por líneas).
+* `:` → **modo Comando**: guardar, salir, ejecutar comandos de la terminal.
 
 ### Guardar y salir
-* `:w` -> Guardar.
-* `:q` -> Salir (falla si hay cambios sin guardar).
-* `:wq` o `:x` -> Guardar y salir.
-* `:q!` -> Salir **descartando** los cambios.
 
-## 🚀 3. Movimientos Rápidos
-* `h`, `j`, `k`, `l` -> Izquierda, abajo, arriba, derecha.
-* `w` / `b` -> Siguiente palabra / Palabra anterior.
-* `0` / `$` -> Principio / Final de línea.
-* `gg` / `G` -> Primera / Última línea del archivo.
-* `[número] + j/k` -> Bajar o subir N líneas (ej. `12j`).
+* `:w` → guardar.
+* `:q` → salir (falla si hay cambios sin guardar).
+* `:wq` o `:x` → guardar y salir.
+* `:q!` → salir **descartando** los cambios.
 
-## ✂️ 4. Edición y Portapapeles
-* `i` / `a` -> Insertar antes / después del cursor.
-* `o` / `O` -> Nueva línea abajo / arriba.
-* `x` -> Borrar letra.
-* `dd` -> Cortar línea entera.
-* `yy` -> Copiar línea entera.
-* `p` / `P` -> Pegar después / antes.
-* `u` / `Ctrl + r` -> Deshacer / Rehacer.
+## Movimientos rápidos
 
-## 📐 5. Pantallas Divididas y Múltiples Archivos
+* `h`, `j`, `k`, `l` → izquierda, abajo, arriba, derecha.
+* `w` / `b` → siguiente palabra / palabra anterior.
+* `0` / `$` → principio / final de línea.
+* `gg` / `G` → primera / última línea del archivo.
+* `[número]` + `j`/`k` → bajar o subir N líneas (ej. `12j`). Con `relativenumber` ves directamente ese número al lado de cada línea.
+* `:42` → ir a la línea 42 (útil cuando el compilador o la norminette te dan un número de línea).
+
+## Edición y portapapeles
+
+* `i` / `a` → insertar antes / después del cursor.
+* `o` / `O` → nueva línea abajo / arriba.
+* `x` → borrar un carácter.
+* `dd` → cortar la línea entera.
+* `yy` → copiar la línea entera.
+* `p` / `P` → pegar después / antes.
+* `u` / `Ctrl + r` → deshacer / rehacer.
+* `>>` / `<<` → añadir / quitar un nivel de indentación a la línea.
+
+## Pantallas divididas y varios archivos
+
 Para trabajar con tu `.c` y tu `.h` al mismo tiempo:
 
-* `:sp [archivo]` -> Divide la pantalla horizontalmente.
-* `:vsp [archivo]` -> Divide la pantalla verticalmente (¡perfecto para 42!).
-* `Ctrl + w` + flechas (o `h`/`j`/`k`/`l`) -> Moverse entre las divisiones.
-* `:q` -> Cerrar división actual.
-* `:tabnew [archivo]` -> Abrir en una pestaña nueva.
-* `gt` / `gT` -> Cambiar de pestaña (siguiente / anterior).
-* `:e [archivo]` -> Abrir archivo en segundo plano (Buffers).
-* `:ls` -> Ver lista de archivos abiertos en buffers.
+* `:sp [archivo]` → divide la pantalla horizontalmente.
+* `:vsp [archivo]` → divide la pantalla verticalmente (cómodo para ver el `.c` y el `.h` lado a lado).
+* `Ctrl + w` + flechas (o `h`/`j`/`k`/`l`) → moverse entre las divisiones.
+* `:q` → cerrar la división actual.
+* `:tabnew [archivo]` → abrir en una pestaña nueva.
+* `gt` / `gT` → cambiar de pestaña (siguiente / anterior).
+* `:e [archivo]` → abrir otro archivo en la misma ventana. El anterior sigue abierto en segundo plano (un **buffer** es un archivo cargado en memoria).
+* `:ls` → ver la lista de buffers abiertos.
 
-## 🔍 6. Búsqueda y Compilación
-* `/palabra` -> Buscar texto (pulsa `n` para la siguiente coincidencia).
-* `:%s/antiguo/nuevo/g` -> Reemplazar texto globalmente.
-* `:!make` -> Ejecutar un comando de la shell sin salir de Vim (aquí, compilar).
-* `:!norminette %` -> Pasar la norminette al archivo actual (`%` = archivo abierto).
+## Búsqueda y compilación
+
+* `/palabra` → buscar texto (pulsa `n` para la siguiente coincidencia y `N` para la anterior).
+* `:%s/antiguo/nuevo/g` → reemplazar texto en todo el archivo.
+* `:!make` → ejecutar un comando de la terminal sin salir de Vim (aquí, compilar).
+* `:!norminette %` → pasar la norminette al archivo actual (`%` = archivo abierto).
+* `:set list` → mostrar tabs y finales de línea, para ver si hay espacios donde debería haber tabs. `:set nolist` lo quita.
 
 ## Relacionadas
 
-[[La Norma]] · [[Makefile y librerías estáticas]] · [[Depurar con gdb]]
+[[La Norma]] · [[Makefile y librerías estáticas]] · [[Depurar con gdb]] · [[Git para 42]]
+
+## Referencias
+
+- [Vim help: options](https://vimhelp.org/options.txt.html) — `tabstop`, `shiftwidth`, `expandtab`, `softtabstop`, `colorcolumn`, `relativenumber`, `list`.
+- [Vim help: autocmd](https://vimhelp.org/autocmd.txt.html) — eventos `BufWritePre` y `BufWritePost`.
+- [Vim help: windows](https://vimhelp.org/windows.txt.html) — `:sp`, `:vsp`, `Ctrl + w`, buffers.
+- [42Paris/42header](https://github.com/42Paris/42header) — plugin de la cabecera de 42 para Vim (`:Stdheader`, `F1`).
+- La Norma v4, capítulos III.2 «Formato» y III.6 «La cabecera de 42» (`Normativa 42/es.norm-2.pdf`).

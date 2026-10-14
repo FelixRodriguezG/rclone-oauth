@@ -9,7 +9,26 @@ estado: hecho
 
 [[libft - Índice|← Índice]] · Parte 1 · Memoria
 
-> Copia n bytes (sin solapamiento)
+> Copia n bytes (sin solapamiento): copia exactamente `n` bytes de `src` a `dest`, sin mirar qué contienen.
+
+## Explicación sencilla
+
+Copia **bytes**, no cadenas: no se detiene en `'\0'`. Y `n` es un número de bytes, no de elementos.
+
+```c
+int	a[3] = {1, 2, 3};
+int	b[3];
+
+ft_memcpy(b, a, sizeof(a));     /* 3 * sizeof(int) = 12 bytes */
+```
+
+```text
+ src  a: │01 00 00 00│02 00 00 00│03 00 00 00│
+           │  copia byte a byte (12 bytes)   │
+ dest b: │01 00 00 00│02 00 00 00│03 00 00 00│
+```
+
+Las dos zonas **no deben solaparse** (compartir bytes). Si se solapan, usa [[ft_memmove]]. Ver [[Punteros en C]].
 
 ## Prototipo
 
@@ -51,14 +70,36 @@ Consultar: `man 3 memcpy`
 > [!note] Traducción
 > (POSIX y los estándares de C dicen explícitamente que usar memcpy() con zonas solapadas produce comportamiento indefinido.)
 
+## Cómo implementarla
+
+```text
+d = dest visto como puntero a unsigned char
+s = src  visto como puntero a const unsigned char
+para i desde 0 hasta n - 1:
+    d[i] = s[i]
+devolver dest
+```
+
 ## Puntos clave y casos límite
 
 - Con `n == 0` devuelve `dest` sin acceder a memoria.
 - `dest` y `src` NULL con `n > 0` es comportamiento indefinido en la original; algunos testers lo prueban, así que decide qué hace tu versión.
 
+### Errores típicos
+
+- **Pasar el número de elementos en vez de bytes**: `ft_memcpy(b, a, 3)` con `int` copia solo 3 bytes, no 3 enteros.
+- **Parar en `'\0'`**: eso es copiar cadenas; `memcpy` copia datos binarios con ceros en medio.
+- **Devolver el puntero avanzado** en lugar de `dest`.
+- **Aritmética con `void *`**: convierte a `unsigned char *` (mira [[ft_memset]]).
+- **Usarla con zonas solapadas**: el resultado depende del orden de copia; por eso existe `memmove`.
+
 ## Relacionadas
 
-[[ft_memmove]] · [[ft_strlcpy]]
+[[ft_memmove]] · [[ft_strlcpy]] · [[Punteros en C]]
 
----
-*Fuente de las citas: `man 3 memcpy` — Linux man-pages 5.10 (Ubuntu 22.04). Texto en inglés copiado literalmente del manual; la traducción es propia. Requisitos copiados literalmente del Subject libft v19.3 (es.subject_libft.pdf). En los Mac de 42 (man de BSD/macOS) la redacción puede variar.*
+## Referencias
+
+- `man 3 memcpy` — Linux man-pages 5.10 (Ubuntu 22.04): las citas en inglés están copiadas literalmente del manual; la traducción es propia.
+- [memcpy(3) — man7.org](https://man7.org/linux/man-pages/man3/memcpy.3.html) — versión en línea del manual de Linux (puede ser más reciente que la de Ubuntu 22.04).
+- Subject de libft v19.3 (`es.subject_libft.pdf`) — requisitos copiados literalmente.
+- En los Mac de 42 (man de BSD/macOS) la redacción del manual puede variar.

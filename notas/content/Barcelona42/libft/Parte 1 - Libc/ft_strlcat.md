@@ -9,7 +9,30 @@ estado: hecho
 
 [[libft - Índice|← Índice]] · Parte 1 · Cadenas
 
-> Concatenación segura con tamaño de buffer
+> Concatenación segura con tamaño de buffer: añade `src` al final de `dst` sin que el resultado ocupe más de `size` bytes (incluido el `'\0'`).
+
+## Explicación sencilla
+
+`size` es el tamaño **total** del buffer `dst`, no lo que queda libre. Lo que se puede añadir es `size - strlen(dst) - 1`.
+
+```c
+char	buf[8] = "hola";
+size_t	r;
+
+r = ft_strlcat(buf, " mundo", 8);
+```
+
+```text
+ antes:   │ h │ o │ l │ a │ \0 │    │    │    │      size = 8
+ después: │ h │ o │ l │ a │ ' '│ m  │ u  │ \0 │      caben 3 letras más
+ r = strlen("hola") + strlen(" mundo") = 4 + 6 = 10   → 10 >= 8: truncado
+```
+
+| Llamada (buf = `"hola"`) | `buf` después | Retorno |
+|---|---|---|
+| `ft_strlcat(buf, " mundo", 8)` | `"hola mu"` | 10 |
+| `ft_strlcat(buf, "xyz", 2)` | `"hola"` (sin cambios) | 2 + 3 = 5 |
+| `ft_strlcat(buf, "!", 20)` | `"hola!"` | 5 |
 
 ## Prototipo
 
@@ -59,6 +82,21 @@ Consultar: `man 3bsd strlcat`
 > [!note] Traducción
 > Ten en cuenta, sin embargo, que si strlcat() recorre size caracteres sin encontrar un NUL, la longitud de la cadena se considera size y la cadena destino no quedará terminada en NUL (porque no había espacio para él). Así se evita que strlcat() se salga del final de una cadena.
 
+## Cómo implementarla
+
+```text
+dlen = longitud de dst, pero contando como mucho hasta size
+slen = longitud de src
+si dlen == size:
+    devolver size + slen            (no hay ni sitio para el '\0')
+i = 0
+mientras src[i] no sea '\0' y dlen + i < size - 1:
+    dst[dlen + i] = src[i]
+    i = i + 1
+dst[dlen + i] = '\0'
+devolver dlen + slen
+```
+
 ## Puntos clave y casos límite
 
 - Si `size <= strlen(dst)`: no concatena nada y devuelve `size + strlen(src)`.
@@ -66,9 +104,22 @@ Consultar: `man 3bsd strlcat`
 - La longitud de `dst` se mide como máximo hasta `size` (no más allá).
 - Para probar la original en Linux: `#include <bsd/string.h>` y `-lbsd`.
 
+### Errores típicos
+
+- **Usar `ft_strlen(dst)` sin límite**: si `dst` no tiene `'\0'` dentro de los `size` primeros bytes, te sales del buffer. Mide como máximo hasta `size`.
+- **Devolver `strlen(dst) + strlen(src)` cuando `size <= strlen(dst)`**: en ese caso es `size + strlen(src)`.
+- **Confundir `size` con «espacio libre»**: `size` es el tamaño completo del buffer.
+- **Dejar el resultado sin `'\0'`** por un error de ±1 en la condición del bucle. Prueba con `size` = `strlen(dst) + 1` (solo cabe el `'\0'`).
+
 ## Relacionadas
 
-[[ft_strlcpy]] · [[ft_strlen]]
+[[ft_strlcpy]] · [[ft_strlen]] · [[Carácter nulo y puntero NULL]]
 
----
-*Fuente de las citas: `man 3bsd strlcat` — libbsd (libbsd-dev, Ubuntu 22.04). Texto en inglés copiado literalmente del manual; la traducción es propia. Requisitos copiados literalmente del Subject libft v19.3 (es.subject_libft.pdf). En los Mac de 42 (man de BSD/macOS) la redacción puede variar.*
+## Referencias
+
+- `man 3bsd strlcat` — libbsd (libbsd-dev, Ubuntu 22.04): las citas en inglés están copiadas literalmente del manual; la traducción es propia.
+- [strlcat(3) — man7.org](https://man7.org/linux/man-pages/man3/strlcat.3.html) — versión añadida a glibc 2.38 (Ubuntu 22.04 trae glibc 2.35, que aún no la incluye).
+- [strlcat(3) — OpenBSD](https://man.openbsd.org/strlcat) — página original de BSD.
+- [strlcat(3bsd) — libbsd (Debian)](https://manpages.debian.org/bookworm/libbsd-dev/strlcat.3bsd.en.html) — la misma página que `man 3bsd strlcat`.
+- Subject de libft v19.3 (`es.subject_libft.pdf`) — requisitos copiados literalmente.
+- En los Mac de 42 (man de BSD/macOS) la redacción del manual puede variar.

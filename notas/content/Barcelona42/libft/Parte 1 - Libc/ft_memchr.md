@@ -3,13 +3,32 @@ tags: [libft, libft/parte1, libft/memoria]
 funcion: ft_memchr
 original: "memchr(3)"
 cabecera: "<string.h>"
-estado: pendiente
+estado: hecho
 ---
 # ft_memchr
 
 [[libft - Índice|← Índice]] · Parte 1 · Memoria
 
-> Busca un byte en n bytes de memoria
+> Busca un byte en n bytes de memoria: devuelve un puntero al primer byte igual a `c` dentro de los `n` primeros, o `NULL`.
+
+## Explicación sencilla
+
+Es la versión «de memoria» de [[ft_strchr]]: no sabe qué es una cadena, así que **no se para en `'\0'`**; recorre exactamente `n` bytes.
+
+```c
+char	data[5] = {'a', 'b', '\0', 'c', 'd'};
+```
+
+```text
+ índice:  0   1    2    3   4
+ data:  │ a │ b │ \0 │ c │ d │
+                      ▲
+   ft_memchr(data, 'c', 5) → &data[3]
+   ft_strchr(data, 'c')    → NULL   (se para en el '\0')
+   ft_memchr(data, 'c', 3) → NULL   (solo mira 3 bytes)
+```
+
+Ver [[Punteros en C]].
 
 ## Prototipo
 
@@ -45,14 +64,35 @@ Consultar: `man 3 memchr`
 > [!note] Traducción
 > memchr() y memrchr() devuelven un puntero al byte coincidente, o NULL si el carácter no aparece en la zona de memoria indicada.
 
+## Cómo implementarla
+
+```text
+p  = s visto como puntero a const unsigned char
+ch = c convertido a unsigned char
+para i desde 0 hasta n - 1:
+    si p[i] == ch → devolver la dirección de p[i]
+devolver NULL
+```
+
 ## Puntos clave y casos límite
 
 - A diferencia de `strchr`, **no** se detiene en `'\0'`: recorre exactamente `n` bytes.
 - Compara usando `unsigned char` tanto para `c` como para los bytes.
 
+### Errores típicos
+
+- **Parar en `'\0'`**: es justo lo que la diferencia de `strchr`.
+- **Comparar un `char` con el `int` sin convertir**: `(char)200` vale −56 en Linux y nunca será igual a 200. Convierte ambos a `unsigned char`. Ver [[Tipos enteros y conversiones]].
+- **Leer más allá de `n`** (por ejemplo, condición `i <= n`).
+- **Olvidar el cast** a `void *` al devolver un puntero que venía de `const void *`.
+
 ## Relacionadas
 
-[[ft_strchr]] · [[ft_memcmp]]
+[[ft_strchr]] · [[ft_memcmp]] · [[Punteros en C]] · [[Tipos enteros y conversiones]]
 
----
-*Fuente de las citas: `man 3 memchr` — Linux man-pages 5.10 (Ubuntu 22.04). Texto en inglés copiado literalmente del manual; la traducción es propia. Requisitos copiados literalmente del Subject libft v19.3 (es.subject_libft.pdf). En los Mac de 42 (man de BSD/macOS) la redacción puede variar.*
+## Referencias
+
+- `man 3 memchr` — Linux man-pages 5.10 (Ubuntu 22.04): las citas en inglés están copiadas literalmente del manual; la traducción es propia.
+- [memchr(3) — man7.org](https://man7.org/linux/man-pages/man3/memchr.3.html) — versión en línea del manual de Linux (puede ser más reciente que la de Ubuntu 22.04).
+- Subject de libft v19.3 (`es.subject_libft.pdf`) — requisitos copiados literalmente.
+- En los Mac de 42 (man de BSD/macOS) la redacción del manual puede variar.

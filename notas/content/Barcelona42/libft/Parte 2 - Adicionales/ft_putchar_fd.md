@@ -9,7 +9,38 @@ estado: pendiente
 
 [[libft - Índice|← Índice]] · Parte 2 · Funciones adicionales
 
-> Escribe un carácter en un fd
+> Escribe un único carácter en el descriptor de fichero que le digas (pantalla, salida de error o un fichero abierto). Es la pieza básica de las demás `ft_put*_fd`.
+
+## Explicación sencilla
+
+Un **descriptor de fichero** (*fd*) es un número entero que el sistema te da para identificar «a dónde escribes». Hay tres abiertos siempre al arrancar un programa (más en [[Descriptores de fichero y read]]):
+
+| fd | Nombre | Normalmente es |
+|---|---|---|
+| 0 | stdin | el teclado (entrada) |
+| 1 | stdout | la terminal (salida normal) |
+| 2 | stderr | la terminal (mensajes de error) |
+
+```c
+ft_putchar_fd('A', 1);   /* imprime A en la terminal */
+ft_putchar_fd('!', 2);   /* imprime ! por la salida de error */
+```
+
+```text
+$ ./a.out 2>/dev/null
+A
+```
+
+(La `!` no aparece porque `2>/dev/null` tira la salida de error.)
+
+`write` necesita la **dirección** de los bytes a escribir, no el carácter en sí:
+
+```text
+  variable c (en la pila)      write(fd, &c, 1)
+  ┌─────┐                        │      │   └── cuántos bytes
+  │ 'A' │ ◄──────────────────────┘      │
+  └─────┘   &c = dirección de c         └────── a dónde
+```
 
 ## Prototipo
 
@@ -44,14 +75,30 @@ void ft_putchar_fd(char c, int fd);
 >
 > Si tiene éxito, devuelve el número de bytes escritos. En caso de error, devuelve -1 y pone en errno la causa del error.
 
+## Cómo implementarla
+
+```text
+1. Llama a write con: el fd recibido, la dirección de c, y 1 byte.
+2. Nada más: la función no devuelve nada.
+```
+
+Es literalmente una línea; está en el bloque de abajo.
+
 ## Puntos clave y casos límite
 
 - `write(fd, &c, 1);`
 - fd estándar: 0 = stdin, 1 = stdout, 2 = stderr.
 
+> [!warning] Errores típicos
+> - **Pasar `c` en vez de `&c`**: `write(fd, c, 1)` convierte el carácter en una dirección de memoria absurda. El compilador avisa (`makes pointer from integer without a cast`); con `-Werror` no compila.
+> - **Escribir siempre en 1**: si ignoras `fd`, la función «funciona» en tus pruebas por pantalla pero falla al escribir en stderr o en un fichero.
+> - **Preocuparte por el valor de retorno de `write`**: el subject dice que la función no devuelve nada; con un fd inválido `write` devuelve -1 y no pasa nada más (no hay crash).
+
 ## Relacionadas
 
-[[ft_putstr_fd]]
+[[ft_putstr_fd]] · [[ft_putendl_fd]] · [[ft_putnbr_fd]] · [[Descriptores de fichero y read]]
 
----
-*Descripción, parámetros y valor devuelto copiados literalmente del Subject libft v19.3 (es.subject_libft.pdf). Citas de `man`: Linux man-pages 5.10 (Ubuntu 22.04), con traducción propia.*
+## Referencias
+
+- Subject de libft v19.3 (`/home/felixrod/cursus/es.subject_libft.pdf`) — descripción, parámetros y valor devuelto, copiados literalmente.
+- `man 2 write` (Linux man-pages 5.10, Ubuntu 22.04), con traducción propia — versión en línea: [write(2) en man7.org](https://man7.org/linux/man-pages/man2/write.2.html).

@@ -1,11 +1,13 @@
 ---
 tags: [libft, tests, valgrind, norminette, herramientas]
 ---
-# libft — Suite de tests
+# libft - Suite de tests
 
-[[Inicio|← Inicio]] · [[libft - Índice|Índice de libft]]
+[[libft - Índice|← Índice]] · Tests
 
-> Suite propia para comprobar las funciones de la libft (código en `cursus/libft/tests/`). Cada caso muestra **qué se prueba**, el **valor esperado**, el **valor obtenido** y si pasa (**[PASS]**) o falla (**[FAIL]**).
+> Una **suite de tests** es un programa aparte que llama a tus funciones con muchas entradas distintas y comprueba que devuelven lo esperado. Esta es la suite propia de la libft (código en `cursus/libft/tests/`): cada caso muestra **qué se prueba**, el **valor esperado**, el **valor obtenido** y si pasa (**[PASS]**) o falla (**[FAIL]**).
+
+Ejemplo de salida (en `ft_toupper` el resultado es un `int`, por eso se ve el código ASCII: 65 es `'A'`):
 
 ```text
 ========== [6] ft_toupper ==========
@@ -48,6 +50,7 @@ Después de `make test_runner` (o de cualquier `make test…`):
 | `./test_runner all` | Ejecuta todos los tests |
 | `./test_runner ft_strlen` | Un test por nombre |
 | `./test_runner strlen` | Igual, sin el prefijo `ft_` |
+| `./test_runner test_ft_strlen` | Igual, con el prefijo `test_` (es lo que hace `make test_ft_strlen`) |
 | `./test_runner 14` | Igual, por número (ver [[#Lista de tests]]) |
 | `./test_runner atoi 3 ft_bzero` | Varios tests seguidos (se pueden mezclar formas) |
 
@@ -133,13 +136,13 @@ Todas reciben `(descripción, esperado, obtenido)`, imprimen una línea y suman 
 
 | Función | Para qué se usa | Ejemplo de salida |
 |---|---|---|
-| `check_bool` | `ft_is*`: solo importa si es 0 o distinto de 0 | `verdadero` / `falso (0)` |
+| `check_bool` | `ft_is*`: solo importa si es 0 o distinto de 0 | esperado `verdadero`, obtenido `verdadero (1)` / `falso (0)` |
 | `check_int` | Dos `int` exactos (`ft_atoi`, `ft_toupper`) | `42` |
 | `check_size` | Dos `size_t` (`ft_strlen`, `ft_strlcpy`) | `4` |
 | `check_sign` | `ft_memcmp`, `ft_strncmp`: solo importa el signo | `<0`, `0`, `>0` |
 | `check_str` | Cadenas (admite `NULL`) | `"hola"` / `NULL` |
 | `check_mem` | `n` bytes de memoria | `AAAAXXXXXX` (no imprimibles = `.`) |
-| `check_ptr` | Punteros dentro de una cadena | `pos 5` / `NULL` |
+| `check_ptr` | Punteros dentro de una cadena (`ft_strchr`, `ft_memchr`…) | `pos 5` (posición respecto al inicio) / `NULL` |
 
 > [!question] ¿Por qué `check_bool` y `check_sign`?
 > - Las `is*` originales devuelven «distinto de 0» (p. ej. `1024`), no necesariamente `1`. El subject pide que las tuyas devuelvan **1 o 0**, pero comparar el valor exacto con la original fallaría sin motivo.
@@ -175,7 +178,9 @@ void	test_ft_toupper(void)
 
 ---
 
-## Edge cases que se prueban
+## Casos límite que se prueban
+
+Un **caso límite** (*edge case*) es una entrada en el borde de lo normal: cadena vacía, tamaño 0, el valor más grande posible… Es donde suelen esconderse los fallos y lo primero que prueba un evaluador.
 
 > [!abstract]- Caracteres — `ft_is*`, `ft_toupper`, `ft_tolower`
 > - Límites de cada rango (`'a'`, `'z'`, `'A'`, `'Z'`, `'0'`, `'9'`) y los caracteres justo antes y después.
@@ -211,7 +216,7 @@ Ejecuta `norminette` sobre `SRC_FILES` y `libft.h`. Si todo está bien, cada fic
 
 ### `make valgrind`
 
-Ejecuta los tests con `valgrind --leak-check=full`. Al final, lo que quieres ver es:
+Ejecuta los tests con `valgrind --leak-check=full --show-leak-kinds=all`. **Valgrind** ejecuta tu programa vigilando cada acceso a memoria: avisa de **leaks** (memoria reservada con `malloc` que nunca se libera) y de lecturas o escrituras fuera de sitio. Al final, lo que quieres ver es:
 
 ```text
 All heap blocks were freed -- no leaks are possible
@@ -224,7 +229,7 @@ ERROR SUMMARY: 0 errors from 0 contexts
 | `Invalid read` / `Invalid write` | Se lee o escribe fuera de la memoria que te corresponde | Mira la función y línea que indica valgrind; suele ser un `<=` que debía ser `<` o falta sitio para el `'\0'` |
 | `Conditional jump … uninitialised value` | Se usa una variable sin inicializar | Inicialízala antes de usarla |
 
-Más contexto en [[Segmentos de memoria en C]] y, para encontrar el fallo paso a paso, [[Depurar con gdb]].
+Más contexto en [[Valgrind y sanitizers]] y [[Segmentos de memoria en C]] y, para encontrar el fallo paso a paso, [[Depurar con gdb]].
 
 ---
 
@@ -262,7 +267,7 @@ Ejemplo con [[ft_itoa]]:
 > Compila todos los `.c` de `tests/` con `$(wildcard tests/*.c)`. Ver [[Makefile y librerías estáticas]].
 
 > [!warning] Nombre del fichero: `ft_xxx_test.c`, no `test_ft_xxx.c`
-> Si no, chocaría con la regla `test_%` del Makefile.
+> Es la convención de la suite: `test_ft_xxx` es el nombre de la **función** de test y del objetivo `make test_ft_xxx` (regla `test_%` del Makefile). Llamar al fichero de otra forma evita confundirlos.
 
 ---
 
@@ -270,6 +275,9 @@ Ejemplo con [[ft_itoa]]:
 
 > [!danger] Un segfault detiene todo
 > No hay protección contra crashes: si una función hace segfault, el runner se para en ese test. El **último caso impreso** indica dónde estaba. Para ver la línea exacta, ejecuta el runner dentro de gdb ([[Depurar con gdb]]).
+
+> [!warning] Cambiar solo `test.h` no recompila
+> La regla `test_runner` depende de `libft.a` y de los `.c` de `tests/`, pero no de `tests/test.h`. Si solo tocas el header, borra el ejecutable (`make clean`) antes de volver a lanzar los tests.
 
 > [!warning] No se simula que `malloc` falle
 > No se comprueba qué hacen `ft_calloc`, `ft_strdup`, `ft_substr`, `ft_strjoin` y `ft_strtrim` si `malloc` devuelve `NULL`. Revísalo a mano: después de cada `malloc` debe haber
@@ -279,6 +287,22 @@ Ejemplo con [[ft_itoa]]:
 > ```
 > Ver [[Control de errores en C]].
 
-> [!todo] Pendiente
-> - [ ] Test de [[ft_split]] (ya implementada; añádelo siguiendo [[#Añadir un test nuevo]], y libera cada cadena **y** el array).
-> - [ ] Tests de la resto de la Parte 2 y de la Parte 3 a medida que se implementen.
+> [!warning] Antes de entregar
+> El subject prohíbe entregar archivos no utilizados, y la Norma pide que el Makefile nombre los fuentes explícitamente (aquí `TEST_SRC` usa `$(wildcard tests/*.c)`). Antes de la entrega final, quita la carpeta `tests/`, el ejecutable y las reglas `test`, `test_%`, `norm` y `valgrind` del Makefile (o guárdalos en otra rama, ver [[Git para 42]]).
+
+## Pendiente
+
+- [ ] Test de [[ft_split]] (ya implementada; añádelo siguiendo [[#Añadir un test nuevo]], y libera cada cadena **y** el array).
+- [ ] Tests del resto de la Parte 2 y de la Parte 3 a medida que se implementen.
+
+## Relacionadas
+
+[[libft - Índice]] · [[libft - Anexo comparativo]] · [[Valgrind y sanitizers]] · [[Depurar con gdb]] · [[Makefile y librerías estáticas]] · [[La Norma]] · [[Control de errores en C]] · [[Git para 42]]
+
+## Referencias
+
+- Código de la suite: `cursus/libft/tests/` (`main.c`, `utils.c`, `test.h`, `README.md`) y el `Makefile` de la libft — comandos, tabla `g_tests` y funciones `check_*` descritos en esta nota.
+- [Valgrind Quick Start Guide](https://valgrind.org/docs/manual/quick-start.html) — uso básico y cómo leer el informe.
+- [Valgrind Memcheck manual](https://valgrind.org/docs/manual/mc-manual.html) — significado de `definitely lost`, `Invalid read/write` y `Conditional jump ... uninitialised value`.
+- [42School/norminette](https://github.com/42School/norminette) — la herramienta que ejecuta `make norm`.
+- Subject de libft v19.3 (`es.subject_libft.pdf`) — se recomienda crear programas de prueba, aunque no se entregan ni se evalúan; prohibido entregar archivos no utilizados.

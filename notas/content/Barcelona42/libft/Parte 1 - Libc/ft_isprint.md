@@ -9,7 +9,26 @@ estado: hecho
 
 [[libft - Índice|← Índice]] · Parte 1 · Caracteres
 
-> ¿Es imprimible (espacio incluido)?
+> ¿Es imprimible (espacio incluido)? Devuelve 1 si `c` es un carácter visible o el espacio (32–126) y 0 si no.
+
+## Explicación sencilla
+
+«Imprimible» significa que, al escribirlo en la terminal, ocupa una posición: letras, dígitos, signos y el espacio. Los caracteres de control (salto de línea, tabulador, `'\0'`…) no lo son.
+
+| Entrada | Código | Salida |
+|---|---|---|
+| `' '` | 32 | 1 |
+| `'A'` | 65 | 1 |
+| `'~'` | 126 | 1 |
+| `'\n'` | 10 | 0 |
+| `'\t'` | 9 | 0 |
+| DEL | 127 | 0 |
+
+```text
+ 0 .......... 31 | 32 .............. 126 | 127
+   control       | ' ' ... 'A' ... '~'   | DEL
+      0          |          1            |  0
+```
 
 ## Prototipo
 
@@ -63,13 +82,31 @@ Consultar: `man 3 isprint`
 > [!note] Traducción
 > Los estándares exigen que el argumento c de estas funciones sea EOF o un valor representable en el tipo unsigned char. Si el argumento c es de tipo char, debe convertirse (cast) a unsigned char
 
+## Cómo implementarla
+
+```text
+si c está entre 32 (' ') y 126 ('~'), ambos incluidos → devolver 1
+si no                                                 → devolver 0
+```
+
 ## Puntos clave y casos límite
 
 - En el locale "C": 32 (`' '`) a 126 (`'~'`). El 127 (DEL) **no** es imprimible.
+
+### Errores típicos
+
+- **Empezar en 33**: eso es `isgraph` (imprimible **sin** espacio). El espacio sí cuenta para `isprint`.
+- **Incluir el 127**: DEL es un carácter de control.
+- **Creer que `'\t'` es imprimible**: es «espacio en blanco» (`isspace`), pero no imprimible.
 
 ## Relacionadas
 
 [[ft_isascii]]
 
----
-*Fuente de las citas: `man 3 isprint` — Linux man-pages 5.10 (Ubuntu 22.04). Texto en inglés copiado literalmente del manual; la traducción es propia. Requisitos copiados literalmente del Subject libft v19.3 (es.subject_libft.pdf). En los Mac de 42 (man de BSD/macOS) la redacción puede variar.*
+## Referencias
+
+- `man 3 isprint` — Linux man-pages 5.10 (Ubuntu 22.04): las citas en inglés están copiadas literalmente del manual; la traducción es propia.
+- [isprint(3) — man7.org](https://man7.org/linux/man-pages/man3/isprint.3.html) — versión en línea del manual de Linux (puede ser más reciente que la de Ubuntu 22.04).
+- [ascii(7) — man7.org](https://man7.org/linux/man-pages/man7/ascii.7.html) — tabla ASCII con los códigos de cada carácter.
+- Subject de libft v19.3 (`es.subject_libft.pdf`) — requisitos copiados literalmente.
+- En los Mac de 42 (man de BSD/macOS) la redacción del manual puede variar.

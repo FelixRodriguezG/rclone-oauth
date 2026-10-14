@@ -1,9 +1,25 @@
 {
- "updated": "2026-10-13T00:17:20+02:00",
+ "updated": "2026-10-14T09:45:38+02:00",
  "files": [
+  {
+   "path": "Barcelona42/42/Exam Rank 02.md",
+   "name": "Exam Rank 02"
+  },
   {
    "path": "Barcelona42/42/La Norma.md",
    "name": "La Norma"
+  },
+  {
+   "path": "Barcelona42/A-Maze-ing/A-Maze-ing - Índice.md",
+   "name": "A-Maze-ing - Índice"
+  },
+  {
+   "path": "Barcelona42/Born2beroot/Born2beroot - Índice.md",
+   "name": "Born2beroot - Índice"
+  },
+  {
+   "path": "Barcelona42/C/Algoritmos de ordenación y complejidad.md",
+   "name": "Algoritmos de ordenación y complejidad"
   },
   {
    "path": "Barcelona42/C/Arrays en C.md",
@@ -18,8 +34,32 @@
    "name": "Control de errores en C"
   },
   {
+   "path": "Barcelona42/C/Descriptores de fichero y read.md",
+   "name": "Descriptores de fichero y read"
+  },
+  {
+   "path": "Barcelona42/C/Listas enlazadas.md",
+   "name": "Listas enlazadas"
+  },
+  {
+   "path": "Barcelona42/C/Operadores de bits.md",
+   "name": "Operadores de bits"
+  },
+  {
+   "path": "Barcelona42/C/Preprocesador y headers.md",
+   "name": "Preprocesador y headers"
+  },
+  {
    "path": "Barcelona42/C/printf.md",
    "name": "printf"
+  },
+  {
+   "path": "Barcelona42/C/Punteros en C.md",
+   "name": "Punteros en C"
+  },
+  {
+   "path": "Barcelona42/C/Recursión.md",
+   "name": "Recursión"
   },
   {
    "path": "Barcelona42/C/Segmentos de memoria en C.md",
@@ -30,12 +70,44 @@
    "name": "stdarg y funciones variádicas"
   },
   {
+   "path": "Barcelona42/C/Structs y typedef.md",
+   "name": "Structs y typedef"
+  },
+  {
+   "path": "Barcelona42/C/Tipos enteros y conversiones.md",
+   "name": "Tipos enteros y conversiones"
+  },
+  {
+   "path": "Barcelona42/C/Variables static y ámbito.md",
+   "name": "Variables static y ámbito"
+  },
+  {
+   "path": "Barcelona42/ft_printf/ft_printf - Índice.md",
+   "name": "ft_printf - Índice"
+  },
+  {
+   "path": "Barcelona42/get_next_line/get_next_line - Índice.md",
+   "name": "get_next_line - Índice"
+  },
+  {
+   "path": "Barcelona42/Herramientas/Cómo compila C.md",
+   "name": "Cómo compila C"
+  },
+  {
    "path": "Barcelona42/Herramientas/Depurar con gdb.md",
    "name": "Depurar con gdb"
   },
   {
+   "path": "Barcelona42/Herramientas/Git para 42.md",
+   "name": "Git para 42"
+  },
+  {
    "path": "Barcelona42/Herramientas/Makefile y librerías estáticas.md",
    "name": "Makefile y librerías estáticas"
+  },
+  {
+   "path": "Barcelona42/Herramientas/Valgrind y sanitizers.md",
+   "name": "Valgrind y sanitizers"
   },
   {
    "path": "Barcelona42/Herramientas/Vim.md",
@@ -228,6 +300,14 @@
   {
    "path": "Barcelona42/libft/Parte 3 - Listas/ft_lstsize.md",
    "name": "ft_lstsize"
+  },
+  {
+   "path": "Barcelona42/push_swap/push_swap - Índice.md",
+   "name": "push_swap - Índice"
+  },
+  {
+   "path": "Barcelona42/Python/Python - Índice.md",
+   "name": "Python - Índice"
   }
  ]
 }

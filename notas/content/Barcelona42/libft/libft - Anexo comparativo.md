@@ -1,7 +1,7 @@
 ---
 tags: [libft, anexo]
 ---
-# libft — Anexo: funciones por uso y comparativas
+# libft - Anexo comparativo
 
 [[libft - Índice|← Índice]] · Anexo
 
@@ -10,7 +10,9 @@ tags: [libft, anexo]
 > [!info] Cómo leer este anexo
 > - Cada sección empieza con una tabla comparativa y sigue con pros/contras.
 > - Las funciones con prefijo `ft_` enlazan a su nota. Las que no llevan `ft_` (`strcpy`, `strtol`, `printf`…) son de la libc y **no** forman parte de libft: aparecen solo como referencia.
-> - **Complejidad:** n = bytes/caracteres procesados, m = longitud de la aguja, N = nodos de la lista.
+> - **Complejidad** (notación O grande): cómo crece el trabajo según el tamaño de la entrada. O(1) = siempre lo mismo; O(n) = proporcional a n; O(n·m) = proporcional al producto. Aquí n = bytes/caracteres procesados, m = longitud de la aguja (la subcadena que buscas), N = nodos de la lista. Ver [[Algoritmos de ordenación y complejidad]].
+> - **En el sitio**: la función modifica la memoria que ya tienes. **Copia**: reserva memoria nueva con `malloc` y deja el original intacto.
+> - ✅ / ❌ marcan ventajas e inconvenientes.
 
 ## Guía rápida: «quiero…» → «uso…»
 
@@ -40,7 +42,7 @@ tags: [libft, anexo]
 
 ---
 
-## 1. Clasificación de caracteres
+## Clasificación de caracteres
 
 [[ft_isalpha]] · [[ft_isdigit]] · [[ft_isalnum]] · [[ft_isascii]] · [[ft_isprint]]
 
@@ -59,9 +61,9 @@ tags: [libft, anexo]
 - **libft vs libc:**
   - ✅ libft devuelve siempre **1 o 0** (lo exige el subject); la libc devuelve «distinto de cero», que puede ser cualquier valor (p. ej. `1024`). No compares nunca el resultado de la original con `== 1`.
   - ❌ libft ignora el *locale*; la libc puede considerar letras otros caracteres (`'ñ'`, `'é'`) según el `setlocale`.
-  - ⚠️ En la libc es comportamiento indefinido pasar un valor que no sea `EOF` ni representable como `unsigned char` (p. ej. un `char` negativo). Si recorres un `char *`, haz *cast* a `(unsigned char)`.
+  - **Cuidado:** En la libc es comportamiento indefinido pasar un valor que no sea `EOF` ni representable como `unsigned char` (p. ej. un `char` negativo). Si recorres un `char *`, haz *cast* a `(unsigned char)`.
 
-## 2. Transformación de caracteres
+## Transformación de caracteres
 
 [[ft_toupper]] · [[ft_tolower]] · [[ft_strmapi]] · [[ft_striteri]]
 
@@ -79,14 +81,14 @@ tags: [libft, anexo]
   - [[ft_striteri]] ✅ sin memoria extra, ❌ destruye el original, ❌ **crashea con literales** (están en memoria de solo lectura, ver [[Segmentos de memoria en C]]).
   - Ambas pasan el **índice** a `f`, así que puedes hacer transformaciones que dependen de la posición (alternar mayúsculas, etc.).
 
-## 3. Inicializar memoria
+## Inicializar memoria
 
 [[ft_memset]] · [[ft_bzero]] · [[ft_calloc]]
 
 | Función | Valor de relleno | Reserva memoria | Devuelve | Estándar |
 |---|---|---|---|---|
 | [[ft_memset]] | cualquier byte | No | puntero al buffer | C estándar |
-| [[ft_bzero]] | solo `0` | No | `void` | BSD; obsoleta en POSIX.1-2008 |
+| [[ft_bzero]] | solo `0` | No | `void` | BSD; marcada obsoleta en POSIX.1-2001 y eliminada en POSIX.1-2008 |
 | [[ft_calloc]] | solo `0` | **Sí** | puntero nuevo o `NULL` | C estándar |
 
 **Comparativa**
@@ -94,12 +96,12 @@ tags: [libft, anexo]
 - **memset vs bzero:** `bzero(p, n)` ≡ `memset(p, 0, n)`. En libft lo natural es implementar [[ft_bzero]] llamando a [[ft_memset]].
   - [[ft_memset]] ✅ estándar y portable, ✅ cualquier valor, ✅ devuelve el puntero (encadenable).
   - [[ft_bzero]] ✅ más corta y explícita para «poner a cero», ❌ no es C estándar.
-- ⚠️ `memset` rellena **bytes**, no elementos: `memset(arr_int, 1, n)` **no** pone los `int` a 1 (pone cada int a `0x01010101`). Solo `0` y `-1` funcionan «como esperarías» con enteros.
+- **Cuidado:** `memset` rellena **bytes**, no elementos: `memset(arr_int, 1, n)` **no** pone los `int` a 1 (pone cada int a `0x01010101`). Solo `0` y `-1` funcionan «como esperarías» con enteros.
 - **calloc vs malloc + bzero:**
   - [[ft_calloc]] ✅ una sola llamada, ✅ la original comprueba el desbordamiento de `nmemb * size` (devuelve `NULL` en vez de reservar menos de lo pedido). Conviene que tu versión lo haga también.
   - ❌ si vas a sobrescribir toda la memoria de inmediato, poner a cero es trabajo inútil: ahí basta `malloc`.
 
-## 4. Copiar datos
+## Copiar datos
 
 [[ft_memcpy]] · [[ft_memmove]] · [[ft_strlcpy]] · [[ft_strdup]] · [[ft_substr]]
 
@@ -117,7 +119,7 @@ tags: [libft, anexo]
 
 - [[ft_memcpy]] ✅ puede ser algo más rápida (no comprueba direcciones), ❌ resultado indefinido si `src` y `dest` se solapan.
 - [[ft_memmove]] ✅ siempre correcta (copia hacia atrás cuando `dest > src`), ❌ una comparación extra.
-- 💡 Regla práctica: usa [[ft_memmove]] salvo que sepas **seguro** que no hay solapamiento (p. ej. dos `malloc` distintos). Desplazar datos dentro del mismo array siempre es `memmove`.
+- **Regla práctica:** usa [[ft_memmove]] salvo que sepas **seguro** que no hay solapamiento (p. ej. dos `malloc` distintos). Desplazar datos dentro del mismo array siempre es `memmove`.
 
 **strlcpy vs strcpy / strncpy**
 
@@ -131,7 +133,7 @@ tags: [libft, anexo]
 - [[ft_strdup]]: ✅ reserva exactamente `strlen + 1`, ❌ hay que hacer `free`, ❌ puede devolver `NULL`.
 - [[ft_substr]]: como `strdup` pero de un trozo. Casos límite: `start >= ft_strlen(s)` → cadena vacía `""` (no `NULL`); `len` mayor que lo que queda → copia solo lo que queda.
 
-## 5. Concatenar
+## Concatenar
 
 [[ft_strlcat]] · [[ft_strjoin]]
 
@@ -145,7 +147,7 @@ tags: [libft, anexo]
 
 - [[ft_strlcat]] ✅ no desborda, ✅ el retorno permite detectar truncado (`retorno >= size`), ❌ `size` es el tamaño **total** del buffer (no lo que queda libre, al contrario que `strncat`), ❌ si `size <= strlen(dst)` no copia nada y devuelve `size + strlen(src)` — el caso límite más evaluado.
 - [[ft_strjoin]] ✅ no toca las entradas y funciona con literales, ❌ `malloc` en cada llamada.
-- ⚠️ Patrón peligroso con [[ft_strjoin]] en bucles: `s = ft_strjoin(s, otra);` pierde la referencia al `s` anterior → **leak**. Guarda el viejo y libéralo:
+- **Cuidado:** Patrón peligroso con [[ft_strjoin]] en bucles: `s = ft_strjoin(s, otra);` pierde la referencia al `s` anterior → **leak**. Guarda el viejo y libéralo:
   ```c
   tmp = ft_strjoin(s, otra);
   free(s);
@@ -153,7 +155,7 @@ tags: [libft, anexo]
   ```
 - Rendimiento: concatenar k veces con [[ft_strjoin]] copia todo cada vez (O(n·k)); con un buffer grande y [[ft_strlcat]] evitas los `malloc`, aunque `strlcat` también recorre `dst` en cada llamada.
 
-## 6. Buscar
+## Buscar
 
 [[ft_strchr]] · [[ft_strrchr]] · [[ft_memchr]] · [[ft_strnstr]]
 
@@ -177,7 +179,7 @@ tags: [libft, anexo]
   - [[ft_strnstr]] ✅ limita la búsqueda (útil en buffers no terminados), ✅ aguja vacía → devuelve `haystack`.
   - ❌ no es estándar (BSD); la aguja debe caber **entera** dentro de los `len` primeros caracteres.
 
-## 7. Comparar
+## Comparar
 
 [[ft_strncmp]] · [[ft_memcmp]]
 
@@ -193,11 +195,11 @@ tags: [libft, anexo]
 - **strncmp vs memcmp:**
   - [[ft_strncmp]] ✅ seguro con cadenas de distinta longitud (para en el primer `'\0'`).
   - [[ft_memcmp]] ✅ compara datos binarios con ceros dentro, ❌ si una zona es más corta que `n`, lees fuera de ella.
-  - ⚠️ No uses `memcmp` para comparar `struct`: el *padding* entre campos puede contener basura.
-- ⚠️ Ambas deben restar como **`unsigned char`**: con `char` con signo, `'\200'` saldría menor que `'a'`. Error típico en la evaluación.
+  - **Cuidado:** No uses `memcmp` para comparar `struct`: el *padding* entre campos puede contener basura.
+- **Cuidado:** Ambas deben restar como **`unsigned char`**: con `char` con signo, `'\200'` saldría menor que `'a'`. Error típico en la evaluación.
 - No supongas que el retorno es `-1/0/1`: solo importa el **signo**.
 
-## 8. Longitudes y recorridos
+## Longitudes y recorridos
 
 [[ft_strlen]] · [[ft_lstsize]] · [[ft_lstlast]]
 
@@ -210,7 +212,7 @@ tags: [libft, anexo]
 - Ninguna guarda la longitud: **cada llamada recorre todo**. Llamar a `ft_strlen(s)` en la condición de un `while` lo vuelve O(n²); guárdalo en una variable antes del bucle.
 - [[ft_strlen]] devuelve `size_t` (sin signo): `ft_strlen(s) - 1` con `s == ""` da un número gigante, no `-1`.
 
-## 9. Construir cadenas nuevas (con `malloc`)
+## Construir cadenas nuevas (con `malloc`)
 
 [[ft_strdup]] · [[ft_substr]] · [[ft_strjoin]] · [[ft_strtrim]] · [[ft_split]] · [[ft_itoa]] · [[ft_strmapi]]
 
@@ -233,7 +235,7 @@ tags: [libft, anexo]
 > [!warning] Regla común a toda esta sección
 > Si un `malloc` intermedio falla, hay que **liberar lo ya reservado** antes de devolver `NULL`. Es crítico en [[ft_split]]: si falla la palabra 5, libera las 4 anteriores y el array.
 
-## 10. Conversión numérica
+## Conversión numérica
 
 [[ft_atoi]] · [[ft_itoa]] · [[ft_putnbr_fd]]
 
@@ -251,9 +253,9 @@ tags: [libft, anexo]
 - [[ft_itoa]] vs [[ft_putnbr_fd]]:
   - [[ft_itoa]] ✅ el resultado se puede guardar, concatenar, comparar…, ❌ `malloc` + `free`.
   - [[ft_putnbr_fd]] ✅ sin memoria dinámica, ❌ solo sirve para escribir.
-- ⚠️ Caso común a ambas: **`INT_MIN` (-2147483648)**. `-INT_MIN` no cabe en `int`: trabaja con `long` o trata el caso aparte.
+- **Cuidado:** Caso común a ambas: **`INT_MIN` (-2147483648)**. `-INT_MIN` no cabe en `int`: trabaja con `long` o trata el caso aparte.
 
-## 11. Salida por *file descriptor*
+## Salida por *file descriptor*
 
 [[ft_putchar_fd]] · [[ft_putstr_fd]] · [[ft_putendl_fd]] · [[ft_putnbr_fd]]
 
@@ -268,9 +270,9 @@ tags: [libft, anexo]
 **Comparativa**
 
 - `write` es una *syscall* y **no tiene buffer**: escribir carácter a carácter es mucho más lento que `write(fd, s, ft_strlen(s))`.
-- vs `printf`: ✅ las `put*_fd` eligen el fd (`2` para errores), ✅ escriben al instante, ❌ sin formato. ⚠️ Mezclar `printf` y `write` en el mismo fd puede desordenar la salida (por el buffer de `printf`).
+- vs `printf`: ✅ las `put*_fd` eligen el fd (`2` para errores), ✅ escriben al instante, ❌ sin formato. **Cuidado:** mezclar `printf` y `write` en el mismo fd puede desordenar la salida (por el buffer de `printf`).
 
-## 12. Listas enlazadas
+## Listas enlazadas
 
 ### Crear e insertar
 
@@ -289,7 +291,7 @@ tags: [libft, anexo]
 | [[ft_lstdelone]] | **un** nodo (`del(content)` + `free(nodo)`) | No | — |
 | [[ft_lstclear]] | **todos** desde `*lst` | — | `NULL` |
 
-- ⚠️ [[ft_lstdelone]] no arregla el `next` del nodo anterior: si borras uno del medio, enlaza tú antes los vecinos.
+- **Cuidado:** [[ft_lstdelone]] no arregla el `next` del nodo anterior: si borras uno del medio, enlaza tú antes los vecinos.
 - `del` existe porque la lista no sabe qué es `content`: puede ser un `malloc` (→ `free`), un literal (→ función que no hace nada) o una estructura con más punteros dentro.
 
 ### Aplicar funciones
@@ -304,7 +306,7 @@ tags: [libft, anexo]
 
 ---
 
-## Resumen: ¿quién reserva memoria?
+## Resumen: quién reserva memoria
 
 | Reservan (hay que hacer `free`) | No reservan |
 |---|---|
@@ -321,7 +323,23 @@ tags: [libft, anexo]
 | [[ft_putnbr_fd]] | [[ft_itoa]] |
 | [[ft_bzero]] / [[ft_memset]] | [[ft_calloc]] |
 
-💡 Criterio general: **en el sitio** cuando el buffer ya existe y no necesitas el original (más rápido, sin leaks posibles); **copia** cuando el original debe conservarse, es un literal, o no sabes el tamaño final de antemano.
+> [!summary] Criterio general
+> **En el sitio** cuando el buffer ya existe y no necesitas el original (más rápido, sin leaks posibles); **copia** cuando el original debe conservarse, es un literal, o no sabes el tamaño final de antemano.
 
----
-*Anexo de elaboración propia. Los comportamientos de las funciones originales se basan en Linux man-pages 5.10 y libbsd; los de las funciones adicionales, en el Subject libft v19.3. Para las citas literales, ver la nota de cada función.*
+## Relacionadas
+
+[[libft - Índice]] · [[libft - Suite de tests]] · [[Punteros en C]] · [[Segmentos de memoria en C]] · [[Carácter nulo y puntero NULL]] · [[Tipos enteros y conversiones]] · [[Listas enlazadas]] · [[Descriptores de fichero y read]] · [[Valgrind y sanitizers]] · [[Algoritmos de ordenación y complejidad]]
+
+## Referencias
+
+Anexo de elaboración propia. Para las citas literales, ver la nota de cada función.
+
+- Linux man-pages 5.10 y libbsd (Ubuntu 22.04): `man 3 memset`, `man 3 memmove`, `man 3 strlcpy` (`3bsd`), etc. — comportamiento de las funciones originales.
+- [cppreference: Null-terminated byte strings](https://en.cppreference.com/w/c/string/byte) — `strcpy`, `strncpy`, `strcat`, `strstr`, `strtok`, `memcmp` y compañía.
+- [cppreference: strncpy](https://en.cppreference.com/w/c/string/byte/strncpy) — no termina en `'\0'` si trunca y rellena con ceros.
+- [man7.org: bzero(3)](https://man7.org/linux/man-pages/man3/bzero.3.html) — `bzero` marcada LEGACY en POSIX.1-2001 y eliminada en POSIX.1-2008.
+- [man7.org: isalpha(3)](https://man7.org/linux/man-pages/man3/isalpha.3.html) — retorno «distinto de cero» y argumento `unsigned char` o `EOF`.
+- [man7.org: calloc(3)](https://man7.org/linux/man-pages/man3/calloc.3.html) — `calloc` comprueba el desbordamiento de `nmemb * size`.
+- [man7.org: strtol(3)](https://man7.org/linux/man-pages/man3/strtol.3.html) y [strtok(3)](https://man7.org/linux/man-pages/man3/strtok.3.html) — alternativas de la libc citadas.
+- [man7.org: write(2)](https://man7.org/linux/man-pages/man2/write.2.html) — `write` es una llamada al sistema sin buffer propio.
+- Subject de libft v19.3 (`es.subject_libft.pdf`) — comportamiento de las funciones de la Parte 2 y la Parte 3.

@@ -9,7 +9,25 @@ estado: hecho
 
 [[libft - Índice|← Índice]] · Parte 1 · Caracteres
 
-> ¿Es letra o dígito?
+> ¿Es letra o dígito? Devuelve 1 si `c` es una letra (`A`–`Z`, `a`–`z`) o un dígito (`0`–`9`) y 0 si no.
+
+## Explicación sencilla
+
+«Alfanumérico» = alfabético **o** numérico. Es la unión de [[ft_isalpha]] y [[ft_isdigit]].
+
+| Entrada | Salida | Por qué |
+|---|---|---|
+| `'a'` | 1 | letra |
+| `'Z'` | 1 | letra |
+| `'4'` | 1 | dígito |
+| `'_'` | 0 | símbolo |
+| `' '` | 0 | espacio |
+
+```text
+ '0'..'9'   '['..'`'   'A'..'Z'   'a'..'z'    resto
+ 48 .. 57   91 .. 96   65 .. 90   97 .. 122
+    1           0          1          1          0
+```
 
 ## Prototipo
 
@@ -63,13 +81,34 @@ Consultar: `man 3 isalnum`
 > [!note] Traducción
 > Los estándares exigen que el argumento c de estas funciones sea EOF o un valor representable en el tipo unsigned char. Si el argumento c es de tipo char, debe convertirse (cast) a unsigned char
 
+## Cómo implementarla
+
+```text
+si ft_isalpha(c) es verdadero o ft_isdigit(c) es verdadero → devolver 1
+si no                                                     → devolver 0
+```
+
+> [!tip] Reutiliza tus funciones
+> Llamar a tus `ft_isalpha` y `ft_isdigit` está permitido (son tuyas, no externas). Recuerda que el operador `||` de C ya da exactamente 0 o 1.
+
 ## Puntos clave y casos límite
 
 - Se puede implementar reutilizando `ft_isalpha` y `ft_isdigit`.
+
+### Errores típicos
+
+- **Llamar a `isalpha`/`isdigit` de la libc**: son funciones externas y el subject lo prohíbe en la Parte 1.
+- **Pensar que `'_'` es alfanumérico**: se permite en nombres de variables, pero no es letra ni dígito.
+- **No declarar `ft_isalpha` y `ft_isdigit` en `libft.h`**: sin prototipo visible, la llamada es una «declaración implícita» y con `-Werror` no compila.
 
 ## Relacionadas
 
 [[ft_isalpha]] · [[ft_isdigit]]
 
----
-*Fuente de las citas: `man 3 isalnum` — Linux man-pages 5.10 (Ubuntu 22.04). Texto en inglés copiado literalmente del manual; la traducción es propia. Requisitos copiados literalmente del Subject libft v19.3 (es.subject_libft.pdf). En los Mac de 42 (man de BSD/macOS) la redacción puede variar.*
+## Referencias
+
+- `man 3 isalnum` — Linux man-pages 5.10 (Ubuntu 22.04): las citas en inglés están copiadas literalmente del manual; la traducción es propia.
+- [isalnum(3) — man7.org](https://man7.org/linux/man-pages/man3/isalnum.3.html) — versión en línea del manual de Linux (puede ser más reciente que la de Ubuntu 22.04).
+- [ascii(7) — man7.org](https://man7.org/linux/man-pages/man7/ascii.7.html) — tabla ASCII con los códigos de cada carácter.
+- Subject de libft v19.3 (`es.subject_libft.pdf`) — requisitos copiados literalmente.
+- En los Mac de 42 (man de BSD/macOS) la redacción del manual puede variar.

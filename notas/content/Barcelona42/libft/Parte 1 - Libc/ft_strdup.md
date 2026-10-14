@@ -1,15 +1,39 @@
 ---
-tags: [libft, libft/parte1, libft/memoria-dinámica]
+tags: [libft, libft/parte1, libft/memoria-dinamica]
 funcion: ft_strdup
 original: "strdup(3)"
 cabecera: "<string.h>"
-estado: pendiente
+estado: hecho
 ---
 # ft_strdup
 
 [[libft - Índice|← Índice]] · Parte 1 · Memoria dinámica
 
-> Duplica una cadena en memoria nueva
+> Duplica una cadena en memoria nueva: reserva con `malloc` el espacio justo, copia `s` dentro y devuelve la copia.
+
+## Explicación sencilla
+
+La copia vive en el **heap** (ver [[Segmentos de memoria en C]]): puedes modificarla y sigue existiendo al salir de la función, pero quien la recibe tiene que liberarla con `free`.
+
+```c
+char	*copia;
+
+copia = ft_strdup("hola");
+copia[0] = 'H';                  /* ✅ la copia sí se puede modificar */
+free(copia);
+```
+
+```text
+ datos (solo lectura)          heap (malloc de 5 bytes)
+ "hola" │ h │ o │ l │ a │ \0 │   │ H │ o │ l │ a │ \0 │ ◄── copia
+                                  strlen("hola") + 1 = 5
+```
+
+| Entrada | Bytes reservados | Retorno |
+|---|---|---|
+| `"hola"` | 5 | nueva cadena `"hola"` |
+| `""` | 1 | nueva cadena vacía (solo `'\0'`) |
+| sin memoria | — | `NULL` |
 
 ## Prototipo
 
@@ -51,14 +75,37 @@ Consultar: `man 3 strdup`
 > [!note] Traducción
 > ENOMEM No hay memoria suficiente para reservar la cadena duplicada.
 
+## Cómo implementarla
+
+```text
+len = ft_strlen(s)
+copia = malloc(len + 1)
+si copia == NULL:
+    devolver NULL
+copiar los len caracteres de s y el '\0' a copia   (ft_memcpy o ft_strlcpy)
+devolver copia
+```
+
 ## Puntos clave y casos límite
 
 - Reserva `ft_strlen(s) + 1` bytes (el `+ 1` es para el `'\0'`).
 - Comprueba siempre el retorno de `malloc`.
 
+### Errores típicos
+
+- **Olvidar el `+ 1`** del `'\0'`: escribes un byte fuera del bloque. Valgrind lo marca como «Invalid write of size 1». Ver [[Valgrind y sanitizers]].
+- **Usar `sizeof(s)`** en lugar de `ft_strlen(s)`: `s` es un puntero, así que `sizeof(s)` vale 8 en 64 bits, sea cual sea la cadena.
+- **Devolver `s`** en vez de una copia: no es un duplicado y el `free` posterior rompe el programa.
+- **No comprobar `NULL` tras `malloc`**. Ver [[Control de errores en C]].
+- **No liberar la copia** en tus tests: fuga de memoria (*leak*).
+
 ## Relacionadas
 
-[[ft_strlen]] · [[ft_calloc]] · [[ft_substr]]
+[[ft_strlen]] · [[ft_calloc]] · [[ft_substr]] · [[Segmentos de memoria en C]] · [[Control de errores en C]]
 
----
-*Fuente de las citas: `man 3 strdup` — Linux man-pages 5.10 (Ubuntu 22.04). Texto en inglés copiado literalmente del manual; la traducción es propia. Requisitos copiados literalmente del Subject libft v19.3 (es.subject_libft.pdf). En los Mac de 42 (man de BSD/macOS) la redacción puede variar.*
+## Referencias
+
+- `man 3 strdup` — Linux man-pages 5.10 (Ubuntu 22.04): las citas en inglés están copiadas literalmente del manual; la traducción es propia.
+- [strdup(3) — man7.org](https://man7.org/linux/man-pages/man3/strdup.3.html) — versión en línea del manual de Linux (puede ser más reciente que la de Ubuntu 22.04).
+- Subject de libft v19.3 (`es.subject_libft.pdf`) — requisitos copiados literalmente.
+- En los Mac de 42 (man de BSD/macOS) la redacción del manual puede variar.

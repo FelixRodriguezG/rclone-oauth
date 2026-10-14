@@ -3,13 +3,33 @@ tags: [libft, libft/parte1, libft/memoria]
 funcion: ft_memcmp
 original: "memcmp(3)"
 cabecera: "<string.h>"
-estado: pendiente
+estado: hecho
 ---
 # ft_memcmp
 
 [[libft - Índice|← Índice]] · Parte 1 · Memoria
 
-> Compara n bytes de memoria
+> Compara n bytes de memoria: devuelve 0 si los `n` primeros bytes de `s1` y `s2` son iguales, y un número negativo o positivo según el primer byte distinto.
+
+## Explicación sencilla
+
+Como [[ft_strncmp]], pero sin tratar el `'\0'` como final: compara **todos** los `n` bytes.
+
+```text
+ s1:  │ a │ b │ \0 │ c │
+ s2:  │ a │ b │ \0 │ d │
+        =   =    =   ≠
+                     └─ 'c' - 'd' = -1  → negativo
+```
+
+| Llamada | Resultado |
+|---|---|
+| `ft_memcmp("ab\0c", "ab\0d", 4)` | negativo |
+| `ft_strncmp("ab\0c", "ab\0d", 4)` | 0 (se para en el `'\0'`) |
+| `ft_memcmp("\200", "\0", 1)` | positivo (128 − 0) |
+| `ft_memcmp(a, b, 0)` | 0 |
+
+Sirve para comparar cualquier cosa: structs, arrays de `int`… (ver [[Punteros en C]]).
 
 ## Prototipo
 
@@ -53,15 +73,35 @@ Consultar: `man 3 memcmp`
 >
 > Si n es cero, el valor devuelto es cero.
 
+## Cómo implementarla
+
+```text
+p1 = s1 como puntero a const unsigned char
+p2 = s2 como puntero a const unsigned char
+para i desde 0 hasta n - 1:
+    si p1[i] != p2[i] → devolver p1[i] - p2[i]
+devolver 0
+```
+
 ## Puntos clave y casos límite
 
 - No se detiene en `'\0'`.
 - Devuelve `(unsigned char)a - (unsigned char)b` del primer byte distinto.
 - El man solo garantiza el **signo**, no el valor exacto: en los tests compara signos.
 
+### Errores típicos
+
+- **Comparar como `char` con signo**: `"\200"` frente a `"\0"` daría negativo. Ver [[Tipos enteros y conversiones]].
+- **Parar en `'\0'`**: eso es `strncmp`.
+- **Acceder a memoria con `n == 0`**: hay que devolver 0 sin leer.
+
 ## Relacionadas
 
-[[ft_strncmp]] · [[ft_memchr]]
+[[ft_strncmp]] · [[ft_memchr]] · [[Tipos enteros y conversiones]]
 
----
-*Fuente de las citas: `man 3 memcmp` — Linux man-pages 5.10 (Ubuntu 22.04). Texto en inglés copiado literalmente del manual; la traducción es propia. Requisitos copiados literalmente del Subject libft v19.3 (es.subject_libft.pdf). En los Mac de 42 (man de BSD/macOS) la redacción puede variar.*
+## Referencias
+
+- `man 3 memcmp` — Linux man-pages 5.10 (Ubuntu 22.04): las citas en inglés están copiadas literalmente del manual; la traducción es propia.
+- [memcmp(3) — man7.org](https://man7.org/linux/man-pages/man3/memcmp.3.html) — versión en línea del manual de Linux (puede ser más reciente que la de Ubuntu 22.04).
+- Subject de libft v19.3 (`es.subject_libft.pdf`) — requisitos copiados literalmente.
+- En los Mac de 42 (man de BSD/macOS) la redacción del manual puede variar.

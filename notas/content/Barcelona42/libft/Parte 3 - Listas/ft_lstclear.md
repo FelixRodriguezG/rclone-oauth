@@ -9,7 +9,28 @@ estado: pendiente
 
 [[libft - Índice|← Índice]] · Parte 3 · Listas enlazadas
 
-> Libera toda la lista
+> Libera **toda** la lista a partir del nodo dado: cada contenido con `del` y cada nodo con `free`. Al terminar deja el puntero de quien llama a `NULL`.
+
+## Explicación sencilla
+
+El problema: en cuanto liberas un nodo, ya no puedes leer su `next`. Así que primero te guardas el siguiente y luego liberas el actual.
+
+```text
+ paso 0:  *lst ──► [A| ● ]──► [B| ● ]──► [C|NULL]
+
+ paso 1:  sig = A->next (B)       ; ft_lstdelone(A, del)
+          *lst = B
+                     ✗ A          [B| ● ]──► [C|NULL]
+
+ paso 2:  sig = B->next (C)       ; ft_lstdelone(B, del)
+          *lst = C
+                                  ✗ B        [C|NULL]
+
+ paso 3:  sig = C->next (NULL)    ; ft_lstdelone(C, del)
+          *lst = NULL             → fin: la variable de main vale NULL
+```
+
+Recibe `t_list **` precisamente para poder dejar la variable de quien llama a `NULL` (si recibiera `t_list *`, solo cambiaría su copia; ver [[Punteros en C]]).
 
 ## Prototipo
 
@@ -41,14 +62,33 @@ void ft_lstclear(t_list **lst, void (*del)(void *));
 > [!note] Traducción
 > La función free() libera el espacio de memoria apuntado por ptr, que debe haber sido devuelto por una llamada previa a malloc(), calloc() o realloc(). Si no, o si ya se llamó antes a free(ptr), el comportamiento es indefinido. Si ptr es NULL, no se hace nada.
 
+## Cómo implementarla
+
+```text
+1. Si lst o del son NULL → sal.
+2. Mientras *lst no sea NULL:
+       sig = (*lst)->next          ← guárdalo ANTES de liberar
+       ft_lstdelone(*lst, del)
+       *lst = sig
+3. (Al salir del bucle *lst ya vale NULL.)
+```
+
 ## Puntos clave y casos límite
 
 - Guarda `next` **antes** de liberar el nodo actual.
 - Termina con `*lst = NULL;`.
 
+> [!danger] Errores que provocan crash o leak
+> - **Leer `next` después de liberar**: `ft_lstdelone(*lst, del); *lst = (*lst)->next;` es *use after free*. A veces «funciona» por casualidad; Valgrind lo marca como *Invalid read of size 8* ([[Valgrind y sanitizers]]).
+> - **No dejar `*lst` a NULL**: quien llama conserva un puntero colgante (*dangling pointer*) y, si vuelve a liberar la lista, hay *double free*.
+> - **Liberar solo los nodos y no el contenido** (o al revés): leak de lo que te saltas. Reutilizar [[ft_lstdelone]] evita olvidos.
+> - **`*lst` ya NULL** (lista vacía): no es un error; el bucle no entra y la función termina.
+
 ## Relacionadas
 
-[[ft_lstdelone]] · [[ft_lstmap]]
+[[ft_lstdelone]] · [[ft_lstmap]] · [[Listas enlazadas]] · [[Control de errores en C]]
 
----
-*Descripción, parámetros y valor devuelto copiados literalmente del Subject libft v19.3 (es.subject_libft.pdf). Citas de `man`: Linux man-pages 5.10 (Ubuntu 22.04), con traducción propia.*
+## Referencias
+
+- Subject de libft v19.3 (`/home/felixrod/cursus/es.subject_libft.pdf`) — descripción, parámetros y valor devuelto, copiados literalmente.
+- `man 3 free` (Linux man-pages 5.10, Ubuntu 22.04), con traducción propia — versión en línea: [free(3) en man7.org](https://man7.org/linux/man-pages/man3/free.3.html).

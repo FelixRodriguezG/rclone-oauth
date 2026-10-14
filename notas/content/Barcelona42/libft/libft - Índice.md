@@ -1,17 +1,28 @@
 ---
 tags: [libft, indice]
 ---
-# libft — Índice
+# libft - Índice
 
-[[Inicio|← Inicio]]
+[[Inicio|← Inicio]] · libft
 
-Documentación de todas las funciones de **libft**. En la Parte 1 se cita literalmente el `man` de la función original (en inglés) con su traducción al español. La Parte 2 y la Parte 3 no tienen función original: se citan literalmente del subject (v19.3).
+> **libft** es el primer proyecto del Common Core: programar tu propia **librería estática** (`libft.a`) con funciones de la libc rehechas por ti (Parte 1), funciones nuevas de cadenas y salida (Parte 2) y funciones de listas enlazadas (Parte 3). La usarás en muchos proyectos posteriores. Esta nota es el índice de todas sus funciones.
+
+En la Parte 1 cada nota cita literalmente el `man` de la función original (en inglés) con su traducción al español. La Parte 2 y la Parte 3 no tienen función original: se citan literalmente del subject (v19.3).
+
+> [!note] Vocabulario
+> - **libc**: la librería estándar de C que ya trae el sistema (`strlen`, `malloc`, `printf`…).
+> - **Librería estática** (`.a`): un paquete de ficheros `.o` que se une a tu programa al compilar. Ver [[Makefile y librerías estáticas]].
+> - **Funciones externas**: funciones que no has escrito tú y que el subject te deja usar (columna «Externas» de las tablas).
+> - **`man`**: el manual del sistema. `man 3 strlen` abre la página de `strlen` (ver [[#Cómo consultar el manual]]).
 
 > [!tip] Anexo
 > [[libft - Anexo comparativo]] — funciones agrupadas por uso y comparadas entre sí (pros, contras y cuándo usar cada una).
 
 > [!info] Conceptos clave
 > - [[Carácter nulo y puntero NULL]] — `'\0'` termina cadenas; `NULL` termina arrays de punteros (`ft_split`) y listas (Parte 3).
+> - [[Punteros en C]] y [[Arrays en C]] — casi todas las funciones reciben punteros a memoria o a cadenas.
+> - [[Segmentos de memoria en C]] — dónde vive cada dato (pila, heap, literales de solo lectura).
+> - [[Listas enlazadas]] y [[Structs y typedef]] — la base de la Parte 3.
 > - [[libft - Suite de tests]] — cómo ejecutar los tests, valgrind y norminette, y cómo añadir tests nuevos.
 
 ## Parte 1 — Funciones de la libc
@@ -80,6 +91,8 @@ Documentación de todas las funciones de **libft**. En la Parte 1 se cita litera
 | [[ft_putendl_fd]] | write | Escribe una cadena + salto de línea en un fd |
 | [[ft_putnbr_fd]] | write | Escribe un entero en un fd |
 
+> [!info] Las cuatro `ft_put*_fd` escriben en un **descriptor de fichero** (`1` pantalla, `2` errores o un fichero abierto con `open`). Si no sabes qué es un fd, empieza por [[Descriptores de fichero y read]].
+
 ## Parte 3 — Listas enlazadas
 
 ```c
@@ -107,16 +120,26 @@ typedef struct s_list
 
 ## Reglas generales del subject (v19.3)
 
+- Archivos a entregar: `Makefile`, `libft.h` y `ft_*.c`, **todos en la raíz del repositorio** (y `libft.a` se crea también en la raíz). **Prohibido entregar archivos no utilizados.**
 - Mismos prototipos y comportamiento que las originales (según su `man`), con el prefijo `ft_`.
 - Prohibido usar `restrict` en los prototipos y compilar con `-std=c99`.
 - Las funciones de la Parte 1 no pueden depender de funciones externas (salvo `malloc` en `calloc` y `strdup`).
 - `isalpha`, `isdigit`, `isalnum`, `isascii`, `isprint` devuelven **1 o 0**.
 - `calloc` con `nmemb` o `size` a 0 → puntero único liberable con `free()`.
-- Sin variables globales; las funciones auxiliares deben ser `static`.
-- Compilar con `cc -Wall -Werror -Wextra`; generar la librería con `ar` (prohibido `libtool`); todo en la raíz del repo.
+- Sin variables globales; las funciones auxiliares deben ser `static` (ver [[Variables static y ámbito]]).
+- Compilar con `cc -Wall -Werror -Wextra`; generar la librería con `ar` (prohibido `libtool`).
 - Makefile con `$(NAME)`, `all`, `clean`, `fclean`, `re` y sin relink.
-- Sin leaks, y ninguna función debe crashear salvo en casos de comportamiento indefinido.
-- Hace falta un `README.md` (primera línea en cursiva: *Este proyecto ha sido creado como parte del currículo de 42 por <login>*).
+- Sin leaks, y ninguna función debe crashear (segfault, bus error, double free…) salvo en casos de comportamiento indefinido. Si crashea, el proyecto es «no funcional» y es un 0.
+- Todo el código, también las funciones auxiliares, debe pasar la Norma: un solo error es un 0.
+- Las listas enlazadas son la **Parte 3, obligatoria**: en esta versión del subject libft no tiene parte bonus.
+- Hace falta un `README.md` en la raíz:
+  - Primera línea en cursiva: *Este proyecto ha sido creado como parte del currículo de 42 por <login>*.
+  - Secciones «Descripción», «Instrucciones» (compilar, usar) y «Recursos» (referencias y **para qué se ha usado IA**, si se ha usado).
+  - En libft, además, una descripción detallada de la librería.
+- En la evaluación pueden pedirte una **pequeña modificación** del código para comprobar que lo entiendes.
+
+> [!warning] Los tests no se entregan
+> Tu carpeta `tests/` y las reglas `test`, `norm` y `valgrind` del Makefile son para ti. Como el subject prohíbe entregar archivos no utilizados y la Norma pide fuentes nombradas explícitamente (las reglas de test usan `$(wildcard ...)`), quítalos antes de la entrega final. Ver [[libft - Suite de tests]] y [[Git para 42]].
 
 Más detalle en [[La Norma]] y [[Makefile y librerías estáticas]].
 
@@ -130,3 +153,15 @@ Cada nota tiene la propiedad `estado` (`hecho` / `pendiente`). Cámbiala al term
 - `strlcpy`, `strlcat` y `strnstr` no están en glibc; vienen de **libbsd**: `man 3bsd strlcpy`. Para compilar tests con la original: `#include <bsd/string.h>` y `-lbsd`.
 - Las secciones que más importan son **DESCRIPTION**, **RETURN VALUE** y **NOTES**.
 - Las citas son de Linux man-pages 5.10 (Ubuntu 22.04). En los Mac de 42 la redacción del man (BSD) puede variar.
+- Desde glibc 2.38 (posterior a la de Ubuntu 22.04), `strlcpy` y `strlcat` ya están en `<string.h>` sin `libbsd`; `strnstr` sigue siendo solo de BSD.
+
+## Relacionadas
+
+[[libft - Anexo comparativo]] · [[libft - Suite de tests]] · [[Makefile y librerías estáticas]] · [[La Norma]] · [[Carácter nulo y puntero NULL]] · [[Punteros en C]] · [[Listas enlazadas]] · [[Valgrind y sanitizers]] · [[Depurar con gdb]] · [[Git para 42]]
+
+## Referencias
+
+- Subject de libft v19.3 (`/home/felixrod/cursus/es.subject_libft.pdf`) — lista de funciones, reglas generales, consideraciones técnicas y requisitos del README.
+- `man 3 <función>` y `man 3bsd strlcpy` (Linux man-pages 5.10 y libbsd, Ubuntu 22.04) — comportamiento de las funciones originales de la Parte 1.
+- [man7.org: strlcpy(3)](https://man7.org/linux/man-pages/man3/strlcpy.3.html) — `strlcpy`/`strlcat` disponibles en glibc desde la 2.38.
+- La Norma v4 (`Normativa 42/es.norm-2.pdf`) — reglas de estilo que se aplican a todos los ficheros.

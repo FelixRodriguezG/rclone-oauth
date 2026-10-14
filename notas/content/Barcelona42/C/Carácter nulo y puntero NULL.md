@@ -2,7 +2,7 @@
 tags: [c, libft, punteros, memoria, cadenas]
 aliases: ["'\\0' vs NULL", "NULL vs '\\0'", "Carácter nulo"]
 ---
-# Carácter nulo (`'\0'`) y puntero `NULL`
+# Carácter nulo y puntero NULL
 
 [[Inicio|← Inicio]] · C
 
@@ -14,7 +14,7 @@ aliases: ["'\\0' vs NULL", "NULL vs '\\0'", "Carácter nulo"]
 
 ---
 
-## 1. Carácter nulo `'\0'`
+## Carácter nulo `'\0'`
 
 | | |
 |---|---|
@@ -49,13 +49,13 @@ str:  [ 'h' ][ 'o' ][ 'l' ][ 'a' ][ '\0' ]
 
 ---
 
-## 2. Puntero nulo `NULL`
+## Puntero nulo `NULL`
 
 | | |
 |---|---|
-| **Qué es** | Un valor de puntero que garantiza **no apuntar a ninguna dirección válida** |
+| **Qué es** | Un valor de puntero que garantiza **no apuntar a ninguna dirección válida** (repaso de punteros en [[Punteros en C]]) |
 | **Tipo** | Una macro de `<stddef.h>` (también la traen `<stdlib.h>`, `<stdio.h>`, `<string.h>`…). En Linux con glibc vale `((void *)0)` |
-| **Para qué** | 1. Decir que un puntero **no apunta a nada todavía** o que algo **falló** (`malloc` devuelve `NULL`). <br>2. Marcar el **final de un array de punteros** (el `char **` de [[ft_split]]). <br>3. Marcar el **final de una lista enlazada** (`next == NULL`, Parte 3) |
+| **Para qué** | 1. Decir que un puntero **no apunta a nada todavía** o que algo **falló** (`malloc` devuelve `NULL`). <br>2. Marcar el **final de un array de punteros** (el `char **` de [[ft_split]]). <br>3. Marcar el **final de una lista enlazada** (`next == NULL`, Parte 3; ver [[Listas enlazadas]]) |
 
 ```c
 char	**tab;
@@ -79,7 +79,7 @@ tab:  [ ptr ]──► "hola\0"
 
 ---
 
-## 3. Los dos niveles a la vez: `ft_split`
+## Los dos niveles a la vez: `ft_split`
 
 En un `char **` aparecen **los dos**, cada uno en su nivel:
 
@@ -99,7 +99,7 @@ tab[i] = NULL;        // en el array:            char * → fin del array
 
 ---
 
-## 4. Resumen
+## Resumen
 
 | | `'\0'` | `NULL` |
 |---|---|---|
@@ -111,9 +111,9 @@ tab[i] = NULL;        // en el array:            char * → fin del array
 
 ---
 
-## 5. ¿Qué dice el compilador si los mezclas?
+## Qué dice el compilador si los mezclas
 
-Con `-Wall -Wextra -Werror` (comprobado en Ubuntu, clang 12 y gcc):
+Con `-Wall -Wextra -Werror` (comprobado en Ubuntu 22.04 con clang 12 y gcc 10):
 
 | Código | gcc | clang (`cc` en 42) |
 |---|---|---|
@@ -121,11 +121,15 @@ Con `-Wall -Wextra -Werror` (comprobado en Ubuntu, clang 12 y gcc):
 | `tab[i] = '\0';` (carácter en un `char *`) | ✅ compila sin aviso | ❌ error `-Wnon-literal-null-conversion` |
 
 ```text
-# clang
+# clang: word[i] = NULL;
+error: incompatible pointer to integer conversion assigning to 'char'
+       from 'void *' [-Werror,-Wint-conversion]
+
+# clang: tab[i] = '\0';
 error: expression which evaluates to zero treated as a null pointer constant
        of type 'char *' [-Werror,-Wnon-literal-null-conversion]
 
-# gcc y clang
+# gcc: word[i] = NULL;
 error: assignment to 'char' from 'void *' makes integer from pointer
        without a cast [-Werror=int-conversion]
 ```
@@ -135,4 +139,15 @@ error: assignment to 'char' from 'void *' makes integer from pointer
 
 ---
 
-Relacionado: [[Arrays en C]] · [[Segmentos de memoria en C]] · [[Control de errores en C]] · [[ft_split]]
+## Relacionadas
+
+[[Arrays en C]] · [[Punteros en C]] · [[Segmentos de memoria en C]] · [[Control de errores en C]] · [[Depurar con gdb]] · [[ft_split]]
+
+## Referencias
+
+- [NULL — cppreference](https://en.cppreference.com/w/c/types/NULL) — definición de la macro y cabeceras que la traen.
+- [Character constant — cppreference](https://en.cppreference.com/w/c/language/character_constant) — una constante de carácter es de tipo `int` en C.
+- [Borrador del estándar C11 (N1570)](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf) — §6.3.2.3p3 (constante de puntero nulo), §7.1.1 (cadena terminada en carácter nulo).
+- [ascii(7) — Linux man-pages](https://man7.org/linux/man-pages/man7/ascii.7.html) — códigos de `'\0'` (0) y `'0'` (48).
+- [Clang Diagnostics Reference](https://clang.llvm.org/docs/DiagnosticsReference.html) — avisos `-Wint-conversion` y `-Wnon-literal-null-conversion`.
+- Mensajes de error comprobados compilando en Ubuntu 22.04 (clang 12.0.1, gcc 10.5).

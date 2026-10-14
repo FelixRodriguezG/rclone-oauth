@@ -1,148 +1,138 @@
 ---
-tags: [42, makefile, make, ar, libft]
+tags: [herramientas, makefile, make, ar, libft]
 ---
 # Makefile y librerías estáticas
 
 [[Inicio|← Inicio]] · Herramientas
 
-Esta guía cubre desde los conceptos esenciales hasta los errores más comunes que causan suspensos automáticos en las evaluaciones de 42 (como el temido relink o fallos de tabulación).
+> Un **Makefile** es un fichero de reglas que le dice a la herramienta `make` cómo construir tu proyecto (compilar los `.c`, empaquetar la librería…) y, sobre todo, **qué hace falta rehacer** cuando cambias algo. Una **librería estática** (`.a`) es un paquete de ficheros objeto (`.o`) que luego se une a tus programas. En 42 todos los proyectos de C se entregan con Makefile, y un Makefile mal hecho (relink, tabulaciones) puede suspenderte el proyecto entero.
 
----
+## Vocabulario
 
-## Índice de Contenidos
-1. [¿Qué es un Makefile y cómo funciona?](#1-qué-es-un-makefile-y-cómo-funciona)
-2. [Estructura Básica de una Regla](#2-estructura-básica-de-una-regla)
-3. [El Tabulador: La Regla de Oro que no perdona](#3-el-tabulador-la-regla-de-oro-que-no-perdona)
-4. [Líneas Multilínea (\) y el Error "missing separator"](#4-líneas-multilínea--y-el-error-missing-separator)
-5. [Variables: Definición, Expansión y Modos de Asignación](#5-variables-definición-expansión-y-modos-de-asignación)
-6. [Variables Automáticas ($@, $<,$^, etc.)](#6-variables-automáticas--etc)
-7. [Manipulación de Listas: addprefix y Sustitución de Sufijos](#7-manipulación-de-listas-addprefix-y-sustitución-de-sufijos)
-8. [La Bandera -I y la Detección Real de Cambios en Headers](#8-la-bandera--i-y-la-detección-real-de-cambios-en-headers)
-9. [Librerías Estáticas y el Comando ar](#9-librerías-estáticas-y-el-comando-ar)
-10. [Reglas Falsas: ¿Por qué necesitamos .PHONY?](#10-reglas-falsas-por-qué-necesitamos-phony)
-11. [El Relink: Qué es, por qué suspende y cómo evitarlo](#11-el-relink-qué-es-por-qué-suspende-y-cómo-evitarlo)
-12. [Organización Profesional: Carpeta obj/ y mkdir -p](#12-organización-profesional-carpeta-obj-y-mkdir--p)
-13. [Estética: Silenciar Comandos con @ y Mensajes Claros](#13-estética-silenciar-comandos-con--y-mensajes-claros)
-14. [Plantilla Completa: libft (42 Standard)](#14-plantilla-completa-libft-42-standard)
-15. [Plantilla Completa con Bonus (Sin Relink)](#15-plantilla-completa-con-bonus-sin-relink)
+| Término | Qué significa |
+|---|---|
+| **Fichero objeto** (`.o`) | El resultado de compilar **un** `.c` sin enlazarlo todavía: código máquina con «huecos» para las funciones de otros ficheros. Ver [[Cómo compila C]] |
+| **Enlazar** (*link*) | Unir varios `.o` (y librerías) en un ejecutable, rellenando esos huecos |
+| **Objetivo** (*target*) | Lo que quieres construir con una regla: normalmente un fichero (`libft.a`) |
+| **Prerrequisito** (*prerequisite*) | Lo que hace falta para construir el objetivo (`ft_strlen.o`) |
+| **Receta** (*recipe*) | Los comandos de terminal que construyen el objetivo |
+| **Relink** | Que `make` vuelva a compilar o empaquetar **sin que nada haya cambiado**. En 42 es un error grave |
 
----
+## Qué es un Makefile y cómo funciona
 
-## 1. ¿Qué es un Makefile y cómo funciona?
-
-Un Makefile no es un script de Bash secuencial. Es un **árbol de dependencias basado en marcas de tiempo (timestamps)**.
+Un Makefile no es un script de Bash que se ejecuta de arriba abajo. Es un **árbol de dependencias basado en fechas de modificación** (*timestamps*): cada fichero del disco guarda cuándo se modificó por última vez, y `make` las compara.
 
 Cuando ejecutas `make`:
 1. Comprueba la fecha de modificación del **archivo que quieres crear** (objetivo).
 2. Comprueba la fecha de los **archivos necesarios para crearlo** (prerrequisitos).
-3. Si los prerrequisitos son más recientes que el objetivo (o el objetivo aún no existe), ejecuta los comandos para crearlo o actualizarlo. Si nada ha cambiado, no hace nada.
+3. Si algún prerrequisito es más reciente que el objetivo (o el objetivo aún no existe), ejecuta los comandos para crearlo o actualizarlo. Si nada ha cambiado, no hace nada.
 
----
+Si ejecutas `make` sin decir qué objetivo quieres, construye **la primera regla** del Makefile. Por eso la primera suele ser `all`.
 
-## 2. Estructura Básica de una Regla
+## Estructura básica de una regla
 
 Toda regla sigue siempre este formato:
 
-```makefile
+```make
 objetivo: prerrequisito1 prerrequisito2
 	comando_en_la_terminal
 ```
 
-* **Objetivo (Target):** Casi siempre es un archivo que se va a generar (`libft.a`, `main.o`) o una orden abstracta (`clean`, `fclean`).
-* **Prerrequisitos (Prerequisites):** Archivos que deben existir o actualizarse antes de que esta regla pueda ejecutarse.
-* **Comandos (Recipe):** Órdenes de terminal que Make ejecuta para transformar los prerrequisitos en el objetivo.
+* **Objetivo (*target*):** casi siempre es un archivo que se va a generar (`libft.a`, `main.o`) o una orden abstracta (`clean`, `fclean`).
+* **Prerrequisitos (*prerequisites*):** archivos que deben existir o actualizarse antes de que esta regla pueda ejecutarse.
+* **Comandos (*recipe*):** órdenes de terminal que `make` ejecuta para transformar los prerrequisitos en el objetivo.
 
----
-
-## 3. El Tabulador: La Regla de Oro que no perdona
+## El tabulador: la regla de oro que no perdona
 
 > [!warning] Make exige un tabulador real
-> Make fue creado en 1976 y exige estrictamente un carácter de tabulación real (`\t`) al inicio de cada línea de comando.
+> Make se creó en 1976 y exige un carácter de tabulación real (`\t`) al inicio de cada línea de comando.
 
-* Si usas **4 espacios** en vez de una tabulación, Make fallará inmediatamente con:
+* Si usas **4 espacios** en vez de una tabulación, `make` fallará inmediatamente con:
   ```text
-  Makefile:XX: *** missing separator. Stop.
+  Makefile:XX: *** missing separator.  Stop.
   ```
-* **Consejo en editores:** Configura tu editor de código para que en archivos con nombre `Makefile` respete siempre el carácter `Tab` real y no lo sustituya por espacios.
+* **Consejo en editores:** configura tu editor para que en los `Makefile` respete siempre el carácter `Tab` real y no lo sustituya por espacios. Con la configuración de [[Vim]] (`set noexpandtab`) ya es así.
 
----
+## Líneas largas con `\` y el error «missing separator»
 
-## 4. Líneas Multilínea (\) y el Error "missing separator"
+En un Makefile, pulsar `Enter` significa «aquí termina esta instrucción». Cuando listas 20 o 30 archivos fuente, no quieres una línea infinita, pero tampoco puedes dar `Enter` a secas.
 
-En un Makefile, presionar `Enter` significa "aquí termina esta instrucción". Cuando listas 20 o 30 archivos fuente, no quieres una línea infinita horizontal, pero tampoco puedes dar `Enter` a secas.
+### La solución: barra invertida (`\`)
 
-### La solución: barra invertida (\)
-La barra invertida al final de la línea le indica a Make: *"ignora este salto de línea y lee la siguiente línea como parte de la misma instrucción"*.
+La barra invertida al final de la línea le indica a `make`: *«ignora este salto de línea y lee la siguiente línea como parte de la misma instrucción»*.
 
-```makefile
+```make
 # ✅ Correcto: la barra une las líneas en una sola lista continua
 SRCS = srcs/ft_putchar.c \
        srcs/ft_putstr.c \
        srcs/ft_strlen.c
 
-# ❌ Incorrecto: la segunda línea queda huérfana y Make dará "missing separator"
+# ❌ Incorrecto: la segunda línea queda huérfana y make dará "missing separator"
 SRCS = srcs/ft_putchar.c
        srcs/ft_putstr.c
 ```
 
-### ⚠️ El fallo invisible: El espacio traicionero
-Nunca dejes un espacio después de la barra invertida (`\` + espacio + `Enter`). Si lo haces, Make interpretará que estás escapando el espacio en lugar del salto de línea, y la siguiente línea volverá a romperse con error de sintaxis.
+### El fallo invisible: el espacio después de la barra
 
----
+Nunca dejes un espacio después de la barra invertida (`\` + espacio + `Enter`). Entonces la barra ya no está al final de la línea, así que no une nada: la siguiente línea vuelve a quedar huérfana y da el mismo error. Como el espacio no se ve, cuesta mucho encontrarlo. En Vim, `:set list` muestra los espacios finales (el `.vimrc` de [[Vim]] los borra al guardar los `.c` y `.h`, pero no los Makefile).
 
-## 5. Variables: Definición, Expansión y Modos de Asignación
+## Variables: definición, expansión y modos de asignación
 
-Las variables evitan repetir texto y permiten modificar banderas de compilación en un solo lugar. Para usarlas se encierran entre paréntesis: `$(NOMBRE_VARIABLE)`.
+Las variables evitan repetir texto y permiten cambiar las banderas de compilación en un solo lugar. Para usarlas se escriben entre paréntesis con `$`: `$(NOMBRE_VARIABLE)`.
 
-Existen cuatro formas de asignar valores:
+Hay cuatro formas de asignar valores:
 
-```makefile
+```make
 # 1. Asignación diferida / recursiva (=)
 # Se evalúa en el momento en que se USA la variable, no donde se declara.
 CC = cc
 
 # 2. Asignación inmediata (:=)
-# Se evalúa exactamente en la línea donde se escribe. Es más rápida y predecible.
+# Se evalúa exactamente en la línea donde se escribe. Es más predecible.
 SRC_DIR := srcs
 
 # 3. Asignación condicional (?=)
-# Asigna el valor SOLO si la variable no existía previamente (por ejemplo, desde la terminal).
+# Asigna el valor SOLO si la variable no tenía ya uno (por ejemplo, del entorno).
 CFLAGS ?= -Wall -Wextra -Werror
 
 # 4. Concatenación (+=)
-# Añade texto al final de la variable existente, separándolo automáticamente con un espacio.
+# Añade texto al final de la variable existente, separándolo con un espacio.
 CFLAGS += -g
 ```
 
----
+> [!tip] Variables desde la terminal
+> Una variable escrita al llamar a `make` **sustituye** a la del Makefile, aunque esta use `=`: `make CFLAGS="-Wall -Wextra -Werror -g"`. Así se compila con `-g` para [[Depurar con gdb]] sin tocar el Makefile.
 
-## 6. Variables Automáticas ($@, $<,$^, etc.)
+## Variables automáticas (`$@`, `$<`, `$^`…)
 
-Make provee atajos automáticos que representan los nombres de los archivos involucrados en la regla actual:
+`make` ofrece atajos que representan los nombres de los archivos de la regla que se está ejecutando:
 
-| Variable | ¿Qué significa? | Ejemplo práctico |
+| Variable | Qué significa | Ejemplo práctico |
 | :--- | :--- | :--- |
 | `$@` | El **nombre del objetivo** actual | En `libft.a: $(OBJS)`, `$@` vale `libft.a` |
-| `$<` | El **primer prerrequisito** de la lista | En `%.o: %.c`, `$<` es el archivo fuente `%.c` |
+| `$<` | El **primer prerrequisito** de la lista | En `%.o: %.c`, `$<` es el archivo fuente `.c` |
 | `$^` | **Todos los prerrequisitos** juntos (sin duplicados) | En `$(NAME): $(OBJS)`, `$^` son todos los `.o` |
 | `$?` | Solo los prerrequisitos **más nuevos que el objetivo** | Útil para saber qué ficheros han cambiado |
-| `%` | **Comodín** de concordancia de patrones | `%.o: %.c` (aplica la regla a cada `.c` que deba ser `.o`) |
 
-**Ejemplo de regla genérica usando variables automáticas:**
-```makefile
+Además, en una **regla de patrón** el símbolo **`%`** hace de comodín: `%.o: %.c` significa «cualquier `algo.o` se construye a partir de `algo.c`». No es una variable automática, pero casi siempre aparece junto a ellas.
+
+**Ejemplo de regla de patrón con variables automáticas:**
+```make
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
-# Se traduce como: cc -Wall... -c archivo.c -o archivo.o
+# Para ft_strlen.o se traduce como: cc -Wall -Wextra -Werror -c ft_strlen.c -o ft_strlen.o
 ```
 
----
+> [!warning] El `.c` tiene que ir primero
+> Si escribes `%.o: $(HEADER) %.c`, `$<` vale `libft.h` y el compilador intentará compilar el header. Pon siempre el `.c` como primer prerrequisito.
 
-## 7. Manipulación de Listas: addprefix y Sustitución de Sufijos
+## Manipulación de listas: `addprefix` y sustitución de sufijos
 
-Escribir `srcs/` delante de cada archivo es tedioso y propenso a errores. Make incluye funciones para automatizarlo:
+Escribir `srcs/` delante de cada archivo es tedioso y propenso a errores. `make` incluye funciones para automatizarlo.
 
-### addprefix: Prefijar rutas automáticamente
-```makefile
+### `addprefix`: prefijar rutas automáticamente
+
+```make
 SRC_DIR = srcs
 FILES   = ft_putchar.c ft_putstr.c ft_strlen.c
 
@@ -151,27 +141,27 @@ SRCS    = $(addprefix $(SRC_DIR)/, $(FILES))
 # Resultado: srcs/ft_putchar.c srcs/ft_putstr.c srcs/ft_strlen.c
 ```
 
-### Sustitución de sufijos: De .c a .o
-Para obtener la lista de binarios objeto que necesitas compilar, sustituye la extensión en una sola línea:
-```makefile
+### Sustitución de sufijos: de `.c` a `.o`
+
+Para obtener la lista de ficheros objeto, sustituye la extensión en una sola línea:
+```make
 OBJS = $(SRCS:.c=.o)
-# Transforma automáticamente cada 'srcs/archivo.c' en 'srcs/archivo.o'
+# Transforma cada 'srcs/archivo.c' en 'srcs/archivo.o'
 ```
 
 > [!warning] Nada de comodines
-> La Norma exige que **todos los archivos fuente estén nombrados explícitamente**. Están prohibidos `SRCS = *.c` y `$(wildcard src/*.c)`, aunque funcionen.
+> La [[La Norma|Norma]] exige que **todos los archivos fuente estén nombrados explícitamente** en el Makefile. Por eso no se aceptan `SRCS = *.c` ni `$(wildcard src/*.c)`, aunque funcionen.
 
----
+## La bandera `-I` y los cambios en los headers
 
-## 8. La Bandera -I y la Detección Real de Cambios en Headers
+Error muy común: compilas con `-Iincludes`, cambias una estructura o una constante en tu `.h`, ejecutas `make` y responde `Nothing to be done`.
 
-Muchos estudiantes cometen este error: compilan con `-Iincludes`, modifican una estructura o constante en su archivo `.h`, ejecutan `make` y Make responde: `"Nothing to be done"`.
+### Por qué pasa
 
-### ¿Por qué pasa?
-`-Iincludes` solo ayuda al compilador (`cc`) a encontrar el archivo de cabecera. Pero **Make no lee el interior de los `.c`**; Make solo mira la lista de prerrequisitos de la regla.
+`-Iincludes` solo le dice al **compilador** (`cc`) en qué carpeta buscar los `#include "..."` (ver [[Preprocesador y headers]]). Pero **`make` no lee el interior de los `.c`**: solo mira la lista de prerrequisitos de la regla. Si el header no está en esa lista, `make` no sabe que existe.
 
-```makefile
-# ❌ INCORRECTO: si editas libft.h, Make no se entera y no recompila
+```make
+# ❌ INCORRECTO: si editas libft.h, make no se entera y no recompila
 %.o: %.c
 	$(CC) $(CFLAGS) -Iincludes -c $< -o $@
 
@@ -182,80 +172,88 @@ HEADER = includes/libft.h
 	$(CC) $(CFLAGS) -Iincludes -c $< -o $@
 ```
 
----
+## Librerías estáticas y el comando `ar`
 
-## 9. Librerías Estáticas y el Comando ar
+Una librería estática (`.a`, de *archive*) es simplemente un **archivo contenedor** (sin comprimir) que empaqueta varios ficheros objeto (`.o`) juntos. Cuando compilas un programa con `libft.a`, el enlazador copia dentro del ejecutable solo los `.o` que contienen las funciones que usas.
 
-Una librería estática (`.a`) es simplemente un **archivo contenedor** (no comprimido) que empaqueta múltiples binarios objeto (`.o`) juntos.
-
-Para generarla en 42 usamos:
-```makefile
+Para generarla en 42 se usa `ar` (el subject de libft prohíbe `libtool`):
+```make
 ar rcs libft.a $(OBJS)
 ```
 
-* **`r` (replace):** Si el `.o` ya estaba dentro del `.a`, lo actualiza; si no estaba, lo añade.
-* **`c` (create):** Crea el archivo `.a` silenciosamente si todavía no existe.
-* **`s` (symbol index):** Crea y actualiza un índice interno de símbolos (funciones y variables). Hace exactamente lo mismo que el comando histórico `ranlib`.
+* **`r` (*replace*):** si el `.o` ya estaba dentro del `.a`, lo sustituye; si no estaba, lo añade.
+* **`c` (*create*):** crea el `.a` sin avisar si todavía no existe.
+* **`s` (*symbol index*):** crea o actualiza un índice de símbolos (los nombres de funciones y variables que contiene), para que el enlazador encuentre rápido cada función. Hace lo mismo que el comando `ranlib`.
 
----
+Para usarla al compilar un programa:
 
-## 10. Reglas Falsas: ¿Por qué necesitamos .PHONY?
+```bash
+cc -Wall -Wextra -Werror main.c libft.a -o prog
+# o, si está en otra carpeta: -L carpeta -lft  (busca carpeta/libft.a)
+```
+
+> [!tip] Ver qué hay dentro
+> `ar t libft.a` lista los `.o` que contiene. `nm libft.a` muestra los símbolos (las funciones definidas aparecen con una `T`).
+
+## Reglas falsas: por qué hace falta `.PHONY`
 
 Si creas una carpeta o un archivo llamado `clean` dentro de tu proyecto y luego ejecutas `make clean`:
-1. Make buscará el objetivo `clean`.
+1. `make` buscará el objetivo `clean`.
 2. Verá que ya existe un archivo o carpeta llamado `clean` en el disco.
-3. Como `clean` no tiene prerrequisitos, Make pensará que ya está "al día" y responderá:
+3. Como `clean` no tiene prerrequisitos, pensará que ya está «al día» y responderá:
    ```text
    make: 'clean' is up to date.
    ```
 4. **Tus comandos de borrado nunca se ejecutarán.**
 
-Para indicarle a Make que un objetivo es una **acción** y no un archivo real del disco, usamos `.PHONY`:
-```makefile
+Para indicar que un objetivo es una **acción** y no un archivo real, se declara con `.PHONY` (*phony* = falso):
+```make
 .PHONY: all clean fclean re bonus
 ```
 
----
-
-## 11. El Relink: Qué es, por qué suspende y cómo evitarlo
+## El relink: qué es, por qué suspende y cómo evitarlo
 
 > [!danger] Proyecto no funcional
-> Según la [[La Norma|Norma]], si el Makefile hace relink el proyecto se considera **no funcional**: es un 0 directo en la evaluación.
+> Según la [[La Norma|Norma]], si el Makefile hace relink el proyecto se considera **no funcional**: es un 0 en la evaluación.
 
-### ¿Qué es el relink?
-Hacer relink significa que Make ejecuta comandos de compilación o empaquetado **cuando nada en el código ha cambiado**.
+### Qué es el relink
 
-```bash
+Hacer relink significa que `make` ejecuta comandos de compilación o empaquetado **cuando nada en el código ha cambiado**.
+
+```text
 $ make
 cc -c src/ft_strlen.c -o src/ft_strlen.o
 ar rcs libft.a src/ft_strlen.o
 $ make
-ar rcs libft.a src/ft_strlen.o  <-- ❌ FALLO: No has tocado nada y volvió a empaquetar
+ar rcs libft.a src/ft_strlen.o      ← ❌ no has tocado nada y volvió a empaquetar
 ```
 
-La respuesta correcta ante un segundo `make` inmediato debe ser:
-```bash
+La respuesta correcta ante un segundo `make` inmediato es:
+```text
 $ make
 make: Nothing to be done for 'all'.
 ```
 
-### Las 2 causas más comunes de relink:
-1. **Regla que depende de nombres .PHONY en vez de archivos reales:**
-   Si pones `$(NAME): all`, como `all` es PHONY, Make siempre considerará que está desactualizado y recompilará.
-2. **La trampa de la regla bonus:**
-   Si la regla `bonus` llama a `$(NAME)` de nuevo o empaqueta sin control, cada vez que escribas `make bonus` volverá a ejecutar `ar rcs`. Se soluciona usando un **archivo bandera oculto** (ver sección 15).
+> [!question] Pregunta típica de evaluación
+> El evaluador ejecuta `make` dos veces seguidas (y, si hay bonus, `make bonus` dos veces). Si la segunda vez sale cualquier comando de compilación o de `ar`, hay relink.
 
----
+### Las causas más comunes de relink
 
-## 12. Organización Profesional: Carpeta obj/ y mkdir -p
+1. **Una regla que depende de un objetivo `.PHONY` en vez de un archivo real.** Si pones `$(NAME): all`, como `all` es PHONY, `make` siempre lo considera desactualizado y vuelve a construir.
+2. **Una regla cuyo objetivo no es el fichero que crea.** Si la regla se llama `$(NAME)` pero la receta genera otro nombre, el objetivo nunca existe y la regla se ejecuta siempre.
+3. **Una carpeta como prerrequisito normal** (`$(OBJ_DIR)/%.o: ... $(OBJ_DIR)`). La fecha de una carpeta cambia cada vez que se crea un fichero dentro, así que parece «más nueva». Crea la carpeta dentro de la receta con `mkdir -p` (ver [[#Carpeta de objetos con mkdir -p]]).
+4. **La trampa de la regla `bonus`.** Si `bonus` vuelve a ejecutar `ar` sin control, cada `make bonus` empaqueta otra vez. Se soluciona con un **archivo centinela** (ver [[#Plantilla con bonus sin relink]]).
 
-Tener los archivos `.o` mezclados con los `.c` ensucia el repositorio. Lo ideal es compilarlos en una carpeta separada llamada `obj/` o `.objs/`.
+## Carpeta de objetos con mkdir -p
 
-Para que `cc` no falle diciendo `No such file or directory`, debemos asegurar que la carpeta destino exista usando `@mkdir -p`:
+Tener los `.o` mezclados con los `.c` ensucia el repositorio. Lo habitual es compilarlos en una carpeta separada llamada `obj/` u `.objs/` (y añadirla al `.gitignore`, ver [[Git para 42]]).
 
-```makefile
+Para que `cc` no falle con `No such file or directory`, hay que asegurarse de que la carpeta destino existe, con `mkdir -p` (`-p` crea las carpetas intermedias y no da error si ya existen):
+
+```make
 SRC_DIR = src
 OBJ_DIR = obj
+HEADER  = includes/libft.h
 
 SRCS    = $(SRC_DIR)/ft_strlen.c $(SRC_DIR)/ft_putchar.c
 # Reemplaza la ruta 'src/' por 'obj/' y la extensión '.c' por '.o'
@@ -266,34 +264,37 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(HEADER)
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -Iincludes -c $< -o $@
 ```
-*(La función `$(dir $@)` extrae la ruta del directorio del archivo objeto que se va a compilar, por ejemplo `obj/`).*
+La función `$(dir $@)` extrae la carpeta del archivo objeto que se va a crear (por ejemplo, `obj/`).
 
----
+## Silenciar comandos con @ y mostrar mensajes
 
-## 13. Estética: Silenciar Comandos con @ y Mensajes Claros
+Por defecto, `make` imprime cada comando antes de ejecutarlo. Para una salida más limpia:
 
-Por defecto, Make imprime en la terminal cada comando exacto antes de ejecutarlo. Para mostrar mensajes limpios y profesionales:
+* **`@` al inicio del comando:** `make` lo ejecuta sin imprimirlo.
+* **`echo` con colores ANSI** (secuencias como `\033[0;33m`, que la terminal interpreta como «cambia a amarillo»):
 
-* **Anteponer `@` al inicio del comando:** Le dice a Make que ejecute la orden en silencio sin imprimirla en pantalla.
-* **Usar `echo` con colores ANSI:**
-
-```makefile
+```make
 clean:
 	@$(RM) $(OBJS)
-	@echo "\033[0;33m🧹 Archivos objeto eliminados.\033[0m"
+	@echo "\033[0;33mArchivos objeto eliminados.\033[0m"
 
 fclean: clean
 	@$(RM) $(NAME)
-	@echo "\033[0;31m🗑️  Librería $(NAME) eliminada.\033[0m"
+	@echo "\033[0;31mLibrería $(NAME) eliminada.\033[0m"
 ```
 
----
+> [!note] `echo` y los colores
+> `make` ejecuta las recetas con `/bin/sh`. En Ubuntu es `dash`, cuyo `echo` interpreta `\033`; con otros shells puede imprimirse tal cual. `printf "\033[0;33m...\033[0m\n"` funciona igual en todos.
 
-## 14. Plantilla Completa: libft (42 Standard)
+> [!tip] No escondas los errores
+> El `@` oculta el comando, no los errores del compilador. Mientras desarrollas, quitar los `@` ayuda a ver exactamente qué se está ejecutando.
 
-Esta plantilla es totalmente compatible con la norma de 42, evita relinks y gestiona las dependencias de cabeceras correctamente.
+## Plantilla completa para libft
 
-### Estructura de carpetas recomendada:
+Esta plantilla cumple la Norma, no hace relink y recompila si cambia el header. Los números de los comentarios son solo para organizar el fichero.
+
+### Estructura de carpetas de ejemplo
+
 ```text
 mi_proyecto/
 ├── Makefile
@@ -305,8 +306,12 @@ mi_proyecto/
     └── ft_strlen.c
 ```
 
-### Código del Makefile:
-```makefile
+> [!warning] En libft, todo en la raíz
+> El subject de libft (v19.3) pide que **todos los archivos estén en la raíz del repositorio**, y `libft.a` también. Para libft, quita `src/` e `includes/` (sin `addprefix`, y `-I.` como en tu Makefile real). La estructura con carpetas sirve para proyectos posteriores.
+
+### Código del Makefile
+
+```make
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
@@ -335,7 +340,7 @@ RM          = rm -f
 INC_DIR     = includes
 SRC_DIR     = src
 
-# Flag de inclusión para el compilador y archivo de dependencia para Make
+# Flag de inclusión para el compilador y archivo de dependencia para make
 INCLUDES    = -I $(INC_DIR)
 HEADER      = $(INC_DIR)/libft.h
 
@@ -361,8 +366,8 @@ $(NAME): $(OBJS)
 	$(AR) $@ $^
 	@echo "Librería $(NAME) creada con éxito."
 
-# Regla implícita de compilación: cada .c genera su .o correspondiente
-# Exige que el header esté listado para recompilar si este se modifica
+# Regla de patrón: cada .c genera su .o correspondiente
+# El header está listado para recompilar si se modifica
 %.o: %.c $(HEADER)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
@@ -372,11 +377,11 @@ $(NAME): $(OBJS)
 
 clean:
 	$(RM) $(OBJS)
-	@echo "🧹 Objetos temporales eliminados."
+	@echo "Objetos temporales eliminados."
 
 fclean: clean
 	$(RM) $(NAME)
-	@echo "🗑️  $(NAME) eliminado por completo."
+	@echo "$(NAME) eliminado por completo."
 
 re: fclean all
 
@@ -386,16 +391,18 @@ re: fclean all
 .PHONY: all clean fclean re
 ```
 
----
+## Plantilla con bonus sin relink
 
-## 15. Plantilla Completa con Bonus (Sin Relink)
+> [!info] libft v19.3 no tiene bonus
+> En el subject de libft v19.3 las listas enlazadas son la **Parte 3, obligatoria**: van en `SRC_FILES` como el resto. En versiones anteriores eran el bonus, y otros proyectos sí tienen parte bonus. Las instrucciones generales del subject piden entonces una regla `bonus` y que los ficheros bonus se llamen `*_bonus.c` / `*_bonus.h`. Esta plantilla sirve para esos casos.
 
-### El truco del archivo centinela (.bonus)
-Para la parte bonus de Libft, necesitas que `make bonus` compile tanto los obligatorios como los bonus, pero **sin recompilar ni volver a empaquetar si vuelves a teclear `make bonus`**.
+### El truco del archivo centinela (`.bonus`)
 
-Usamos un archivo oculto vacío llamado `.bonus` como objetivo real de Make:
+Quieres que `make bonus` compile la parte obligatoria y la bonus, pero **sin recompilar ni volver a empaquetar si vuelves a escribir `make bonus`**. El problema es que `bonus` es una acción (PHONY), no un fichero, así que `make` no tiene una fecha con la que comparar.
 
-```makefile
+La solución es usar un archivo oculto vacío llamado `.bonus` como objetivo real: se crea con `touch` al terminar, y su fecha sirve para saber si hace falta repetir el trabajo.
+
+```make
 # ========================================== #
 # VARIABLES BÁSICAS                          #
 # ========================================== #
@@ -416,8 +423,8 @@ HEADER      = $(INC_DIR)/libft.h
 FILES_MANDATORY = ft_putchar.c \
                   ft_strlen.c
 
-FILES_BONUS     = ft_lstnew.c \
-                  ft_lstadd_front.c
+FILES_BONUS     = ft_lstnew_bonus.c \
+                  ft_lstadd_front_bonus.c
 
 SRCS_MANDATORY  = $(addprefix $(SRC_DIR)/,$(FILES_MANDATORY))
 SRCS_BONUS      = $(addprefix $(SRC_DIR)/,$(FILES_BONUS))
@@ -440,7 +447,7 @@ $(NAME): $(OBJS_MANDATORY)
 bonus: .bonus
 
 # .bonus depende de los objetos obligatorios Y de los bonus
-# Si ninguno ha cambiado, touch no se ejecuta y no hay relink
+# Si ninguno ha cambiado, la receta no se ejecuta y no hay relink
 .bonus: $(OBJS_MANDATORY) $(OBJS_BONUS)
 	$(AR) $(NAME) $^
 	@touch .bonus
@@ -457,6 +464,23 @@ fclean: clean
 re: fclean all
 ```
 
+> [!warning] Limitación del centinela
+> Si borras `libft.a` a mano pero no `.bonus`, `make bonus` dirá que no hay nada que hacer. Usa siempre `make fclean`, que borra los dos.
+
 ## Relacionadas
 
-[[La Norma]] · [[Vim]]
+[[La Norma]] · [[Cómo compila C]] · [[Preprocesador y headers]] · [[Depurar con gdb]] · [[Git para 42]] · [[Vim]] · [[libft - Índice]] · [[libft - Suite de tests]]
+
+## Referencias
+
+- [GNU make manual](https://www.gnu.org/software/make/manual/make.html) — funcionamiento general de `make`.
+- [GNU make: Rule Syntax](https://www.gnu.org/software/make/manual/html_node/Rule-Syntax.html) y [Recipe Syntax](https://www.gnu.org/software/make/manual/html_node/Recipe-Syntax.html) — objetivos, prerrequisitos y el tabulador obligatorio.
+- [GNU make: Splitting Long Lines](https://www.gnu.org/software/make/manual/html_node/Splitting-Lines.html) — la barra invertida al final de línea.
+- [GNU make: The Two Flavors of Variables](https://www.gnu.org/software/make/manual/html_node/Flavors.html) y [Setting Variables](https://www.gnu.org/software/make/manual/html_node/Setting.html) — `=`, `:=`, `?=`.
+- [GNU make: Overriding Variables](https://www.gnu.org/software/make/manual/html_node/Overriding.html) — variables pasadas desde la línea de comandos.
+- [GNU make: Automatic Variables](https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html) y [Pattern Rules](https://www.gnu.org/software/make/manual/html_node/Pattern-Rules.html) — `$@`, `$<`, `$^`, `$?` y `%`.
+- [GNU make: Substitution References](https://www.gnu.org/software/make/manual/html_node/Substitution-Refs.html) y [Functions for File Names](https://www.gnu.org/software/make/manual/html_node/File-Name-Functions.html) — `$(SRCS:.c=.o)`, `addprefix`, `dir`.
+- [GNU make: Phony Targets](https://www.gnu.org/software/make/manual/html_node/Phony-Targets.html) — `.PHONY`.
+- [`man 1 ar`](https://man7.org/linux/man-pages/man1/ar.1.html) — modificadores `r`, `c`, `s` y `t`.
+- La Norma v4, capítulo III.11 «Makefile» (`Normativa 42/es.norm-2.pdf`) — reglas obligatorias, relink y fuentes nombradas explícitamente.
+- Subject de libft v19.3 (`es.subject_libft.pdf`) — `ar` obligatorio, `libtool` prohibido, todo en la raíz, ficheros `_bonus.{c/h}`.
