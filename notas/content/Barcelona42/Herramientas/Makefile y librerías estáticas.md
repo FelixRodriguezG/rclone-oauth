@@ -469,7 +469,7 @@ re: fclean all
 
 ## Relacionadas
 
-[[La Norma]] · [[Cómo compila C]] · [[Preprocesador y headers]] · [[Depurar con gdb]] · [[Git para 42]] · [[Vim]] · [[libft - Índice]] · [[libft - Suite de tests]]
+[[La Norma]] · [[Cómo compila C]] · [[Preprocesador y headers]] · [[Depurar con gdb]] · [[Git para 42]] · [[Vim]] · [[libft - Índice]]
 
 ## Referencias
 

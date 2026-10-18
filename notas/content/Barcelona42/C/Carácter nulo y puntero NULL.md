@@ -39,7 +39,7 @@ str:  [ 'h' ][ 'o' ][ 'l' ][ 'a' ][ '\0' ]
 ```
 
 > [!warning] Siempre hay que reservar un byte más
-> `"hola"` tiene 4 letras pero ocupa **5** bytes. Olvidar ese `+ 1` en un `malloc` es el `Invalid write` más típico de valgrind (ver [[libft - Suite de tests#Norminette y Valgrind|valgrind]]).
+> `"hola"` tiene 4 letras pero ocupa **5** bytes. Olvidar ese `+ 1` en un `malloc` es el `Invalid write` más típico de valgrind (ver [[Valgrind y sanitizers]]).
 > ```c
 > word = malloc(sizeof(char) * (len + 1));
 > ```

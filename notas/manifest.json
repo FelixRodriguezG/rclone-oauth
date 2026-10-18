@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-14T09:45:38+02:00",
+ "updated": "2026-10-18T20:30:13+02:00",
  "files": [
   {
    "path": "Barcelona42/42/Exam Rank 02.md",
@@ -122,8 +122,8 @@
    "name": "libft - Anexo comparativo"
   },
   {
-   "path": "Barcelona42/libft/libft - Suite de tests.md",
-   "name": "libft - Suite de tests"
+   "path": "Barcelona42/libft/libft - Edge cases y tests por función.md",
+   "name": "libft - Edge cases y tests por función"
   },
   {
    "path": "Barcelona42/libft/libft - Índice.md",

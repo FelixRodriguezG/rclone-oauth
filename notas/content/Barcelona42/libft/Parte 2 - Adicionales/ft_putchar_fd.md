@@ -88,15 +88,20 @@ Es literalmente una línea; está en el bloque de abajo.
 
 - `write(fd, &c, 1);`
 - fd estándar: 0 = stdin, 1 = stdout, 2 = stderr.
+- `'\0'` **también se escribe**: fuera de una cadena es un byte más (`0x00`), no un final. `ft_putchar_fd('\0', 1)` escribe 1 byte, igual que `putchar('\0')` ([[Carácter nulo y puntero NULL]]).
+- Con un fd inválido (`-1`, uno sin abrir o uno ya cerrado) `write` no escribe nada y devuelve `-1`; la función no se cuelga ni peta.
+- Los tests de esta función y su salida esperada están en [[libft - Edge cases y tests por función#ft_putchar_fd]].
 
 > [!warning] Errores típicos
 > - **Pasar `c` en vez de `&c`**: `write(fd, c, 1)` convierte el carácter en una dirección de memoria absurda. El compilador avisa (`makes pointer from integer without a cast`); con `-Werror` no compila.
 > - **Escribir siempre en 1**: si ignoras `fd`, la función «funciona» en tus pruebas por pantalla pero falla al escribir en stderr o en un fichero.
+> - **Saltarse el `'\0'`** con `if (!c) return ;`: el subject no hace ninguna excepción, así que `ft_putchar_fd('\0', fd)` debe escribir 1 byte. Ese `if` hace que tu función no se comporte igual que `write` o `putchar` y no te avisa de nada.
+> - **Comprobar `if (fd < 0)`**: no hace falta. Con un fd inválido `write` ya falla sin hacer nada, y `fd >= 0` no garantiza que el fd esté abierto (`42` es positivo y también falla).
 > - **Preocuparte por el valor de retorno de `write`**: el subject dice que la función no devuelve nada; con un fd inválido `write` devuelve -1 y no pasa nada más (no hay crash).
 
 ## Relacionadas
 
-[[ft_putstr_fd]] · [[ft_putendl_fd]] · [[ft_putnbr_fd]] · [[Descriptores de fichero y read]]
+[[ft_putstr_fd]] · [[ft_putendl_fd]] · [[ft_putnbr_fd]] · [[Descriptores de fichero y read]] · [[Carácter nulo y puntero NULL]] · [[libft - Edge cases y tests por función]]
 
 ## Referencias
 

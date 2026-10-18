@@ -23,7 +23,7 @@ En la Parte 1 cada nota cita literalmente el `man` de la función original (en i
 > - [[Punteros en C]] y [[Arrays en C]] — casi todas las funciones reciben punteros a memoria o a cadenas.
 > - [[Segmentos de memoria en C]] — dónde vive cada dato (pila, heap, literales de solo lectura).
 > - [[Listas enlazadas]] y [[Structs y typedef]] — la base de la Parte 3.
-> - [[libft - Suite de tests]] — cómo ejecutar los tests, valgrind y norminette, y cómo añadir tests nuevos.
+> - [[libft - Edge cases y tests por función]] — un `main` por función, con su happy path y sus edge cases, para la defensa.
 
 ## Parte 1 — Funciones de la libc
 
@@ -139,7 +139,7 @@ typedef struct s_list
 - En la evaluación pueden pedirte una **pequeña modificación** del código para comprobar que lo entiendes.
 
 > [!warning] Los tests no se entregan
-> Tu carpeta `tests/` y las reglas `test`, `norm` y `valgrind` del Makefile son para ti. Como el subject prohíbe entregar archivos no utilizados y la Norma pide fuentes nombradas explícitamente (las reglas de test usan `$(wildcard ...)`), quítalos antes de la entrega final. Ver [[libft - Suite de tests]] y [[Git para 42]].
+> Los `main.c` de prueba, los testers y cualquier regla extra del Makefile para ejecutarlos son para ti. Como el subject prohíbe entregar archivos no utilizados y la Norma pide fuentes nombradas explícitamente (nada de `$(wildcard ...)`), quítalos antes de la entrega final. Para la defensa, cada `ft_*.c` lleva al final su `main` de prueba **comentado** (no se compila); cómo usarlo, en [[libft - Edge cases y tests por función]]. Ver también [[Git para 42]].
 
 Más detalle en [[La Norma]] y [[Makefile y librerías estáticas]].
 
@@ -157,7 +157,7 @@ Cada nota tiene la propiedad `estado` (`hecho` / `pendiente`). Cámbiala al term
 
 ## Relacionadas
 
-[[libft - Anexo comparativo]] · [[libft - Suite de tests]] · [[Makefile y librerías estáticas]] · [[La Norma]] · [[Carácter nulo y puntero NULL]] · [[Punteros en C]] · [[Listas enlazadas]] · [[Valgrind y sanitizers]] · [[Depurar con gdb]] · [[Git para 42]]
+[[libft - Anexo comparativo]] · [[libft - Edge cases y tests por función]] · [[Makefile y librerías estáticas]] · [[La Norma]] · [[Carácter nulo y puntero NULL]] · [[Punteros en C]] · [[Listas enlazadas]] · [[Valgrind y sanitizers]] · [[Depurar con gdb]] · [[Git para 42]]
 
 ## Referencias
 

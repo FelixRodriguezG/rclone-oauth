@@ -48,11 +48,11 @@ char *ft_substr(char const *s, unsigned int start, size_t len);
 > Reserva memoria (con malloc(3)) y devuelve una subcadena de caracteres de la cadena ‘s’.
 > La subcadena comienza en el índice ‘start’ y tiene una longitud máxima ‘len’.
 
-| | |
-|---|---|
-| **Parámetros** | `s`: La cadena original desde la que se crea la subcadena.<br>`start`: El índice del carácter en ‘s’ desde el que empieza la subcadena.<br>`len`: La longitud máxima de la subcadena. |
-| **Valor devuelto** | La subcadena de caracteres resultante.<br>NULL si falla la reserva de memoria. |
-| **Funciones autorizadas** | malloc |
+|                           |                                                                                                                                                                                       |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Parámetros**            | `s`: La cadena original desde la que se crea la subcadena.<br>`start`: El índice del carácter en ‘s’ desde el que empieza la subcadena.<br>`len`: La longitud máxima de la subcadena. |
+| **Valor devuelto**        | La subcadena de caracteres resultante.<br>NULL si falla la reserva de memoria.                                                                                                        |
+| **Funciones autorizadas** | malloc                                                                                                                                                                                |
 
 ## Funciones externas (man)
 

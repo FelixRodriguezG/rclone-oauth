@@ -93,7 +93,7 @@ Program received signal SIGSEGV, Segmentation fault.
 3. **En un proyecto con Makefile**, puedes añadir `-g` sin tocar el Makefile pasándolo desde la terminal. Haz `fclean` antes, para que se recompile todo:
    ```bash
    make fclean
-   make CFLAGS="-Wall -Wextra -Werror -g"
+   make CFLAGS="-Wall -Wextra -Werror -I. -g"
    ```
    Funciona porque una variable que escribes en la línea de comandos **sustituye** a la del Makefile. Por eso, si tu Makefile pone más cosas en `CFLAGS` (como `-I.` en tu libft), inclúyelas también: si no, se pierden.
 4. **Lo normal es no dejar `-g` en el Makefile que entregas**: usa las banderas que pida el subject (ver [[Makefile y librerías estáticas]]).
@@ -366,23 +366,43 @@ count_char (s=0x7fffffffe39f "anana", c=97 'a') at count.c:12
 
 ---
 
-## Depurar tu libft con tus tests
+## Depurar tu libft con un main de prueba
 
-Tu Makefile de libft tiene un `test_runner` (ver [[libft - Suite de tests]]). Para depurarlo, recompila **todo** con `-g`, incluida la librería (`-I.` es porque tu Makefile ya lo pone en `CFLAGS`):
+Para depurar una función de tu libft, escribe un `main.c` pequeño que la llame:
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include "libft.h"
+
+int	main(void)
+{
+	char	*copia;
+
+	copia = ft_strdup("hola mundo");
+	printf("%s\n", copia);
+	free(copia);
+	return (0);
+}
+```
+
+Y compila **todo** con `-g`, incluida la librería (`-I.` es porque tu Makefile ya lo pone en `CFLAGS`):
 
 ```bash
 make fclean
-make test_runner CFLAGS="-Wall -Wextra -Werror -I. -g"
-gdb --args ./test_runner ft_strdup
+make CFLAGS="-Wall -Wextra -Werror -I. -g"
+cc -Wall -Wextra -Werror -g main.c -L. -lft -o prueba
+gdb ./prueba
 ```
 
 ```text
 (gdb) break ft_strdup
 (gdb) run
-Breakpoint 1, ft_strdup (s=0x407bf6 "hola mundo") at ft_strdup.c:20
+Breakpoint 1, ft_strdup (s=0x555555556004 "hola mundo") at ft_strdup.c:20
+20		str_len = ft_strlen(s) + 1;
 (gdb) bt
-#0  ft_strdup (s=0x407bf6 "hola mundo") at ft_strdup.c:20
-#1  0x0000000000402dff in test_ft_strdup () at tests/ft_strdup_test.c:21
+#0  ft_strdup (s=0x555555556004 "hola mundo") at ft_strdup.c:20
+#1  0x00005555555551a4 in main () at main.c:9
 ```
 
 Cuando termines, vuelve a compilar normal con `make re`.
@@ -442,7 +462,7 @@ En los Mac de 42 se usa `lldb`. Se compila igual (**con `-g`**) y el método es 
 
 ## Relacionadas
 
-[[Valgrind y sanitizers]] · [[Cómo compila C]] · [[Punteros en C]] · [[Control de errores en C]] · [[Segmentos de memoria en C]] · [[Makefile y librerías estáticas]] · [[libft - Suite de tests]] · [[Vim]]
+[[Valgrind y sanitizers]] · [[Cómo compila C]] · [[Punteros en C]] · [[Control de errores en C]] · [[Segmentos de memoria en C]] · [[Makefile y librerías estáticas]] · [[Vim]]
 
 ## Referencias
 

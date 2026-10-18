@@ -14,7 +14,7 @@ tags: [inicio]
 
 | Rank | Proyecto | Lenguaje | Notas |
 |---|---|---|---|
-| 0 | **libft** | C | [[libft - Índice\|Índice de funciones]] · [[libft - Anexo comparativo\|Comparativa por uso]] · [[libft - Suite de tests\|Suite de tests]] |
+| 0 | **libft** | C | [[libft - Índice\|Índice de funciones]] · [[libft - Anexo comparativo\|Comparativa por uso]] · [[libft - Edge cases y tests por función\|Tests por función]] |
 | 1 | **ft_printf** | C | [[ft_printf - Índice]] |
 | 1 | **get_next_line** | C | [[get_next_line - Índice]] |
 | 1 | **push_swap** | C | [[push_swap - Índice]] |

@@ -328,7 +328,7 @@ tags: [libft, anexo]
 
 ## Relacionadas
 
-[[libft - Índice]] · [[libft - Suite de tests]] · [[Punteros en C]] · [[Segmentos de memoria en C]] · [[Carácter nulo y puntero NULL]] · [[Tipos enteros y conversiones]] · [[Listas enlazadas]] · [[Descriptores de fichero y read]] · [[Valgrind y sanitizers]] · [[Algoritmos de ordenación y complejidad]]
+[[libft - Índice]] · [[Punteros en C]] · [[Segmentos de memoria en C]] · [[Carácter nulo y puntero NULL]] · [[Tipos enteros y conversiones]] · [[Listas enlazadas]] · [[Descriptores de fichero y read]] · [[Valgrind y sanitizers]] · [[Algoritmos de ordenación y complejidad]]
 
 ## Referencias
 

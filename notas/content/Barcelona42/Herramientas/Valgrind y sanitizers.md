@@ -323,7 +323,7 @@ Al terminar el programa, `leaks` dice cuántos bloques quedan sin liberar (`Proc
 
 ## Relacionadas
 
-[[Depurar con gdb]] · [[Segmentos de memoria en C]] · [[Cómo compila C]] · [[Makefile y librerías estáticas]] · [[Control de errores en C]] · [[Listas enlazadas]] · [[ft_calloc]] · [[ft_split]] · [[libft - Suite de tests]]
+[[Depurar con gdb]] · [[Segmentos de memoria en C]] · [[Cómo compila C]] · [[Makefile y librerías estáticas]] · [[Control de errores en C]] · [[Listas enlazadas]] · [[ft_calloc]] · [[ft_split]]
 
 ## Referencias
 
