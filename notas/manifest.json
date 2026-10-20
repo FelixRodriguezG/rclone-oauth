@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-18T20:30:13+02:00",
+ "updated": "2026-10-20T09:40:21+02:00",
  "files": [
   {
    "path": "Barcelona42/42/Exam Rank 02.md",
@@ -12,6 +12,82 @@
   {
    "path": "Barcelona42/A-Maze-ing/A-Maze-ing - Índice.md",
    "name": "A-Maze-ing - Índice"
+  },
+  {
+   "path": "Barcelona42/Bash/Argumentos y subcomandos en Bash.md",
+   "name": "Argumentos y subcomandos en Bash"
+  },
+  {
+   "path": "Barcelona42/Bash/Arrays en Bash.md",
+   "name": "Arrays en Bash"
+  },
+  {
+   "path": "Barcelona42/Bash/Bash - Chuleta de sintaxis.md",
+   "name": "Bash - Chuleta de sintaxis"
+  },
+  {
+   "path": "Barcelona42/Bash/Bash - Índice.md",
+   "name": "Bash - Índice"
+  },
+  {
+   "path": "Barcelona42/Bash/Bucles en Bash.md",
+   "name": "Bucles en Bash"
+  },
+  {
+   "path": "Barcelona42/Bash/Colores en la terminal.md",
+   "name": "Colores en la terminal"
+  },
+  {
+   "path": "Barcelona42/Bash/Condiciones en Bash.md",
+   "name": "Condiciones en Bash"
+  },
+  {
+   "path": "Barcelona42/Bash/Configuración y estado de un script.md",
+   "name": "Configuración y estado de un script"
+  },
+  {
+   "path": "Barcelona42/Bash/Códigos de salida y errores en Bash.md",
+   "name": "Códigos de salida y errores en Bash"
+  },
+  {
+   "path": "Barcelona42/Bash/Depurar scripts de Bash.md",
+   "name": "Depurar scripts de Bash"
+  },
+  {
+   "path": "Barcelona42/Bash/Expansiones en Bash.md",
+   "name": "Expansiones en Bash"
+  },
+  {
+   "path": "Barcelona42/Bash/Funciones en Bash.md",
+   "name": "Funciones en Bash"
+  },
+  {
+   "path": "Barcelona42/Bash/grep, sed y awk lo justo.md",
+   "name": "grep, sed y awk lo justo"
+  },
+  {
+   "path": "Barcelona42/Bash/Leer entrada del usuario en Bash.md",
+   "name": "Leer entrada del usuario en Bash"
+  },
+  {
+   "path": "Barcelona42/Bash/Primer script en Bash.md",
+   "name": "Primer script en Bash"
+  },
+  {
+   "path": "Barcelona42/Bash/Redirecciones y tuberías.md",
+   "name": "Redirecciones y tuberías"
+  },
+  {
+   "path": "Barcelona42/Bash/Scripts robustos con set y trap.md",
+   "name": "Scripts robustos con set y trap"
+  },
+  {
+   "path": "Barcelona42/Bash/Subshells y procesos en Bash.md",
+   "name": "Subshells y procesos en Bash"
+  },
+  {
+   "path": "Barcelona42/Bash/Variables y comillas en Bash.md",
+   "name": "Variables y comillas en Bash"
   },
   {
    "path": "Barcelona42/Born2beroot/Born2beroot - Índice.md",
@@ -102,8 +178,20 @@
    "name": "Git para 42"
   },
   {
+   "path": "Barcelona42/Herramientas/GitHub CLI (gh).md",
+   "name": "GitHub CLI (gh)"
+  },
+  {
+   "path": "Barcelona42/Herramientas/Grabar una demo de terminal.md",
+   "name": "Grabar una demo de terminal"
+  },
+  {
    "path": "Barcelona42/Herramientas/Makefile y librerías estáticas.md",
    "name": "Makefile y librerías estáticas"
+  },
+  {
+   "path": "Barcelona42/Herramientas/README de un proyecto.md",
+   "name": "README de un proyecto"
   },
   {
    "path": "Barcelona42/Herramientas/Valgrind y sanitizers.md",
@@ -308,6 +396,114 @@
   {
    "path": "Barcelona42/Python/Python - Índice.md",
    "name": "Python - Índice"
+  },
+  {
+   "path": "Barcelona42/tmux/Automatizar tmux desde scripts.md",
+   "name": "Automatizar tmux desde scripts"
+  },
+  {
+   "path": "Barcelona42/tmux/Configurar tmux.md",
+   "name": "Configurar tmux"
+  },
+  {
+   "path": "Barcelona42/tmux/Qué es tmux.md",
+   "name": "Qué es tmux"
+  },
+  {
+   "path": "Barcelona42/tmux/tmux - Uso básico.md",
+   "name": "tmux - Uso básico"
+  },
+  {
+   "path": "Barcelona42/tmux/tmux - Índice.md",
+   "name": "tmux - Índice"
+  },
+  {
+   "path": "Barcelona42/TUI/Animación en la terminal - fundamentos.md",
+   "name": "Animación en la terminal - fundamentos"
+  },
+  {
+   "path": "Barcelona42/TUI/CLI, TUI y GUI.md",
+   "name": "CLI, TUI y GUI"
+  },
+  {
+   "path": "Barcelona42/TUI/curses - Animaciones.md",
+   "name": "curses - Animaciones"
+  },
+  {
+   "path": "Barcelona42/TUI/curses - Colores y estilos.md",
+   "name": "curses - Colores y estilos"
+  },
+  {
+   "path": "Barcelona42/TUI/curses - Ejecutar comandos.md",
+   "name": "curses - Ejecutar comandos"
+  },
+  {
+   "path": "Barcelona42/TUI/curses - El bucle principal.md",
+   "name": "curses - El bucle principal"
+  },
+  {
+   "path": "Barcelona42/TUI/curses - Layout y paneles.md",
+   "name": "curses - Layout y paneles"
+  },
+  {
+   "path": "Barcelona42/TUI/curses - Primeros pasos.md",
+   "name": "curses - Primeros pasos"
+  },
+  {
+   "path": "Barcelona42/TUI/curses - Teclado y atajos.md",
+   "name": "curses - Teclado y atajos"
+  },
+  {
+   "path": "Barcelona42/TUI/Cómo funciona la terminal.md",
+   "name": "Cómo funciona la terminal"
+  },
+  {
+   "path": "Barcelona42/TUI/De script a TUI - arquitectura.md",
+   "name": "De script a TUI - arquitectura"
+  },
+  {
+   "path": "Barcelona42/TUI/Diseño de una TUI moderna.md",
+   "name": "Diseño de una TUI moderna"
+  },
+  {
+   "path": "Barcelona42/TUI/Elegir un framework de TUI.md",
+   "name": "Elegir un framework de TUI"
+  },
+  {
+   "path": "Barcelona42/TUI/Frameworks de TUI - Listado.md",
+   "name": "Frameworks de TUI - Listado"
+  },
+  {
+   "path": "Barcelona42/TUI/Instalador TUI en Bash.md",
+   "name": "Instalador TUI en Bash"
+  },
+  {
+   "path": "Barcelona42/TUI/Instalador TUI en Python.md",
+   "name": "Instalador TUI en Python"
+  },
+  {
+   "path": "Barcelona42/TUI/Instalar con una línea.md",
+   "name": "Instalar con una línea"
+  },
+  {
+   "path": "Barcelona42/TUI/Qué hace un buen instalador.md",
+   "name": "Qué hace un buen instalador"
+  },
+  {
+   "path": "Barcelona42/TUI/Spinners y barras de progreso.md",
+   "name": "Spinners y barras de progreso"
+  },
+  {
+   "path": "Barcelona42/TUI/TUI - Índice.md",
+   "name": "TUI - Índice"
+  },
+  {
+   "path": "Barcelona42/TUI/TUIs en Bash - dialog, whiptail y gum.md",
+   "name": "TUIs en Bash - dialog, whiptail y gum"
+  },
+  {
+   "path": "Barcelona42/TUI/Unicode y emojis en la terminal.md",
+   "name": "Unicode y emojis en la terminal"
   }
  ]
 }

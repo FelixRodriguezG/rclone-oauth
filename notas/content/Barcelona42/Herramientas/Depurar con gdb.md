@@ -427,7 +427,7 @@ Cuando termines, vuelve a compilar normal con `make re`.
 |---|---|---|---|
 | 1 | `(No debugging symbols found in ./prog)` | Compilaste sin `-g` | Recompila **todo** con `-g` |
 | 2 | `No symbol "n" in current context.` | El programa aún no se está ejecutando, o estás en otra función | Haz `run` primero, o cambia de función con `frame N` |
-| 3 | `step` no entra en tu función `ft_...`, la ejecuta de golpe | Esa función (o tu `libft.a`) se compiló **sin `-g`**: gdb se salta las funciones sin símbolos | Recompila la librería con `-g` (ver [[#Depurar tu libft con tus tests]]) |
+| 3 | `step` no entra en tu función `ft_...`, la ejecuta de golpe | Esa función (o tu `libft.a`) se compiló **sin `-g`**: gdb se salta las funciones sin símbolos | Recompila la librería con `-g` (ver [[#Depurar tu libft con un main de prueba]]) |
 | 4 | `step` te mete dentro de `printf` o `malloc` | Has entrado en una función de la libc | Escribe `finish` para salir, y usa `next` en esas líneas |
 | 5 | Un breakpoint nunca para, o ves `<optimized out>` | Compilaste con optimizaciones (`-O2`…), y el compilador ha reordenado o eliminado código | Compila con `-O0` |
 | 6 | Las líneas que enseña gdb no coinciden con tu código | Cambiaste el código y no recompilaste | Recompila y vuelve a abrir gdb |

@@ -69,6 +69,37 @@ tags: [inicio]
 - [[Valgrind y sanitizers]]: leaks, lecturas/escrituras inválidas, ASan y UBSan.
 - [[Git para 42]]: repositorio de entrega, `.gitignore` y comprobar qué entregas.
 - [[Vim]]: `.vimrc` para 42 y atajos esenciales.
+- [[GitHub CLI (gh)]]: iniciar sesión, crear y publicar repositorios desde la terminal.
+- [[README de un proyecto]]: qué secciones poner y cómo añadir capturas o un GIF.
+- [[Grabar una demo de terminal]]: asciinema + agg para convertir una sesión en GIF.
+
+## Bash
+
+> [!tip] Mapa visual
+> [[Mapa - De script a TUI.canvas|Mapa: de script a TUI]] muestra todas las notas de Bash, tmux y TUI en un lienzo, con el orden de lectura.
+
+De tu primer script a uno organizado, con subcomandos, configuración y control de errores. Empieza por [[Bash - Índice]].
+
+- **Básicos:** [[Primer script en Bash]] · [[Variables y comillas en Bash]] · [[Condiciones en Bash]] · [[Bucles en Bash]] · [[Funciones en Bash]]
+- **Sintaxis a fondo:** [[Expansiones en Bash]] · [[Arrays en Bash]] · [[Leer entrada del usuario en Bash]] · [[Subshells y procesos en Bash]] · [[Scripts robustos con set y trap]]
+- **Organizar un script:** [[Argumentos y subcomandos en Bash]] · [[Códigos de salida y errores en Bash]] · [[Redirecciones y tuberías]] · [[grep, sed y awk lo justo]] · [[Colores en la terminal]] · [[Configuración y estado de un script]] · [[Depurar scripts de Bash]]
+- **Consulta rápida:** [[Bash - Chuleta de sintaxis]]
+
+## tmux
+
+Varias terminales en una y sesiones que siguen vivas al cerrar la ventana. Empieza por [[tmux - Índice]].
+
+- [[Qué es tmux]] · [[tmux - Uso básico]] · [[Configurar tmux]] · [[Automatizar tmux desde scripts]]
+
+## TUI
+
+Escalar un script a una interfaz de terminal moderna, con Python y curses. Empieza por [[TUI - Índice]].
+
+- **Fundamentos:** [[CLI, TUI y GUI]] · [[Cómo funciona la terminal]] · [[De script a TUI - arquitectura]]
+- **curses en Python:** [[curses - Primeros pasos]] · [[curses - El bucle principal]] · [[curses - Layout y paneles]] · [[curses - Colores y estilos]] · [[curses - Teclado y atajos]] · [[curses - Ejecutar comandos]] · [[Unicode y emojis en la terminal]] · [[Diseño de una TUI moderna]]
+- **Frameworks:** [[Frameworks de TUI - Listado]] · [[Elegir un framework de TUI]] · [[TUIs en Bash - dialog, whiptail y gum]]
+- **Animaciones:** [[Animación en la terminal - fundamentos]] · [[Spinners y barras de progreso]] · [[curses - Animaciones]]
+- **Instaladores:** [[Qué hace un buen instalador]] · [[Instalador TUI en Bash]] · [[Instalador TUI en Python]] · [[Instalar con una línea]]
 
 ## Normativa de 42
 
