@@ -98,7 +98,7 @@ para i desde 0 hasta n - 1:
 
 ## Relacionadas
 
-[[ft_memset]] · [[ft_calloc]] · [[Carácter nulo y puntero NULL]]
+[[ft_memset]] · [[ft_calloc]] · [[Carácter nulo y puntero NULL]] · [[Padding y alineación de memoria]]
 
 ## Referencias
 

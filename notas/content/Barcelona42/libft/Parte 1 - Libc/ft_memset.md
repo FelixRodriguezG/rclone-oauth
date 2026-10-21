@@ -88,7 +88,7 @@ devolver s            (el puntero original, no p avanzado)
 
 ## Relacionadas
 
-[[ft_bzero]] · [[ft_calloc]] · [[Punteros en C]]
+[[ft_bzero]] · [[ft_calloc]] · [[Punteros en C]] · [[Padding y alineación de memoria]]
 
 ## Referencias
 

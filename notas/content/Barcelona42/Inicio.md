@@ -14,7 +14,8 @@ tags: [inicio]
 
 | Rank | Proyecto | Lenguaje | Notas |
 |---|---|---|---|
-| 0 | **libft** | C | [[libft - Índice\|Índice de funciones]] · [[libft - Anexo comparativo\|Comparativa por uso]] · [[libft - Edge cases y tests por función\|Tests por función]] |
+| 0 | **Piscine Reloaded** | C y shell | [[Piscine Reloaded - Índice\|Índice de ejercicios]] · [[Piscine Reloaded - Diagramas de flujo\|Diagramas de flujo]] |
+| 0 | **libft** | C | [[libft - Índice\|Índice de funciones]] · [[libft - Anexo comparativo\|Comparativa por uso]] · [[libft - Edge cases y tests por función\|Tests por función]] · [[libft - Diagramas de flujo\|Diagramas de flujo]] |
 | 1 | **ft_printf** | C | [[ft_printf - Índice]] |
 | 1 | **get_next_line** | C | [[get_next_line - Índice]] |
 | 1 | **push_swap** | C | [[push_swap - Índice]] |
@@ -47,6 +48,7 @@ tags: [inicio]
 ### Memoria y errores
 
 - [[Segmentos de memoria en C]]: stack, heap, BSS, DATA y TEXT, y los errores de memoria típicos.
+- [[Padding y alineación de memoria]]: por qué `sizeof` de un struct no es la suma de sus campos, structs empaquetados y por qué se usa `unsigned char *`.
 - [[Variables static y ámbito]]: ámbito, duración, `static` en variables y funciones.
 - [[Control de errores en C]]: comprobar `malloc` y llamadas al sistema, liberar al fallar, `errno` y `perror`.
 
@@ -56,6 +58,10 @@ tags: [inicio]
 - [[printf]]: especificadores, banderas y casos límite para ft_printf.
 - [[stdarg y funciones variádicas]]: `va_list`, `va_start`, `va_arg`, `va_end` y la promoción de tipos.
 - [[Preprocesador y headers]]: `#include`, guardas, `#define` y `-D BUFFER_SIZE`.
+
+### Variaciones
+
+- [[Variaciones - Índice]]: funciones de la C Piscine y del Exam Rank 02 que no están en libft (`ft_putnbr_base`, `ft_atoi_base`, `ft_strcpy`, `ft_power`, `print_bits`…), cada una con su diagrama de flujo.
 
 ### Algoritmos
 

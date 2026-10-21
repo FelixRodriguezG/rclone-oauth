@@ -17,6 +17,8 @@ En la Parte 1 cada nota cita literalmente el `man` de la función original (en i
 
 > [!tip] Anexo
 > [[libft - Anexo comparativo]] — funciones agrupadas por uso y comparadas entre sí (pros, contras y cuándo usar cada una).
+> [[libft - Diagramas de flujo]] — el algoritmo de cada función como diagrama de flujo, en una sola página.
+> [[Variaciones - Índice]] — variantes que no son de libft (`ft_putnbr_base`, `ft_atoi_base`, `ft_strcpy`…).
 
 > [!info] Conceptos clave
 > - [[Carácter nulo y puntero NULL]] — `'\0'` termina cadenas; `NULL` termina arrays de punteros (`ft_split`) y listas (Parte 3).
@@ -157,7 +159,7 @@ Cada nota tiene la propiedad `estado` (`hecho` / `pendiente`). Cámbiala al term
 
 ## Relacionadas
 
-[[libft - Anexo comparativo]] · [[libft - Edge cases y tests por función]] · [[Makefile y librerías estáticas]] · [[La Norma]] · [[Carácter nulo y puntero NULL]] · [[Punteros en C]] · [[Listas enlazadas]] · [[Valgrind y sanitizers]] · [[Depurar con gdb]] · [[Git para 42]]
+[[libft - Anexo comparativo]] · [[libft - Edge cases y tests por función]] · [[libft - Diagramas de flujo]] · [[Piscine Reloaded - Índice]] · [[Variaciones - Índice]] · [[Makefile y librerías estáticas]] · [[La Norma]] · [[Carácter nulo y puntero NULL]] · [[Punteros en C]] · [[Listas enlazadas]] · [[Valgrind y sanitizers]] · [[Depurar con gdb]] · [[Git para 42]]
 
 ## Referencias
 

@@ -97,7 +97,7 @@ devolver 0
 
 ## Relacionadas
 
-[[ft_strncmp]] · [[ft_memchr]] · [[Tipos enteros y conversiones]]
+[[ft_strncmp]] · [[ft_memchr]] · [[Tipos enteros y conversiones]] · [[Padding y alineación de memoria]]
 
 ## Referencias
 

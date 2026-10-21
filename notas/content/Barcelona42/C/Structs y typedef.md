@@ -194,6 +194,7 @@ Mismos campos, distinto orden, 4 bytes de diferencia. Conclusiones:
 - **Nunca calcules a mano** el tamaño de un struct: usa siempre `sizeof(t_mix)` en `malloc`.
 - `offsetof` (de `<stddef.h>`) da la posición de un campo dentro del struct.
 - Los valores concretos dependen de la máquina; estos son de Linux x86_64.
+- Más a fondo (reglas, structs empaquetados, `memcmp` y padding): [[Padding y alineación de memoria]].
 
 ## El struct de la libft: `t_list`
 
@@ -291,7 +292,7 @@ felix: hp original 3, hp copia 0
 
 ## Relacionadas
 
-[[Punteros en C]] · [[Listas enlazadas]] · [[ft_lstnew]] · [[Preprocesador y headers]] · [[La Norma]] · [[Segmentos de memoria en C]] · [[Tipos enteros y conversiones]]
+[[Punteros en C]] · [[Listas enlazadas]] · [[Padding y alineación de memoria]] · [[ft_lstnew]] · [[Preprocesador y headers]] · [[La Norma]] · [[Segmentos de memoria en C]] · [[Tipos enteros y conversiones]]
 
 ## Referencias
 

@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-20T09:40:21+02:00",
+ "updated": "2026-10-21T16:41:14+02:00",
  "files": [
   {
    "path": "Barcelona42/42/Exam Rank 02.md",
@@ -122,6 +122,10 @@
    "name": "Operadores de bits"
   },
   {
+   "path": "Barcelona42/C/Padding y alineación de memoria.md",
+   "name": "Padding y alineación de memoria"
+  },
+  {
    "path": "Barcelona42/C/Preprocesador y headers.md",
    "name": "Preprocesador y headers"
   },
@@ -208,6 +212,10 @@
   {
    "path": "Barcelona42/libft/libft - Anexo comparativo.md",
    "name": "libft - Anexo comparativo"
+  },
+  {
+   "path": "Barcelona42/libft/libft - Diagramas de flujo.md",
+   "name": "libft - Diagramas de flujo"
   },
   {
    "path": "Barcelona42/libft/libft - Edge cases y tests por función.md",
@@ -390,6 +398,86 @@
    "name": "ft_lstsize"
   },
   {
+   "path": "Barcelona42/Piscine Reloaded/ft_abs.md",
+   "name": "ft_abs"
+  },
+  {
+   "path": "Barcelona42/Piscine Reloaded/ft_count_if.md",
+   "name": "ft_count_if"
+  },
+  {
+   "path": "Barcelona42/Piscine Reloaded/ft_display_file.md",
+   "name": "ft_display_file"
+  },
+  {
+   "path": "Barcelona42/Piscine Reloaded/ft_div_mod.md",
+   "name": "ft_div_mod"
+  },
+  {
+   "path": "Barcelona42/Piscine Reloaded/ft_foreach.md",
+   "name": "ft_foreach"
+  },
+  {
+   "path": "Barcelona42/Piscine Reloaded/ft_ft.md",
+   "name": "ft_ft"
+  },
+  {
+   "path": "Barcelona42/Piscine Reloaded/ft_is_negative.md",
+   "name": "ft_is_negative"
+  },
+  {
+   "path": "Barcelona42/Piscine Reloaded/ft_iterative_factorial.md",
+   "name": "ft_iterative_factorial"
+  },
+  {
+   "path": "Barcelona42/Piscine Reloaded/ft_point.md",
+   "name": "ft_point"
+  },
+  {
+   "path": "Barcelona42/Piscine Reloaded/ft_print_alphabet.md",
+   "name": "ft_print_alphabet"
+  },
+  {
+   "path": "Barcelona42/Piscine Reloaded/ft_print_numbers.md",
+   "name": "ft_print_numbers"
+  },
+  {
+   "path": "Barcelona42/Piscine Reloaded/ft_print_params.md",
+   "name": "ft_print_params"
+  },
+  {
+   "path": "Barcelona42/Piscine Reloaded/ft_range.md",
+   "name": "ft_range"
+  },
+  {
+   "path": "Barcelona42/Piscine Reloaded/ft_recursive_factorial.md",
+   "name": "ft_recursive_factorial"
+  },
+  {
+   "path": "Barcelona42/Piscine Reloaded/ft_sort_params.md",
+   "name": "ft_sort_params"
+  },
+  {
+   "path": "Barcelona42/Piscine Reloaded/ft_sqrt.md",
+   "name": "ft_sqrt"
+  },
+  {
+   "path": "Barcelona42/Piscine Reloaded/ft_strcmp.md",
+   "name": "ft_strcmp"
+  },
+  {
+   "path": "Barcelona42/Piscine Reloaded/ft_swap.md",
+   "name": "ft_swap"
+  },
+  {
+   "path": "Barcelona42/Piscine Reloaded/Piscine Reloaded - Diagramas de flujo.md",
+   "name": "Piscine Reloaded - Diagramas de flujo"
+  },
+  {
+   "path": "Barcelona42/Piscine Reloaded/Piscine Reloaded - Índice.md",
+   "name": "Piscine Reloaded - Índice"
+  },
+  {
    "path": "Barcelona42/push_swap/push_swap - Índice.md",
    "name": "push_swap - Índice"
   },
@@ -504,6 +592,62 @@
   {
    "path": "Barcelona42/TUI/Unicode y emojis en la terminal.md",
    "name": "Unicode y emojis en la terminal"
+  },
+  {
+   "path": "Barcelona42/Variaciones/ft_atoi_base.md",
+   "name": "ft_atoi_base"
+  },
+  {
+   "path": "Barcelona42/Variaciones/ft_convert_base.md",
+   "name": "ft_convert_base"
+  },
+  {
+   "path": "Barcelona42/Variaciones/ft_fibonacci.md",
+   "name": "ft_fibonacci"
+  },
+  {
+   "path": "Barcelona42/Variaciones/ft_is_prime.md",
+   "name": "ft_is_prime"
+  },
+  {
+   "path": "Barcelona42/Variaciones/ft_itoa_base.md",
+   "name": "ft_itoa_base"
+  },
+  {
+   "path": "Barcelona42/Variaciones/ft_power.md",
+   "name": "ft_power"
+  },
+  {
+   "path": "Barcelona42/Variaciones/ft_print_bits.md",
+   "name": "ft_print_bits"
+  },
+  {
+   "path": "Barcelona42/Variaciones/ft_putnbr_base.md",
+   "name": "ft_putnbr_base"
+  },
+  {
+   "path": "Barcelona42/Variaciones/ft_strcat.md",
+   "name": "ft_strcat"
+  },
+  {
+   "path": "Barcelona42/Variaciones/ft_strcpy.md",
+   "name": "ft_strcpy"
+  },
+  {
+   "path": "Barcelona42/Variaciones/ft_strncpy.md",
+   "name": "ft_strncpy"
+  },
+  {
+   "path": "Barcelona42/Variaciones/ft_strrev.md",
+   "name": "ft_strrev"
+  },
+  {
+   "path": "Barcelona42/Variaciones/ft_strstr.md",
+   "name": "ft_strstr"
+  },
+  {
+   "path": "Barcelona42/Variaciones/Variaciones - Índice.md",
+   "name": "Variaciones - Índice"
   }
  ]
 }
