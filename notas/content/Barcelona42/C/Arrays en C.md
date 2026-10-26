@@ -175,4 +175,4 @@ No confundir con un **array de punteros** como el que devuelve [[ft_split]] (`ch
 - [String literals — cppreference](https://en.cppreference.com/w/c/language/string_literal) — modificar un literal es comportamiento indefinido.
 - [Borrador del estándar C11 (N1570)](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf) — §6.5.2.1 (`E1[E2]` es `*((E1)+(E2))`), §6.3.2.1p3 (decay), §6.7.9 (inicialización).
 - [Beej's Guide to C — Arrays](https://beej.us/guide/bgc/html/split/arrays.html) — explicación introductoria.
-- La Norma v4 (`Normativa 42/es.norm-2.pdf`) — prohíbe los VLA y declarar e inicializar en la misma línea.
+- La Norma v4 (`Cursus/42/Normativa 42/es.norm-2.pdf`) — prohíbe los VLA y declarar e inicializar en la misma línea.

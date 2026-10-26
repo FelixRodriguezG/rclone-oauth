@@ -121,4 +121,4 @@ Cada nota tiene la propiedad `estado` (`hecho` / `pendiente`), igual que en libf
 ## Referencias
 
 - Subject de Piscine Reloaded v2.0 (`/home/felixrod/cursus/piscine-reloaded/es.subject_piscine-reloaded.pdf`) — lista de ejercicios, funciones autorizadas e instrucciones (citas literales).
-- La Norma v4 (`Normativa 42/es.norm-2.pdf`) — reglas de estilo y prohibición de wildcards en el Makefile.
+- La Norma v4 (`Cursus/42/Normativa 42/es.norm-2.pdf`) — reglas de estilo y prohibición de wildcards en el Makefile.

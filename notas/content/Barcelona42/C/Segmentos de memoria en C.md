@@ -375,5 +375,5 @@ void	leak_ejemplo(void)
 - [size(1)](https://man7.org/linux/man-pages/man1/size.1.html) y [nm(1)](https://man7.org/linux/man-pages/man1/nm.1.html) — columnas de `size` y letras de `nm`.
 - [Valgrind: Memcheck manual](https://valgrind.org/docs/manual/mc-manual.html) — detección de leaks, *use-after-free* y *double free*.
 - Wikipedia: [Data segment](https://en.wikipedia.org/wiki/Data_segment), [.bss](https://en.wikipedia.org/wiki/.bss), [Code segment](https://en.wikipedia.org/wiki/Code_segment) — disposición general de la memoria de un proceso.
-- La Norma v4 (`Normativa 42/es.norm-2.pdf`) — reglas sobre variables globales e inicialización.
+- La Norma v4 (`Cursus/42/Normativa 42/es.norm-2.pdf`) — reglas sobre variables globales e inicialización.
 - Salidas de `./programa_demo`, `size` y `nm` obtenidas en Ubuntu 22.04 con clang 12.0.1.

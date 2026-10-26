@@ -12,12 +12,14 @@ tags: [inicio]
 
 ## Proyectos
 
+Todo lo de 42 está en la carpeta `Cursus/`: un subdirectorio por rank (`Rank 0`, `Rank 1`, `Rank 2`), más `42/` (Norma, examen y PDFs de normativa) y `Variaciones/`. Los conceptos generales (`C/`, `Herramientas/`, `Bash/`, `tmux/`, `TUI/`) siguen fuera porque sirven para cualquier proyecto.
+
 | Rank | Proyecto | Lenguaje | Notas |
 |---|---|---|---|
 | 0 | **Piscine Reloaded** | C y shell | [[Piscine Reloaded - Índice\|Índice de ejercicios]] · [[Piscine Reloaded - Diagramas de flujo\|Diagramas de flujo]] |
 | 0 | **libft** | C | [[libft - Índice\|Índice de funciones]] · [[libft - Anexo comparativo\|Comparativa por uso]] · [[libft - Edge cases y tests por función\|Tests por función]] · [[libft - Diagramas de flujo\|Diagramas de flujo]] |
 | 1 | **ft_printf** | C | [[ft_printf - Índice]] |
-| 1 | **get_next_line** | C | [[get_next_line - Índice]] |
+| 1 | **get_next_line** | C | [[get_next_line - Índice\|Índice]] · [[get_next_line - Guía paso a paso\|Guía paso a paso]] · [[get_next_line - Funciones auxiliares\|Funciones auxiliares]] · [[get_next_line - Pruebas y depuración\|Pruebas]] |
 | 1 | **push_swap** | C | [[push_swap - Índice]] |
 | 2 | **Born2beroot** | Sistemas (Debian/Rocky) | [[Born2beroot - Índice]] |
 | 2 | **Python Modules 00–10** | Python | [[Python - Índice]] |
@@ -47,6 +49,7 @@ tags: [inicio]
 
 ### Memoria y errores
 
+- [[malloc y free]]: reservar y liberar, quién es dueño de cada bloque, el patrón `p = f(p)` y los errores típicos.
 - [[Segmentos de memoria en C]]: stack, heap, BSS, DATA y TEXT, y los errores de memoria típicos.
 - [[Padding y alineación de memoria]]: por qué `sizeof` de un struct no es la suma de sus campos, structs empaquetados y por qué se usa `unsigned char *`.
 - [[Variables static y ámbito]]: ámbito, duración, `static` en variables y funciones.
@@ -109,6 +112,6 @@ Escalar un script a una interfaz de terminal moderna, con Python y curses. Empie
 
 ## Normativa de 42
 
-- [[Normativa 42/es.norm-2.pdf|La Norma (PDF oficial)]]
-- [[Normativa 42/normativa-campus-42barcelona.pdf|Normativa del campus]]
-- [[Normativa 42/normas-convivencia-42.pdf|Normas de convivencia]]
+- [[es.norm-2.pdf|La Norma (PDF oficial)]]
+- [[normativa-campus-42barcelona.pdf|Normativa del campus]]
+- [[normas-convivencia-42.pdf|Normas de convivencia]]

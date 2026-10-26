@@ -129,4 +129,4 @@ Para trabajar con tu `.c` y tu `.h` al mismo tiempo:
 - [Vim help: autocmd](https://vimhelp.org/autocmd.txt.html) — eventos `BufWritePre` y `BufWritePost`.
 - [Vim help: windows](https://vimhelp.org/windows.txt.html) — `:sp`, `:vsp`, `Ctrl + w`, buffers.
 - [42Paris/42header](https://github.com/42Paris/42header) — plugin de la cabecera de 42 para Vim (`:Stdheader`, `F1`).
-- La Norma v4, capítulos III.2 «Formato» y III.6 «La cabecera de 42» (`Normativa 42/es.norm-2.pdf`).
+- La Norma v4, capítulos III.2 «Formato» y III.6 «La cabecera de 42» (`Cursus/42/Normativa 42/es.norm-2.pdf`).

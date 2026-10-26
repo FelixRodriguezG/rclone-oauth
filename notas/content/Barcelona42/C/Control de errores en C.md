@@ -224,5 +224,5 @@ Uso detallado de las dos primeras en [[Valgrind y sanitizers]].
 - [open(2)](https://man7.org/linux/man-pages/man2/open.2.html) y [read(2)](https://man7.org/linux/man-pages/man2/read.2.html) — devuelven `-1` y ponen `errno`.
 - [exit(3)](https://man7.org/linux/man-pages/man3/exit.3.html) — `EXIT_SUCCESS` y `EXIT_FAILURE`.
 - [Valgrind: Memcheck manual](https://valgrind.org/docs/manual/mc-manual.html) — qué errores detecta memcheck.
-- La Norma v4 (`Normativa 42/es.norm-2.pdf`) — prohíbe `goto`, máximo 25 líneas por función.
+- La Norma v4 (`Cursus/42/Normativa 42/es.norm-2.pdf`) — prohíbe `goto`, máximo 25 líneas por función.
 - Ejemplo de `print_file` comprobado con `cc -Wall -Wextra -Werror` (clang 12, Ubuntu 22.04).

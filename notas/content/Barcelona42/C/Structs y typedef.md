@@ -301,6 +301,6 @@ felix: hp original 3, hp copia 0
 - [Member access operators — cppreference](https://en.cppreference.com/w/c/language/operator_member_access) — `.` y `->`.
 - [Beej's Guide to C: Structs](https://beej.us/guide/bgc/html/split/structs.html) y [Structs II: More Fun with Structs](https://beej.us/guide/bgc/html/split/structs-ii-more-fun-with-structs.html) — padding, `offsetof`, copia de structs.
 - [N1570 (borrador C11)](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1570.pdf) — §6.7.2.1 (los campos se colocan en orden y puede haber relleno, nunca al principio), §6.7.8 (`typedef`).
-- La Norma v4 (`Normativa 42/es.norm-2.pdf`) — prefijos `s_`/`t_` y reglas de declaración de structs (citas literales).
+- La Norma v4 (`Cursus/42/Normativa 42/es.norm-2.pdf`) — prefijos `s_`/`t_` y reglas de declaración de structs (citas literales).
 - Subject de libft v19.3 (`es.subject_libft.pdf`) — definición de `t_list`.
 - Tamaños medidos con `cc` (Ubuntu clang 12.0.1) en Linux x86_64.

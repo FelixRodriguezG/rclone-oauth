@@ -334,6 +334,6 @@ Notice: GLOBAL_VAR_DETECTED  (line:   3, col:   1):	Global variable present in f
 - [cppreference: Scope](https://en.cppreference.com/w/c/language/scope) — ámbito de bloque y de fichero, ocultación de nombres.
 - [nm(1), man7.org](https://man7.org/linux/man-pages/man1/nm.1.html) — significado de `T`/`t`, `B`/`b` (mayúscula global, minúscula local).
 - [Beej's Guide to C Programming](https://beej.us/guide/bgc/) — capítulo sobre *storage-class specifiers* (`static`, `extern`).
-- La Norma v4 (`Normativa 42/es.norm-2.pdf`) — prefijo `g_` y restricción de variables globales.
+- La Norma v4 (`Cursus/42/Normativa 42/es.norm-2.pdf`) — prefijo `g_` y restricción de variables globales.
 - Subject de libft v19.3 (`es.subject_libft.pdf`) — prohibición de globales y helpers `static`.
 - Salidas obtenidas con Ubuntu clang 12.0.1 en Ubuntu 22.04.

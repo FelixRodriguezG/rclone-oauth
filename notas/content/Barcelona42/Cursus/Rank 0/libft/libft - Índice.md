@@ -31,15 +31,15 @@ En la Parte 1 cada nota cita literalmente el `man` de la función original (en i
 
 ### Caracteres
 
-| Función | Original | Cabecera | Descripción |
-|---|---|---|---|
-| [[ft_isalpha]] | `man 3 isalpha` | `<ctype.h>` | ¿Es una letra? |
-| [[ft_isdigit]] | `man 3 isdigit` | `<ctype.h>` | ¿Es un dígito decimal? |
-| [[ft_isalnum]] | `man 3 isalnum` | `<ctype.h>` | ¿Es letra o dígito? |
-| [[ft_isascii]] | `man 3 isascii` | `<ctype.h>` | ¿Está en la tabla ASCII (0–127)? |
+| Función        | Original        | Cabecera    | Descripción                        |
+| -------------- | --------------- | ----------- | ---------------------------------- |
+| [[ft_isalpha]] | `man 3 isalpha` | `<ctype.h>` | ¿Es una letra?                     |
+| [[ft_isdigit]] | `man 3 isdigit` | `<ctype.h>` | ¿Es un dígito decimal?             |
+| [[ft_isalnum]] | `man 3 isalnum` | `<ctype.h>` | ¿Es letra o dígito?                |
+| [[ft_isascii]] | `man 3 isascii` | `<ctype.h>` | ¿Está en la tabla ASCII (0–127)?   |
 | [[ft_isprint]] | `man 3 isprint` | `<ctype.h>` | ¿Es imprimible (espacio incluido)? |
-| [[ft_toupper]] | `man 3 toupper` | `<ctype.h>` | Minúscula → mayúscula |
-| [[ft_tolower]] | `man 3 tolower` | `<ctype.h>` | Mayúscula → minúscula |
+| [[ft_toupper]] | `man 3 toupper` | `<ctype.h>` | Minúscula → mayúscula              |
+| [[ft_tolower]] | `man 3 tolower` | `<ctype.h>` | Mayúscula → minúscula              |
 
 ### Memoria
 
@@ -166,4 +166,4 @@ Cada nota tiene la propiedad `estado` (`hecho` / `pendiente`). Cámbiala al term
 - Subject de libft v19.3 (`/home/felixrod/cursus/es.subject_libft.pdf`) — lista de funciones, reglas generales, consideraciones técnicas y requisitos del README.
 - `man 3 <función>` y `man 3bsd strlcpy` (Linux man-pages 5.10 y libbsd, Ubuntu 22.04) — comportamiento de las funciones originales de la Parte 1.
 - [man7.org: strlcpy(3)](https://man7.org/linux/man-pages/man3/strlcpy.3.html) — `strlcpy`/`strlcat` disponibles en glibc desde la 2.38.
-- La Norma v4 (`Normativa 42/es.norm-2.pdf`) — reglas de estilo que se aplican a todos los ficheros.
+- La Norma v4 (`Cursus/42/Normativa 42/es.norm-2.pdf`) — reglas de estilo que se aplican a todos los ficheros.

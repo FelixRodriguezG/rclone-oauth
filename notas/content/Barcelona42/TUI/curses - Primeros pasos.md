@@ -111,15 +111,15 @@ Ambas **esperan** hasta que pulses algo (salvo que configures un `timeout`, ver 
 
 ## Errores típicos
 
-| Error | Causa |
-|---|---|
-| `_curses.error: addwstr() returned ERR` | Escribiste **fuera** de la ventana (`addstr(50, 0, ...)` con 30 filas) o el texto no cabe hasta el final |
+| Error                                                                 | Causa                                                                                                                                                                          |
+| --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `_curses.error: addwstr() returned ERR`                               | Escribiste **fuera** de la ventana (`addstr(50, 0, ...)` con 30 filas) o el texto no cabe hasta el final                                                                       |
 | El mismo error al escribir en la **última celda** (`alto-1, ancho-1`) | `curses` intenta mover el cursor después del carácter y no puede. El carácter sí se pinta: captura `curses.error` (ver la función `escribir` en [[curses - Layout y paneles]]) |
-| Pantalla en blanco | Falta `refresh()` |
-| `addstr(x, y, …)` | Coordenadas al revés: el texto sale en otro sitio o da error |
-| `_curses.error: setupterm: could not find terminal` | `TERM` vacío o raro (ver [[Cómo funciona la terminal#TERM y terminfo]]) |
-| La terminal se queda rota | No usaste `wrapper`: escribe `reset` |
-| Ejecutarlo dentro del «Run» de un IDE | Esa consola no es una terminal real: ejecútalo en una terminal |
+| Pantalla en blanco                                                    | Falta `refresh()`                                                                                                                                                              |
+| `addstr(x, y, …)`                                                     | Coordenadas al revés: el texto sale en otro sitio o da error                                                                                                                   |
+| `_curses.error: setupterm: could not find terminal`                   | `TERM` vacío o raro (ver [[Cómo funciona la terminal#TERM y terminfo]])                                                                                                        |
+| La terminal se queda rota                                             | No usaste `wrapper`: escribe `reset`                                                                                                                                           |
+| Ejecutarlo dentro del «Run» de un IDE                                 | Esa consola no es una terminal real: ejecútalo en una terminal                                                                                                                 |
 
 ## Relacionadas
 

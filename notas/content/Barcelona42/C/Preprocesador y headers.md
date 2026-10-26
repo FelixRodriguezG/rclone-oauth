@@ -298,5 +298,5 @@ BUFFER_SIZE = 10000000
 - [GNU CPP: Macro Pitfalls](https://gcc.gnu.org/onlinedocs/cpp/Macro-Pitfalls.html) — paréntesis y precedencia en macros.
 - [GCC: Preprocessor Options](https://gcc.gnu.org/onlinedocs/gcc/Preprocessor-Options.html) — `-D`, `-I`, `-E`.
 - [norminette (42School)](https://github.com/42School/norminette) — errores `PREPROC_BAD_INDENT`, `MACRO_FUNC_FORBIDDEN`, `PREPROC_CONSTANT`.
-- La Norma v4 (`Normativa 42/es.norm-2.pdf`) — secciones «Headers» y «Macros y Preprocesadores».
+- La Norma v4 (`Cursus/42/Normativa 42/es.norm-2.pdf`) — secciones «Headers» y «Macros y Preprocesadores».
 - Salidas obtenidas con Ubuntu clang 12.0.1 en Ubuntu 22.04.

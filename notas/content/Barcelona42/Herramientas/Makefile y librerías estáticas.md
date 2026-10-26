@@ -482,5 +482,5 @@ re: fclean all
 - [GNU make: Substitution References](https://www.gnu.org/software/make/manual/html_node/Substitution-Refs.html) y [Functions for File Names](https://www.gnu.org/software/make/manual/html_node/File-Name-Functions.html) — `$(SRCS:.c=.o)`, `addprefix`, `dir`.
 - [GNU make: Phony Targets](https://www.gnu.org/software/make/manual/html_node/Phony-Targets.html) — `.PHONY`.
 - [`man 1 ar`](https://man7.org/linux/man-pages/man1/ar.1.html) — modificadores `r`, `c`, `s` y `t`.
-- La Norma v4, capítulo III.11 «Makefile» (`Normativa 42/es.norm-2.pdf`) — reglas obligatorias, relink y fuentes nombradas explícitamente.
+- La Norma v4, capítulo III.11 «Makefile» (`Cursus/42/Normativa 42/es.norm-2.pdf`) — reglas obligatorias, relink y fuentes nombradas explícitamente.
 - Subject de libft v19.3 (`es.subject_libft.pdf`) — `ar` obligatorio, `libtool` prohibido, todo en la raíz, ficheros `_bonus.{c/h}`.

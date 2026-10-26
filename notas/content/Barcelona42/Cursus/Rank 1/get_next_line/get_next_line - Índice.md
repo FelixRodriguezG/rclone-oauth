@@ -8,23 +8,32 @@ aliases: ["get_next_line", "gnl", "GNL"]
 
 > **get_next_line** es una función que, cada vez que la llamas, devuelve **la siguiente línea** de un descriptor de fichero. Para lograrlo tiene que recordar entre llamadas lo que ya leyó de más, y eso te obliga a entender `read`, las [[Variables static y ámbito|variables `static`]] y la gestión de memoria sin leaks.
 
-> [!warning] Comprueba el subject
-> Resumen basado en versiones públicas del subject; los detalles cambian entre versiones. Lo que manda es el PDF de tu intra.
+> [!success] Verificado contra el subject v14.0
+> Esta nota está contrastada con `es.subject_get_next_line.pdf` (versión 14.0). Si en tu intra aparece una versión más nueva, compara los cambios: lo que manda es el PDF.
+
+> [!tip] ¿Primera vez con get_next_line?
+> Esta nota es un resumen para repasar. Si no entiendes el ejercicio, empieza por la serie para principiantes:
+> 1. [[get_next_line - Guía paso a paso]]: la idea, por qué hace falta `static` y la construcción por etapas.
+> 2. [[get_next_line - Funciones auxiliares]]: las utilidades de `get_next_line_utils.c`, una a una.
+> 3. [[get_next_line - Pruebas y depuración]]: script de pruebas, Valgrind, gdb y errores típicos.
 
 ## Qué se pide
 
-Lo comúnmente conocido del subject:
+Según el subject v14.0:
 
-| Aspecto | Lo habitual |
+| Aspecto | Subject v14.0 |
 |---|---|
 | Prototipo | `char *get_next_line(int fd);` |
 | Ficheros | `get_next_line.c`, `get_next_line_utils.c`, `get_next_line.h` |
-| Funciones externas | `read`, `malloc`, `free` |
+| Funciones autorizadas | `read`, `malloc`, `free` |
 | Prohibido | Usar libft, `lseek` y variables globales |
 | Devuelve | La línea leída **incluido el `'\n'`** (salvo si el fichero termina sin él), o `NULL` si no queda nada o hay un error |
+| Debe funcionar con | Ficheros **y** `stdin`. «Un descriptor de archivo no solo apunta a archivos normales» (tuberías, redirecciones…) |
+| Lectura | «Se debería leer lo menos posible» en cada llamada: nada de leer el fichero entero y luego procesarlo |
 | Compilación | Con `-D BUFFER_SIZE=n` y también **sin** esa opción (necesitas un valor por defecto) |
-| Indefinido | Que el fichero cambie entre llamadas, o leer un fichero binario |
-| Makefile | Normalmente **no** se entrega: el evaluador compila a mano |
+| Indefinido | Que el fichero cambie desde la última llamada **mientras `read` no haya llegado al final**, y leer un fichero binario (aunque puedes implementar una forma lógica de manejarlo, si quieres) |
+| Makefile | El subject **no** lo pide: se compila con `cc -Wall -Werror -Wextra -D BUFFER_SIZE=42 <archivos>.c` |
+| README | **Obligatorio** en la raíz del repo (ver [[#README obligatorio]]) |
 
 > [!example] Uso
 > ```c
@@ -49,13 +58,28 @@ Lo comúnmente conocido del subject:
 - Gestionar **varios fd a la vez**: leer una línea del fd 3, luego del 4, luego del 3 otra vez, sin perder el hilo de cada uno.
 - Ficheros con sufijo `_bonus`: `get_next_line_bonus.c`, `get_next_line_utils_bonus.c`, `get_next_line_bonus.h`.
 
+> [!warning] El bonus solo se evalúa si la obligatoria está perfecta
+> «Perfecta» significa completa y sin ningún fallo. Si falla cualquier requisito de la parte obligatoria, el bonus no se evalúa.
+
+## README obligatorio
+
+El subject v14.0 exige un `README.md` en la raíz del repositorio con, como mínimo:
+
+- **Primera línea en cursiva**: *Este proyecto ha sido creado como parte del currículo de 42 por \<login\>.*
+- Sección **Descripción**: el proyecto, su objetivo y una visión general.
+- Sección **Instrucciones**: compilación y uso.
+- Sección **Recursos**: referencias (documentación, artículos, tutoriales) y **para qué tareas y en qué partes has usado IA**.
+- Específico de GNL: **explicación detallada y justificación del algoritmo elegido**.
+
+El idioma es libre (se recomienda inglés). Plantilla general en [[README de un proyecto]]; para explicar el algoritmo, apóyate en [[get_next_line - Guía paso a paso]].
+
 ## Conceptos que necesitas
 
 | Concepto | Para qué en GNL | Nota |
 |---|---|---|
 | `open`, `read`, `close` | Leer bytes del fichero en trozos | [[Descriptores de fichero y read]] |
 | Variables `static` | Recordar el resto entre llamadas | [[Variables static y ámbito]] |
-| Memoria dinámica | Reservar y liberar líneas y buffers | [[Segmentos de memoria en C]] |
+| Memoria dinámica | Reservar y liberar líneas y buffers | [[malloc y free]] · [[Segmentos de memoria en C]] |
 | Fin de cadena | Saber dónde acaba lo acumulado | [[Carácter nulo y puntero NULL]] |
 | Macros del preprocesador | `BUFFER_SIZE` con valor por defecto | [[Preprocesador y headers]] |
 | Leaks y accesos inválidos | Comprobar que no se pierde memoria | [[Valgrind y sanitizers]] |
@@ -210,12 +234,13 @@ Puntos clave del esqueleto:
 | fd inválido (`-1`, `42`, cerrado) | `NULL`, sin crash ni leak | `get_next_line(-1)`; `close(fd)` y volver a llamar |
 | `BUFFER_SIZE=1` | Funciona (muy lento, muchas llamadas a `read`) | `-D BUFFER_SIZE=1` |
 | `BUFFER_SIZE` enorme | Funciona si el buffer está en el heap | `-D BUFFER_SIZE=10000000` |
-| `BUFFER_SIZE <= 0` | `NULL` | `-D BUFFER_SIZE=0` |
+| `BUFFER_SIZE <= 0` | `NULL` (el subject no lo pide; es una protección razonable) | `-D BUFFER_SIZE=0` |
 | Fichero vacío | `NULL` en la primera llamada | `touch vacio.txt` |
 | Sin `'\n'` final | Última línea **sin** `'\n'` y luego `NULL` | `printf 'a\nb' > f` |
 | Solo saltos de línea | Devuelve `"\n"` tantas veces como haya | `printf '\n\n' > f` |
 | Línea muy larga | Varias lecturas acumuladas en una línea | Una línea de 100 000 caracteres |
 | stdin (fd `0`) | Devuelve cada línea al pulsar Intro; `Ctrl+D` es EOF | `./a.out < fichero` o escribir a mano |
+| Tubería | Igual que un fichero | `cat fichero \| ./a.out` |
 
 > [!tip] Probar con stdin
 > ```bash
@@ -239,7 +264,7 @@ valgrind --leak-check=full --show-leak-kinds=all ./gnl_test poema.txt
 ```
 
 > [!note] «still reachable» al cortar la lectura
-> Si tu `main` deja de llamar a `get_next_line` antes del EOF, el `stash` sigue reservado al salir. Valgrind lo marca como *still reachable* (no *definitely lost*). Hay debate sobre si cuenta como leak; lo que el subject mira en cada versión, compruébalo en el PDF. Si lees hasta el `NULL`, no debería quedar nada.
+> Si tu `main` deja de llamar a `get_next_line` antes del EOF, el `stash` sigue reservado al salir. Valgrind lo marca como *still reachable* (no *definitely lost*). Hay debate sobre si cuenta como leak; el subject v14.0 solo dice «No se permitirán leaks de memoria», sin entrar en este caso, así que ten la explicación preparada. Si lees hasta el `NULL`, no debería quedar nada.
 
 ## Bonus: varios fd
 
@@ -278,6 +303,7 @@ Es un fragmento incompleto: el comentario dentro de la función lo marcaría nor
 6. Pasa valgrind en todos ellos.
 7. Pasa norminette y un tester público.
 8. Bonus: convierte la `static` en array y prueba alternando dos ficheros.
+9. Escribe el `README.md` (ver [[#README obligatorio]]) y practica explicar el algoritmo en voz alta.
 
 ## Errores frecuentes que suspenden
 
@@ -290,14 +316,15 @@ Es un fragmento incompleto: el comentario dentro de la función lo marcaría nor
 > - No liberar el `stash` en caso de error de `read`.
 > - Leer el fichero entero en la primera llamada (va en contra del espíritu del proyecto y del subject).
 > - En el bonus, usar más de una `static` o no comprobar el rango del fd.
+> - No entregar el `README.md` o que le falte la explicación del algoritmo.
 
 ## Preguntas de evaluación
 
 > [!question] ¿Qué es una variable `static` local y dónde vive?
 > Una variable cuyo valor se conserva entre llamadas. No está en la pila: vive en el segmento de datos (`.data` o `.bss`) durante todo el programa. Solo es visible dentro de la función.
 
-> [!question] ¿Qué pasa con `BUFFER_SIZE=1`? ¿Y con 10 000 000?
-> Con 1 funciona pero hace una llamada a `read` por byte (lento). Con 10 millones funciona si el buffer se reserva con `malloc`; en la pila desbordaría.
+> [!question] ¿Funciona con `BUFFER_SIZE=9999`? ¿Y con 1? ¿Y con 10 000 000? ¿Sabes por qué?
+> (Es la pregunta literal del subject.) Con 9999 funciona igual que con 42: lee bloques más grandes y le sobra más texto en el stash. Con 1 funciona pero hace una llamada a `read` por byte (lento). Con 10 millones funciona si el buffer se reserva con `malloc`; en la pila (8 MB normalmente) desbordaría.
 
 > [!question] ¿Qué devuelve `read`?
 > El número de bytes leídos (puede ser menor que el pedido), `0` en EOF y `-1` en error.
@@ -311,9 +338,12 @@ Es un fragmento incompleto: el comentario dentro de la función lo marcaría nor
 > [!question] Enséñame que no hay leaks
 > Ten preparado un `main` y el comando de valgrind. Prueba también con un fd inválido y con un fichero vacío.
 
+> [!example] Modificación durante la evaluación
+> El subject avisa de que te pueden pedir un cambio pequeño en el código (ajustar el comportamiento, cambiar unas líneas, añadir algo sencillo) que se haga en pocos minutos, para comprobar que lo entiendes. Ejemplos para practicar en [[get_next_line - Guía paso a paso#La modificación en directo]].
+
 ## Relacionadas
 
-[[Descriptores de fichero y read]] · [[Variables static y ámbito]] · [[Segmentos de memoria en C]] · [[Valgrind y sanitizers]] · [[Preprocesador y headers]] · [[ft_strjoin]] · [[ft_printf - Índice]] · [[Born2beroot - Índice]] · [[libft - Índice]]
+[[get_next_line - Guía paso a paso]] · [[get_next_line - Funciones auxiliares]] · [[get_next_line - Pruebas y depuración]] · [[malloc y free]] · [[Descriptores de fichero y read]] · [[Variables static y ámbito]] · [[Segmentos de memoria en C]] · [[Valgrind y sanitizers]] · [[Preprocesador y headers]] · [[ft_strjoin]] · [[ft_printf - Índice]] · [[Born2beroot - Índice]] · [[libft - Índice]]
 
 ## Referencias
 
@@ -323,4 +353,5 @@ Es un fragmento incompleto: el comentario dentro de la función lo marcaría nor
 - [malloc(3) — Linux man-pages](https://man7.org/linux/man-pages/man3/malloc.3.html) y [free(3)](https://man7.org/linux/man-pages/man3/free.3.html) — memoria dinámica.
 - [Valgrind: Memcheck manual](https://valgrind.org/docs/manual/mc-manual.html) — tipos de leak (*definitely lost*, *still reachable*).
 - [gnlTester (Tripouille)](https://github.com/Tripouille/gnlTester) — tester público de la comunidad.
-- Requisitos del proyecto: conocimiento general de versiones públicas del subject de get_next_line (no verificado contra el PDF). El esqueleto de código se ha compilado y probado con `BUFFER_SIZE` 1, 3, 42 y 10 000 000 y valgrind sin errores.
+- Subject de get_next_line v14.0 (`~/cursus/es.subject_get_next_line.pdf`): requisitos, prohibiciones, comportamientos indefinidos, README, bonus y modificación en la evaluación.
+- El esqueleto de código se ha compilado y probado con `BUFFER_SIZE` 1, 3, 42 y 10 000 000 y valgrind sin errores.

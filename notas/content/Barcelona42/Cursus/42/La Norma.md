@@ -175,6 +175,6 @@ Más detalle en [[Makefile y librerías estáticas]].
 
 ## Referencias
 
-- La Norma, versión 4 (PDF oficial de 42, en español): [[Normativa 42/es.norm-2.pdf|es.norm-2.pdf]] — fuente de todas las reglas de esta nota (capítulos III.1 a III.11).
+- La Norma, versión 4 (PDF oficial de 42, en español): [[es.norm-2.pdf|es.norm-2.pdf]] — fuente de todas las reglas de esta nota (capítulos III.1 a III.11).
 - [42School/norminette](https://github.com/42School/norminette) — código fuente de la herramienta que comprueba la Norma.
 - [42Paris/42header](https://github.com/42Paris/42header) — plugin de la cabecera de 42 para Vim.
