@@ -85,7 +85,7 @@ El idioma es libre (se recomienda inglés). Plantilla general en [[README de un 
 | Leaks y accesos inválidos | Comprobar que no se pierde memoria | [[Valgrind y sanitizers]] |
 | Depuración | Seguir el estado de la `static` paso a paso | [[Depurar con gdb]] |
 
-Funciones de libft que tendrás que **reescribir** dentro de `get_next_line_utils.c` (no puedes enlazar libft): [[ft_strlen]], [[ft_strchr]], [[ft_strjoin]], [[ft_substr]] o equivalentes.
+Funciones que tendrás que **escribir** dentro de `get_next_line_utils.c` (no puedes enlazar libft): `ft_strlen` y `ft_strchr` (que acepten `NULL`), `ft_strndup`, `ft_strjoin_free` (que libere el primer argumento) y `ft_free`. Están explicadas una a una en [[get_next_line - Funciones auxiliares]]; las versiones de libft en las que se basan son [[ft_strlen]], [[ft_strchr]] y [[ft_strjoin]].
 
 ## Vocabulario
 
@@ -167,7 +167,7 @@ Dibujo de la memoria en la llamada 2:
 
 ### Esqueleto orientativo
 
-Cumple la [[La Norma|Norma]]. Las funciones auxiliares (`ft_strchr` que acepte `NULL`, `ft_strjoin_free` que libere el primer argumento, `ft_extract_line`, `ft_save_rest`, `ft_free`) las escribes tú.
+Cumple la [[La Norma|Norma]]. Las funciones auxiliares las escribes tú: en `get_next_line_utils.c`, `ft_strlen` y `ft_strchr` (que acepten `NULL`), `ft_strndup`, `ft_strjoin_free` (que libere el primer argumento) y `ft_free`; en `get_next_line.c`, `ft_extract_line` y `ft_save_rest`. Ver [[get_next_line - Funciones auxiliares]] y [[get_next_line - Guía paso a paso#6. Construirlo por etapas|la guía]].
 
 ```c
 static char	*ft_read_to_stash(int fd, char *stash)
@@ -210,11 +210,7 @@ char	*get_next_line(int fd)
 		return (NULL);
 	line = ft_extract_line(stash);
 	if (!line)
-	{
-		free(stash);
-		stash = NULL;
-		return (NULL);
-	}
+		return (ft_free(&stash));
 	stash = ft_save_rest(stash);
 	return (line);
 }
@@ -297,7 +293,7 @@ Es un fragmento incompleto: el comentario dentro de la función lo marcaría nor
 
 1. Escribe un programa que abra un fichero y lo imprima entero con `read` en un bucle. Ver [[Descriptores de fichero y read]].
 2. Prueba un contador `static` en una función para ver que conserva el valor ([[Variables static y ámbito]]).
-3. Escribe las utilidades: `ft_strlen`, `ft_strchr` (que acepte `NULL`), `ft_strjoin` que libere el primero.
+3. Escribe las utilidades de [[get_next_line - Funciones auxiliares]]: `ft_strlen` y `ft_strchr` (que acepten `NULL`), `ft_strndup`, `ft_strjoin_free` (que libere el primero) y `ft_free`. Pruébalas solas antes de seguir.
 4. Implementa los cuatro pasos y prueba con `BUFFER_SIZE=1`, `42` y `10000000`.
 5. Prueba los casos límite de la tabla, uno a uno.
 6. Pasa valgrind en todos ellos.

@@ -11,6 +11,9 @@ aliases: ["get_next_line_utils", "Utils de get_next_line", "Helpers de GNL"]
 > [!info] Antes de leer
 > Esta nota es la etapa 2 de [[get_next_line - Guía paso a paso#6. Construirlo por etapas|la guía]]. Conviene tener claro qué es un puntero ([[Punteros en C]]), la diferencia entre `'\0'` y `NULL` ([[Carácter nulo y puntero NULL]]) y quién libera cada bloque de memoria ([[malloc y free]]).
 
+> [!note] ¿Y `ft_read_to_stash`, `ft_extract_line` y `ft_save_rest`?
+> No están aquí porque no son utilidades de cadenas: son las piezas del algoritmo y van en `get_next_line.c` como funciones `static`. Se explican en la guía: [[get_next_line - Guía paso a paso#Etapa 3: leer hasta tener una línea (`ft_read_to_stash`)|Etapa 3]], [[get_next_line - Guía paso a paso#Etapa 4: cortar la línea (`ft_extract_line`)|Etapa 4]] y [[get_next_line - Guía paso a paso#Etapa 5: guardar el resto (`ft_save_rest`)|Etapa 5]]. Por dentro usan las funciones de esta nota.
+
 ## Resumen
 
 | Función | Prototipo | Diferencia con libft |

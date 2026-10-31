@@ -450,7 +450,7 @@ ft_save_rest(stash):
     devolver resto
 ```
 
-- ¿Por qué no simplemente mover el puntero (`stash = nl + 1`)? Porque `free` solo acepta la dirección **exacta** que devolvió `malloc`. Si el stash apunta a la mitad del bloque, nunca podrás liberarlo: `free(stash)` daría `Invalid free()` (ver [[malloc y free#Las reglas de free]]).
+- ¿Por qué no simplemente mover el puntero (`stash = nl + 1`)? Porque `free` solo acepta la dirección **exacta** que devolvió! `malloc`. Si el stash apunta a la mitad del bloque, nunca podrás liberarlo: `free(stash)` daría `Invalid free()` (ver [[malloc y free#Las reglas de free]]).
 - Devolver `NULL` cuando no queda nada (en vez de `""`) deja el stash limpio y evita reservar memoria para nada.
 
 > [!faq]- Ver una posible solución

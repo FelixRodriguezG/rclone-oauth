@@ -1,6 +1,10 @@
 {
- "updated": "2026-10-26T20:39:05+01:00",
+ "updated": "2026-10-31T11:45:39+01:00",
  "files": [
+  {
+   "path": "Barcelona42/2026-10-29.md",
+   "name": "2026-10-29"
+  },
   {
    "path": "Barcelona42/Bash/Argumentos y subcomandos en Bash.md",
    "name": "Argumentos y subcomandos en Bash"
