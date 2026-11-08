@@ -55,10 +55,10 @@ Lo que dice el subject v12.0:
 
 ## 2. El enfoque ingenuo y por qué se rompe con el bonus
 
-La forma «natural» de empezar es que cada conversión **escriba directamente**:
+La forma «natural» de empezar es que cada conversión **escriba directamente**. Por ejemplo, una función para `%d` así (es solo un ejemplo de lo que **no** vamos a hacer; esta función no forma parte del proyecto):
 
 ```c
-int	ft_print_nbr(int n)          /* enfoque ingenuo */
+int	imprimir_numero(int n)
 {
 	/* escribe '-' si hace falta, luego los dígitos uno a uno con write */
 }
@@ -163,14 +163,21 @@ typedef struct s_field
 
 ## 5. Obligatoria y bonus sin duplicar código
 
-El subject exige que el bonus esté en ficheros `_bonus.c` y que la obligatoria y el bonus se evalúen **por separado**. El truco es que **la única diferencia entre las dos es cómo se lee lo que hay entre el `%` y la letra**:
+El subject exige que el bonus esté en ficheros `_bonus.c` y que la obligatoria y el bonus se evalúen **por separado**. El truco es que **la única diferencia entre las dos es cómo se lee lo que hay entre el `%` y la letra**.
 
-| | Lee `"%-08.3d"` así | Resultado |
+Cuando `ft_printf` encuentra un `%`, llama a `ft_set_flags`, que lee lo que viene detrás y rellena un `t_flags`. Todo lo demás solo mira ese `t_flags`. De `ft_set_flags` hay **dos versiones**, con el mismo nombre y el mismo prototipo, en dos ficheros:
+
+- **`ft_flags.c` (obligatoria)**: toma el carácter justo después del `%` como letra. Todo lo demás se queda como lo deja `ft_init_flags`: sin banderas, ancho `0`, precisión `-1` («no hay»).
+- **`ft_flags_bonus.c` (bonus)**: lee banderas, ancho, `.precisión` y por último la letra.
+
+Con `ft_printf("[%-08.3d]", -42)`:
+
+| Versión | Qué deja en `t_flags` | Qué imprime |
 |---|---|---|
-| `ft_flags.c` (obligatoria) | spec = `'-'` | Las banderas nunca se activan: ancho 0, precisión -1 |
-| `ft_flags_bonus.c` (bonus) | minus, zero, width 8, precisión 3, spec = `'d'` | Todas las banderas |
+| `ft_flags.c` (obligatoria) | `spec = '-'` y nada más | `[%-08.3d]`: `-` no es una letra conocida, así que escribe `%-`, y el bucle escribe `08.3d]` como texto normal |
+| `ft_flags_bonus.c` (bonus) | `minus = 1`, `zero = 0` (el `-` lo anula), `width = 8`, `precision = 3`, `spec = 'd'` | `[-042    ]` |
 
-Las dos definen **la misma función con el mismo prototipo**, `ft_set_flags`. El Makefile compila **una u otra**, nunca las dos (si compilas las dos, el enlazador se queja de que `ft_set_flags` está definida dos veces).
+El Makefile compila **una u otra**: `make` compila `ft_flags.c` y `make bonus` compila `ft_flags_bonus.c`. Nunca las dos: el enlazador se quejaría de que `ft_set_flags` está definida dos veces. El resto de ficheros es el mismo en los dos casos, porque «ancho 0 y sin precisión» es simplemente el caso en que no hay que rellenar nada (sección 3).
 
 ```mermaid
 flowchart LR
@@ -202,7 +209,7 @@ Antes de escribir código, revisa estos fallos frecuentes en el esqueleto del pr
 | `t_flags` sin la letra de la conversión | Tendrás que pasar la letra aparte a cada función | Añadir `char spec;` |
 | `#include <stdio.h>` | No se usa `printf` dentro de la librería | Quitarlo; incluir `"libft.h"` |
 | Comentarios copiados de otro proyecto (p. ej. de get_next_line) | Confunden al evaluador | Revisarlos |
-| Varias funciones para leer las banderas (`ft_set_flags`, `ft_parse_flags`, `ft_is_specifier`…) | Hacen lo mismo y se pisan | Una sola: `t_flags ft_set_flags(const char *s, int *i);` |
+| Varias funciones para leer lo que va tras el `%` (una para las banderas, otra para comprobar la letra…) | Hacen lo mismo y se pisan | Una sola: `t_flags ft_set_flags(const char *s, int *i);` |
 
 ### En el Makefile
 
@@ -258,7 +265,56 @@ Ideas que sí conviene usar: `cp $(LIBFT) $(NAME)` seguido de `ar` (mete libft d
 
 ## 8. Construirlo por etapas
 
-Igual que en get_next_line: **pieza a pieza y probando cada una**. Las etapas 1 a 6 son la obligatoria; la 7 es el bonus.
+Igual que en get_next_line: **pieza a pieza y probando cada una**. Las etapas 1 a 6 son la obligatoria; la 7 es el bonus. **Al final de cada etapa, el proyecto compila y se puede probar.**
+
+### El mapa: todas las funciones del proyecto
+
+Antes de empezar, el plano completo. Son todas las funciones que vas a escribir; **no hay ninguna más**. Vuelve aquí cuando te pierdas.
+
+```text
+ft_printf
+├── texto normal → ft_out_char
+└── '%'          → ft_set_flags   lee lo que va tras el '%' y rellena un t_flags
+                                  (empieza con ft_init_flags)
+                 → ft_convert     según la letra:
+
+    %c        → ft_print_char                           → ft_out_field
+    %s        → ft_print_str                            → ft_out_field
+    %d %i     → ft_print_int       → ft_print_number    → ft_out_field
+    %u %x %X  → ft_print_unsigned  → ft_print_number    → ft_out_field
+    %p        → ft_print_ptr       → ft_print_number    → ft_out_field
+    %%        → ft_out_char
+
+ft_print_number usa ft_utoa_base (número → cifras) y ft_base (qué base).
+ft_out_field escribe con ft_out_repeat (relleno) y ft_out_nstr.
+Solo ft_out_char y ft_out_nstr llaman a write.
+```
+
+| Función | Fichero | Qué hace | Etapa |
+|---|---|---|---|
+| `ft_out_char` | `ft_output.c` | Escribe 1 byte y lo cuenta en `t_out` | 1 |
+| `ft_out_nstr` | `ft_output.c` | Escribe `n` bytes y los cuenta | 1 |
+| `ft_out_repeat` (`static`) | `ft_output.c` | Escribe `n` veces el mismo carácter (relleno) | 2 |
+| `ft_out_field` | `ft_output.c` | Escribe un campo: espacios, prefijo, ceros, cuerpo, espacios | 2 |
+| `ft_init_flags` | `ft_printf.c` | Devuelve un `t_flags` sin banderas y con precisión `-1` | 3 |
+| `ft_set_flags` | `ft_flags.c` | Versión obligatoria: solo lee la letra | 3 |
+| `ft_convert` (`static`) | `ft_printf.c` | Llama a la función de la letra. **Crece** en las etapas 4, 5 y 6 | 3 |
+| `ft_printf` | `ft_printf.c` | Recorre el formato | 3 |
+| `ft_print_char` | `ft_print_chars.c` | Prepara el campo de `%c` | 4 |
+| `ft_print_str` | `ft_print_chars.c` | Prepara el campo de `%s` | 4 |
+| `ft_utoa_base` (`static`) | `ft_print_nums.c` | Número → cifras en un `char[20]` | 5 |
+| `ft_base` (`static`) | `ft_print_nums.c` | La base según la letra | 5 |
+| `ft_print_number` | `ft_print_nums.c` | Prepara el campo de **cualquier** número sin signo con el prefijo que le den | 5 |
+| `ft_print_int` | `ft_print_nums.c` | `%d` `%i`: elige el prefijo (`-`, `+`, espacio) | 5 |
+| `ft_print_unsigned` | `ft_print_nums.c` | `%u` `%x` `%X`: elige el prefijo (`0x`, `0X`) | 5 |
+| `ft_print_ptr` | `ft_print_chars.c` | `%p`: caso `NULL` o `ft_print_number` con `"0x"` | 6 |
+| `ft_set_flags` | `ft_flags_bonus.c` | Versión bonus: banderas, ancho, precisión y letra | 7 |
+| `ft_read_number` (`static`) | `ft_flags_bonus.c` | Lee el ancho o la precisión | 7 |
+| `ft_set_one_flag` (`static`) | `ft_flags_bonus.c` | Activa una bandera de `-0# +` | 7 |
+
+> [!important] Dos familias de nombres
+> - **`ft_out_*`** son las únicas que **escriben** (llaman a `write`) y cuentan.
+> - **`ft_print_*`**, a pesar del nombre, **no escriben nada**: preparan las piezas del campo (prefijo, cuerpo, ceros) y se las pasan a `ft_out_field`.
 
 ### Etapa 0: los ficheros
 
@@ -374,8 +430,10 @@ ft_out_nstr(o, s, n):           (escribe los n primeros bytes de s)
 - **¿Por qué un `error` en vez de devolver `-1` en cada función?** Porque con `-1` tendrías que comprobar el retorno de cada `write` y propagarlo hacia arriba por todas las funciones: el código se llena de `if (ret == -1) return (-1);` y te pasas de 25 líneas. Con la bandera `error` en `t_out`, las funciones no devuelven nada, y al final `ft_printf` mira una sola vez si hubo error.
 - Comprobado: con la salida cerrada (`./test >&-`) o llena (`./test > /dev/full`), `ft_printf` devuelve `-1`, igual que `printf`.
 
-> [!faq]- Ver una posible solución
+> [!faq]- Ver una posible solución (`ft_output.c`)
 > ```c
+> #include "ft_printf.h"
+>
 > void	ft_out_char(t_out *o, char c)
 > {
 > 	if (o->error)
@@ -423,7 +481,7 @@ ft_out_field(o, f, fl):
 - **¿Y si `f->zero` no debería aplicarse?** (con `-`, con precisión en números, en `%c` y `%s`). No se decide aquí: quien prepara las piezas pone `f->zero = 0` antes de llamar. Así esta función no necesita saber qué conversión está imprimiendo.
 - En la obligatoria, `width = 0` → `pad` siempre ≤ 0 → solo se escriben prefijo, ceros y cuerpo.
 
-> [!faq]- Ver una posible solución
+> [!faq]- Ver una posible solución (`ft_output.c`, debajo de lo de la etapa 1)
 > ```c
 > static void	ft_out_repeat(t_out *o, char c, int n)
 > {
@@ -458,6 +516,8 @@ ft_out_field(o, f, fl):
 
 Recorres el formato. Si no es `%`, lo escribes. Si es `%`, `ft_set_flags` lee lo que viene detrás (en la obligatoria, solo la letra) y avanza el índice; luego `ft_convert` llama a la función de esa letra.
 
+En esta etapa escribes `ft_printf.c` y `ft_flags.c`. Como todavía no existe ninguna `ft_print_*`, **`ft_convert` empieza sabiendo solo `%%`**; en las etapas 4, 5 y 6 le irás añadiendo una rama por conversión.
+
 ```text
 ft_printf(format, ...):
     si format es NULL: devolver -1
@@ -475,8 +535,10 @@ ft_printf(format, ...):
 - **Letra desconocida** (`%k`): es comportamiento indefinido en `printf`. Esta solución imprime `%k`, que es lo que hace glibc.
 - **`va_end` en todos los caminos**: aquí solo hay uno porque el error no sale del bucle con `return`, sino que lo corta la condición del `while`.
 
-> [!faq]- Ver una posible solución (ft_printf.c)
+> [!faq]- Ver una posible solución (`ft_printf.c`)
 > ```c
+> #include "ft_printf.h"
+>
 > t_flags	ft_init_flags(void)
 > {
 > 	t_flags	f;
@@ -494,17 +556,8 @@ ft_printf(format, ...):
 >
 > static void	ft_convert(t_out *o, t_flags *f, va_list *args)
 > {
-> 	if (f->spec == 'c')
-> 		ft_print_char(o, f, va_arg(*args, int));
-> 	else if (f->spec == 's')
-> 		ft_print_str(o, f, va_arg(*args, char *));
-> 	else if (f->spec == 'p')
-> 		ft_print_ptr(o, f, va_arg(*args, void *));
-> 	else if (f->spec == 'd' || f->spec == 'i')
-> 		ft_print_int(o, f, va_arg(*args, int));
-> 	else if (f->spec == 'u' || f->spec == 'x' || f->spec == 'X')
-> 		ft_print_unsigned(o, f, va_arg(*args, unsigned int));
-> 	else if (f->spec == '%')
+> 	(void)args;
+> 	if (f->spec == '%')
 > 		ft_out_char(o, '%');
 > 	else if (f->spec)
 > 	{
@@ -543,10 +596,11 @@ ft_printf(format, ...):
 > }
 > ```
 > - `format[i++] != '%'`: compara y avanza a la vez. Si no era `%`, el carácter a escribir es `format[i - 1]`.
-> - `%c` lee `int` (promoción de argumentos), `%u` `%x` `%X` leen `unsigned int` y `%p` `void *`.
+> - `(void)args;`: de momento `ft_convert` no usa `args`, y sin esta línea `-Wextra -Werror` no compila (*unused parameter*). La quitarás en la etapa 4.
+> - La última rama escribe una letra desconocida tal cual (`%k` → `%k`), como glibc.
 > - `ft_init_flags` vive aquí y no en `ft_flags.c` para no repetirla en `ft_flags_bonus.c`.
 
-> [!faq]- Ver una posible solución (ft_flags.c, la obligatoria)
+> [!faq]- Ver una posible solución (`ft_flags.c`, la obligatoria)
 > ```c
 > #include "ft_printf.h"
 >
@@ -563,7 +617,7 @@ ft_printf(format, ...):
 > ```
 
 > [!tip] Pruébalo tú
-> Con `ft_convert` solo con `%c` y `%%` (comenta el resto) ya puedes probar `ft_printf("%c%c%%\n", 'o', 'k')`. Debe escribir `ok%` y devolver `4`. Prueba también `ft_printf("%c", '\0')`: escribe un byte nulo y devuelve `1` (míralo con `./test | cat -A`, sale `^@`).
+> Con `ft_output.c`, `ft_printf.c` y `ft_flags.c` ya compila. Prueba `ft_printf("hola %% %k\n")`: debe escribir `hola % %k` y devolver `10`. Prueba también `ft_printf("fin %")` (un `%` al final): escribe `fin ` y devuelve `4`, sin leer fuera de la cadena.
 
 ### Etapa 4: `%c` y `%s`
 
@@ -583,8 +637,10 @@ Casos con `NULL` (glibc en Linux, medidos):
 | `%.6s` | `[(null)]` |
 | `%.3s` | `[]` ← con precisión menor que 6, glibc no imprime nada |
 
-> [!faq]- Ver una posible solución
+> [!faq]- Ver una posible solución (`ft_print_chars.c`)
 > ```c
+> #include "ft_printf.h"
+>
 > void	ft_print_char(t_out *o, t_flags *f, int c)
 > {
 > 	char	ch;
@@ -620,6 +676,30 @@ Casos con `NULL` (glibc en Linux, medidos):
 > - `ch = (char)c` y `fl.body = &ch`: el `int` recibido se guarda en un `char` local para tener una dirección de 1 byte que darle a `write`.
 > - `%c` con `'\0'` funciona solo: `body_len` es `1` aunque el byte sea un `0`. Por eso `body_len` va aparte y no se usa `strlen`.
 > - `f->zero = 0`: glibc ignora el `0` en `%s` y `%c` (`%05s` con `"ab"` da `[   ab]`).
+
+**Conéctalas a `ft_convert`** (en `ft_printf.c`): quita el `(void)args;` y añade una rama para cada letra **delante** de la del `%`. Queda así:
+
+> [!faq]- Ver `ft_convert` después de la etapa 4
+> ```c
+> static void	ft_convert(t_out *o, t_flags *f, va_list *args)
+> {
+> 	if (f->spec == 'c')
+> 		ft_print_char(o, f, va_arg(*args, int));
+> 	else if (f->spec == 's')
+> 		ft_print_str(o, f, va_arg(*args, char *));
+> 	else if (f->spec == '%')
+> 		ft_out_char(o, '%');
+> 	else if (f->spec)
+> 	{
+> 		ft_out_char(o, '%');
+> 		ft_out_char(o, f->spec);
+> 	}
+> }
+> ```
+> `%c` lee `int` y no `char` por la promoción de argumentos ([[stdarg y funciones variádicas#Promoción de tipos por defecto]]).
+
+> [!tip] Pruébalo tú
+> `ft_printf("%c%c%%\n", 'o', 'k')` debe escribir `ok%` y devolver `4`. `ft_printf("%c", '\0')` escribe un byte nulo y devuelve `1` (míralo con `./test | cat -A`, sale `^@`). `ft_printf("[%s]", (char *)NULL)` debe dar `[(null)]` y devolver `8`.
 
 ### Etapa 5: los números (`ft_utoa_base`, `ft_print_number`)
 
@@ -666,7 +746,7 @@ ft_print_number(o, f, n, prefix):
 > [!danger] `INT_MIN`
 > `-n` con `n = -2147483648` desborda un `int` (el positivo no existe en 32 bits). Conviértelo **antes** de cambiar el signo: `-(long)n`. Detalles en [[Tipos enteros y conversiones]].
 
-> [!faq]- Ver una posible solución (ft_print_nums.c)
+> [!faq]- Ver una posible solución (`ft_print_nums.c`)
 > ```c
 > #include "ft_printf.h"
 >
@@ -747,6 +827,18 @@ ft_print_number(o, f, n, prefix):
 > - `ft_base` devuelve la base según la letra: así `ft_print_number` cabe en 4 parámetros.
 > - `char digits[20]`: 20 cifras es el máximo de un `unsigned long` de 64 bits en base 10.
 > - `%u` recibe `unsigned int`, que se convierte solo a `unsigned long` al llamar.
+> - `ft_print_number` no la llama `ft_convert`: la llaman `ft_print_int`, `ft_print_unsigned` y (en la etapa 6) `ft_print_ptr`.
+
+**Conéctalas a `ft_convert`**: añade estas dos ramas justo después de la de `'s'`:
+
+```c
+	else if (f->spec == 'd' || f->spec == 'i')
+		ft_print_int(o, f, va_arg(*args, int));
+	else if (f->spec == 'u' || f->spec == 'x' || f->spec == 'X')
+		ft_print_unsigned(o, f, va_arg(*args, unsigned int));
+```
+
+`%u`, `%x` y `%X` comparten función: la diferencia (la base) la decide `ft_base` mirando `f->spec`.
 
 > [!tip] Pruébalo tú
 > Compara con `printf`: `%d` con `0`, `-42`, `INT_MIN`, `INT_MAX`; `%u` con `-1` (debe dar `4294967295`); `%x` y `%X` con `255`, `0`, `-1`.
@@ -759,7 +851,7 @@ Con `ft_print_number` ya hecho, `%p` es un caso especial pequeño:
 - Si no → `ft_print_number(o, f, (unsigned long)p, "0x")` con la letra `p`, que usa la base hexadecimal en minúscula.
 - `unsigned long` y no `unsigned int`: una dirección de 64 bits no cabe en 32 (`%p` de `ULONG_MAX` es `0xffffffffffffffff`).
 
-> [!faq]- Ver una posible solución
+> [!faq]- Ver una posible solución (`ft_print_chars.c`, debajo de `ft_print_str`)
 > ```c
 > void	ft_print_ptr(t_out *o, t_flags *f, void *p)
 > {
@@ -780,13 +872,41 @@ Con `ft_print_number` ya hecho, `%p` es un caso especial pequeño:
 > ```
 > Está en `ft_print_chars.c` para dejar ese fichero en 3 funciones y `ft_print_nums.c` en 5.
 
+**Conéctala a `ft_convert`** con la última rama, y la función queda completa:
+
+> [!faq]- Ver `ft_convert` final
+> ```c
+> static void	ft_convert(t_out *o, t_flags *f, va_list *args)
+> {
+> 	if (f->spec == 'c')
+> 		ft_print_char(o, f, va_arg(*args, int));
+> 	else if (f->spec == 's')
+> 		ft_print_str(o, f, va_arg(*args, char *));
+> 	else if (f->spec == 'p')
+> 		ft_print_ptr(o, f, va_arg(*args, void *));
+> 	else if (f->spec == 'd' || f->spec == 'i')
+> 		ft_print_int(o, f, va_arg(*args, int));
+> 	else if (f->spec == 'u' || f->spec == 'x' || f->spec == 'X')
+> 		ft_print_unsigned(o, f, va_arg(*args, unsigned int));
+> 	else if (f->spec == '%')
+> 		ft_out_char(o, '%');
+> 	else if (f->spec)
+> 	{
+> 		ft_out_char(o, '%');
+> 		ft_out_char(o, f->spec);
+> 	}
+> }
+> ```
+
 ### ✅ Punto de control: la obligatoria
 
-Con `make` (sin bonus), pasa todos los casos obligatorios de la sección 10 y Valgrind sin errores **antes** de seguir. Si la obligatoria no es perfecta, el bonus no se evalúa.
+Ya tienes todos los ficheros menos `ft_flags_bonus.c`. Con `make` (sin bonus), pasa los casos obligatorios del tester de la [[#11. Probarlo|sección 11]] y Valgrind sin errores **antes** de seguir. Si la obligatoria no es perfecta, el bonus no se evalúa.
 
 ### Etapa 7: el bonus (`ft_flags_bonus.c`)
 
-Lo único nuevo. El orden en que `printf` espera las cosas entre `%` y la letra es fijo:
+Lo único nuevo: **otra versión de `ft_set_flags`**, con el mismo prototipo que la de `ft_flags.c`, en un fichero nuevo. No se toca ningún otro fichero; `make bonus` compila este en lugar de `ft_flags.c` (sección 5).
+
+El orden en que `printf` espera las cosas entre `%` y la letra es fijo:
 
 ```text
  %   [banderas]   [ancho]   [.precisión]   letra
@@ -797,7 +917,8 @@ Lo único nuevo. El orden en que `printf` espera las cosas entre `%` y la letra 
 **Qué tiene que hacer:**
 
 ```text
-ft_set_flags(s, &i):                (i apunta al carácter justo después del %)
+ft_set_flags(s, i):                 (i apunta al carácter justo después del %;
+                                     en C, i es un int *, así que se lee s[*i])
     f = ft_init_flags()
     mientras s[i] sea uno de "-0# +": activar esa bandera, i++
     f.width = leer número (0 si no hay dígitos)
@@ -812,7 +933,7 @@ ft_set_flags(s, &i):                (i apunta al carácter justo después del %)
 - **Números enormes** (`%99999999999d`): se deja de acumular a partir de cierto tamaño para no desbordar el `int`. Es comportamiento indefinido, pero no debe crashear.
 - Ahora que `f->width`, `f->precision`… tienen valores, **todo lo de las etapas 2 a 6 ya funciona con banderas**: no hay que tocar nada más.
 
-> [!faq]- Ver una posible solución
+> [!faq]- Ver una posible solución (`ft_flags_bonus.c`)
 > ```c
 > #include "ft_printf.h"
 >
