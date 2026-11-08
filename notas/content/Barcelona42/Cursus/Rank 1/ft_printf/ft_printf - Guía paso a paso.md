@@ -206,7 +206,7 @@ Antes de escribir código, revisa estos fallos frecuentes en el esqueleto del pr
 
 ### En el Makefile
 
-1. **Una regla de patrón que no coincide con los objetos.** Si los objetos son `srcs/ft_print_char.o` y la regla es `%.o: $(SRCS)/%.c $(HEADER)`, make busca `srcs/srcs/ft_print_char.c`, no lo encuentra y usa su regla interna. Consecuencias: no ves tu mensaje de compilación y, lo grave, **si cambias `ft_printf.h` no se recompila nada** (compruébalo con `touch includes/ft_printf.h && make`). Solución: `$(SRCS)/%.o: $(SRCS)/%.c $(HEADER)`.
+1. **Una regla de patrón que no coincide con los objetos.** Si los objetos son `srcs/ft_print_chars.o` y la regla es `%.o: $(SRCS)/%.c $(HEADER)`, make busca `srcs/srcs/ft_print_chars.c`, no lo encuentra y usa su regla interna. Consecuencias: no ves tu mensaje de compilación y, lo grave, **si cambias `ft_printf.h` no se recompila nada** (compruébalo con `touch includes/ft_printf.h && make`). Solución: `$(SRCS)/%.o: $(SRCS)/%.c $(HEADER)`.
 2. **Olvidar `ft_printf.c` en la lista de fuentes.** La librería compila, pero sale sin la función `ft_printf`. Compruébalo con `ar t libftprintf.a`.
 3. **Añadir el bonus encima de la obligatoria.** Con el diseño de la sección 5, el fichero de banderas bonus **sustituye** al obligatorio: necesitas tres listas (comunes, solo obligatoria, solo bonus).
 4. **Olvidar `bonus` en `.PHONY`.**
@@ -911,8 +911,8 @@ ft_set_flags (bonus)
     "8"  → width = 8
     ".3" → precision = 3
     "d"  → spec = 'd'                           i apunta a ']'
-ft_convert → ft_print_int(-42)
-    n < 0 → ft_print_number(42, prefix "-")
+ft_convert → ft_print_int(o, f, -42)
+    n < 0 → ft_print_number(o, f, 42, "-")
 ft_print_number
     digits = "42", body_len = 2
     precision 3 > 2 → zeros = 1
