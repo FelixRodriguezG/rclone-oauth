@@ -167,14 +167,14 @@ El subject exige que el bonus esté en ficheros `_bonus.c` y que la obligatoria 
 
 Cuando `ft_printf` encuentra un `%`, llama a `ft_set_flags`, que lee lo que viene detrás y rellena un `t_flags`. Todo lo demás solo mira ese `t_flags`. De `ft_set_flags` hay **dos versiones**, con el mismo nombre y el mismo prototipo, en dos ficheros:
 
-- **`ft_flags.c` (obligatoria)**: toma el carácter justo después del `%` como letra. Todo lo demás se queda como lo deja `ft_init_flags`: sin banderas, ancho `0`, precisión `-1` («no hay»).
+- **`ft_flags.c` (obligatoria)**: **se salta** las banderas, el ancho y la precisión sin guardarlos, y lee la letra. Todo lo demás se queda como lo deja `ft_init_flags`: sin banderas, ancho `0`, precisión `-1` («no hay»).
 - **`ft_flags_bonus.c` (bonus)**: lee banderas, ancho, `.precisión` y por último la letra.
 
 Con `ft_printf("[%-08.3d]", -42)`:
 
 | Versión | Qué deja en `t_flags` | Qué imprime |
 |---|---|---|
-| `ft_flags.c` (obligatoria) | `spec = '-'` y nada más | `[%-08.3d]`: `-` no es una letra conocida, así que escribe `%-`, y el bucle escribe `08.3d]` como texto normal |
+| `ft_flags.c` (obligatoria) | `spec = 'd'` y nada más (`-08.3` se ha saltado) | `[-42]`: se imprime el dato, sin formato |
 | `ft_flags_bonus.c` (bonus) | `minus = 1`, `zero = 0` (el `-` lo anula), `width = 8`, `precision = 3`, `spec = 'd'` | `[-042    ]` |
 
 El Makefile compila **una u otra**: `make` compila `ft_flags.c` y `make bonus` compila `ft_flags_bonus.c`. Nunca las dos: el enlazador se quejaría de que `ft_set_flags` está definida dos veces. El resto de ficheros es el mismo en los dos casos, porque «ancho 0 y sin precisión» es simplemente el caso en que no hay que rellenar nada (sección 3).
@@ -187,12 +187,12 @@ flowchart LR
         B --> D[ft_output.c]
         C --> D
     end
-    M[ft_flags.c<br>solo lee la letra] -. make .-> A
+    M[ft_flags.c<br>salta banderas, lee la letra] -. make .-> A
     X[ft_flags_bonus.c<br>lee - 0 # espacio + ancho .precisión] -. make bonus .-> A
 ```
 
 > [!question] «Pero el relleno está en ficheros que no son `_bonus`»
-> Es la pregunta que te puede hacer un evaluador. Respuesta: la funcionalidad del bonus (que `ft_printf` entienda banderas) **solo existe** si se compila `ft_flags_bonus.c`. Con `make`, `ft_printf("%5d", 1)` no tiene ancho. El código común trata «ancho 0, sin precisión» como un caso más, igual que trata un número de 1 o de 10 cifras. Si tu evaluador no lo acepta, la alternativa estricta es copiar los comunes como `ft_printf_bonus.c`, `ft_output_bonus.c`… y que `SRCS_BONUS` sea la lista completa de copias. Con este diseño es un `cp` y cambiar el Makefile; no hay que reescribir nada.
+> Es la pregunta que te puede hacer un evaluador. Respuesta: la funcionalidad del bonus (que `ft_printf` entienda banderas) **solo existe** si se compila `ft_flags_bonus.c`. Con `make`, `ft_printf("%5d", 1)` imprime `1`, sin ancho: `ft_flags.c` se salta el `5` sin guardarlo. El código común trata «ancho 0, sin precisión» como un caso más, igual que trata un número de 1 o de 10 cifras. Si tu evaluador no lo acepta, la alternativa estricta es copiar los comunes como `ft_printf_bonus.c`, `ft_output_bonus.c`… y que `SRCS_BONUS` sea la lista completa de copias. Con este diseño es un `cp` y cambiar el Makefile; no hay que reescribir nada.
 
 ## 6. Errores típicos al montar el header y el Makefile
 
@@ -297,7 +297,7 @@ Solo ft_out_char y ft_out_nstr llaman a write.
 | `ft_out_repeat` (`static`) | `ft_output.c` | Escribe `n` veces el mismo carácter (relleno) | 2 |
 | `ft_out_field` | `ft_output.c` | Escribe un campo: espacios, prefijo, ceros, cuerpo, espacios | 2 |
 | `ft_init_flags` | `ft_printf.c` | Devuelve un `t_flags` sin banderas y con precisión `-1` | 3 |
-| `ft_set_flags` | `ft_flags.c` | Versión obligatoria: solo lee la letra | 3 |
+| `ft_set_flags` | `ft_flags.c` | Versión obligatoria: salta banderas, ancho y precisión y lee la letra | 3 |
 | `ft_convert` (`static`) | `ft_printf.c` | Llama a la función de la letra. **Crece** en las etapas 4, 5 y 6 | 3 |
 | `ft_printf` | `ft_printf.c` | Recorre el formato | 3 |
 | `ft_print_char` | `ft_print_chars.c` | Prepara el campo de `%c` | 4 |
@@ -330,7 +330,7 @@ ft_printf/
     ├── ft_output.c          ← lo ÚNICO que llama a write: ft_out_char, ft_out_nstr, ft_out_field
     ├── ft_print_chars.c     ← %c, %s, %p
     ├── ft_print_nums.c      ← %d %i %u %x %X y el pasar a texto en cualquier base
-    ├── ft_flags.c           ← ft_set_flags OBLIGATORIA (solo lee la letra)
+    ├── ft_flags.c           ← ft_set_flags OBLIGATORIA (salta las banderas, lee la letra)
     └── ft_flags_bonus.c     ← ft_set_flags BONUS (banderas, ancho, precisión)
 ```
 
@@ -514,7 +514,7 @@ ft_out_field(o, f, fl):
 
 ### Etapa 3: el bucle principal y el reparto
 
-Recorres el formato. Si no es `%`, lo escribes. Si es `%`, `ft_set_flags` lee lo que viene detrás (en la obligatoria, solo la letra) y avanza el índice; luego `ft_convert` llama a la función de esa letra.
+Recorres el formato. Si no es `%`, lo escribes. Si es `%`, `ft_set_flags` lee lo que viene detrás (en la obligatoria, se salta las banderas y se queda con la letra) y avanza el índice; luego `ft_convert` llama a la función de esa letra.
 
 En esta etapa escribes `ft_printf.c` y `ft_flags.c`. Como todavía no existe ninguna `ft_print_*`, **`ft_convert` empieza sabiendo solo `%%`**; en las etapas 4, 5 y 6 le irás añadiendo una rama por conversión.
 
@@ -529,7 +529,7 @@ ft_printf(format, ...):
     devolver -1 si hubo error, si no out.len
 ```
 
-- **`&i` y no `i`**: `ft_set_flags` tiene que dejar `i` justo **después** de la letra, y para eso necesita modificar la variable de `ft_printf`. Con el bonus avanzará varios caracteres (`-08.3d`), con la obligatoria uno.
+- **`&i` y no `i`**: `ft_set_flags` tiene que dejar `i` justo **después** de la letra, y para eso necesita modificar la variable de `ft_printf`. Con `%-08.3d`, las dos versiones avanzan los 6 caracteres; la diferencia es que la bonus guarda lo que lee y la obligatoria lo tira.
 - **`va_list *args`**: el `va_list` se pasa por puntero a `ft_convert` para que cada `va_arg` avance el **mismo** `va_list` (explicado en [[stdarg y funciones variádicas#Aplicación en ft_printf]]).
 - **Un `%` al final** (`"hola %"`): `format[i]` es `'\0'`. `ft_set_flags` no debe avanzar `i` más allá del `'\0'`, o el `while` leería fuera de la cadena. Por eso hace `if (s[*i]) (*i)++;`.
 - **Letra desconocida** (`%k`): es comportamiento indefinido en `printf`. Esta solución imprime `%k`, que es lo que hace glibc.
@@ -609,15 +609,20 @@ ft_printf(format, ...):
 > 	t_flags	f;
 >
 > 	f = ft_init_flags();
+> 	while (s[*i] && ft_strchr("-+ #.0123456789", s[*i]))
+> 		(*i)++;
 > 	f.spec = s[*i];
 > 	if (s[*i])
 > 		(*i)++;
 > 	return (f);
 > }
 > ```
+> - **¿Por qué saltar las banderas y no tomar el primer carácter como letra?** El subject no dice qué hacer con banderas en la obligatoria, pero ft_printf **no puede crashear**. Si con `%5d` tomaras el `5` como letra, escribirías `%5` **sin consumir el argumento**, y todos los siguientes irían desplazados: `ft_printf("[%5d] [%s]", 42, "hola")` haría que `%s` leyera el `42` como `char *` → *segmentation fault*. Saltándolas, cada conversión lee su argumento: sale `[42] [hola]`.
+> - Esto **no implementa** ninguna bandera: no se guarda nada, así que el ancho, el `-` y el `0` solo existen si se compila `ft_flags_bonus.c`.
+> - `s[*i] &&` delante de `ft_strchr`: igual que en la bonus, `ft_strchr` encontraría el `'\0'` final (etapa 7).
 
 > [!tip] Pruébalo tú
-> Con `ft_output.c`, `ft_printf.c` y `ft_flags.c` ya compila. Prueba `ft_printf("hola %% %k\n")`: debe escribir `hola % %k` y devolver `10`. Prueba también `ft_printf("fin %")` (un `%` al final): escribe `fin ` y devuelve `4`, sin leer fuera de la cadena.
+> Con `ft_output.c`, `ft_printf.c` y `ft_flags.c` ya compila. Prueba `ft_printf("hola %% %k\n")`: debe escribir `hola % %k` y devolver `10`. Prueba también `ft_printf("fin %")` (un `%` al final): escribe `fin ` y devuelve `4`, sin leer fuera de la cadena. Y `ft_printf("[%5%]")`: se salta el `5` y escribe `[%]`.
 
 ### Etapa 4: `%c` y `%s`
 
@@ -1158,7 +1163,7 @@ Requisitos del subject v12.0: primera línea en cursiva (*Este proyecto ha sido 
 > Porque «sin precisión» y «precisión 0» se comportan distinto: `%d` con 0 imprime `0` y `%.0d` con 0 no imprime nada.
 
 > [!question]- ¿Cómo separas la obligatoria del bonus?
-> Las dos versiones definen `ft_set_flags` con el mismo prototipo. La obligatoria solo lee la letra; la bonus lee banderas, ancho y precisión. El Makefile compila una u otra. El resto del código es común y trata «sin banderas» como un caso más.
+> Las dos versiones definen `ft_set_flags` con el mismo prototipo. La obligatoria se salta las banderas, el ancho y la precisión sin guardarlos (así cada conversión lee su argumento y nunca se desplazan) y lee la letra; la bonus los guarda en `t_flags`. El Makefile compila una u otra. El resto del código es común y trata «sin banderas» como un caso más.
 
 > [!question]- ¿Por qué no usas `malloc`?
 > Los dígitos caben en un `char[20]` en la pila y para `%s` apunto a la cadena original. Sin `malloc` no hay leaks posibles ni fallos de memoria que gestionar.

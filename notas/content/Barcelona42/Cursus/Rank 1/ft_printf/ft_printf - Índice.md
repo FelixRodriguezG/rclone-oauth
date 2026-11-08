@@ -80,7 +80,7 @@ Funciones de libft que reutilizarás: [[ft_strlen]], [[ft_strchr]] y [[ft_isdigi
 > [!note] Un solo diseño en toda la serie
 > Esta nota usa los **mismos nombres y prototipos** que [[ft_printf - Guía paso a paso|la guía]], [[ft_printf - Funciones auxiliares]] y [[ft_printf - Pruebas y depuración]]. Es un diseño pensado para el bonus desde el principio, pero la parte obligatoria funciona sola. El código completo, etapa a etapa, está en la guía.
 
-La idea general: recorres `format` carácter a carácter. Si no es `%`, lo escribes. Si es `%`, `ft_set_flags` lee lo que viene detrás (en la obligatoria, solo la letra) y `ft_convert` llama a la función de esa conversión. Ninguna función devuelve cuántos caracteres ha escrito: todas **apuntan en un `t_out`** lo que escriben (`len`) y si `write` ha fallado (`error`). Al final, `ft_printf` devuelve `-1` si hubo error y `len` si no.
+La idea general: recorres `format` carácter a carácter. Si no es `%`, lo escribes. Si es `%`, `ft_set_flags` lee lo que viene detrás (en la obligatoria, se salta las banderas y se queda con la letra) y `ft_convert` llama a la función de esa conversión. Ninguna función devuelve cuántos caracteres ha escrito: todas **apuntan en un `t_out`** lo que escriben (`len`) y si `write` ha fallado (`error`). Al final, `ft_printf` devuelve `-1` si hubo error y `len` si no.
 
 ```text
 ft_printf("Hola %s, tienes %d años\n", "Ana", 20)
@@ -106,7 +106,7 @@ ft_printf/
     ├── ft_output.c          ← lo ÚNICO que llama a write: ft_out_char, ft_out_nstr, ft_out_field
     ├── ft_print_chars.c     ← %c, %s, %p
     ├── ft_print_nums.c      ← %d %i %u %x %X, ft_utoa_base y ft_base
-    ├── ft_flags.c           ← ft_set_flags OBLIGATORIA (solo lee la letra)
+    ├── ft_flags.c           ← ft_set_flags OBLIGATORIA (salta las banderas, lee la letra)
     └── ft_flags_bonus.c     ← ft_set_flags BONUS (banderas, ancho, precisión)
 ```
 
