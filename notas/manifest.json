@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-08T12:50:32+01:00",
+ "updated": "2026-11-08T12:56:08+01:00",
  "files": [
   {
    "path": "Barcelona42/2026-10-29.md",
@@ -90,8 +90,20 @@
    "name": "Arrays en C"
   },
   {
+   "path": "Barcelona42/C/Bases numéricas.md",
+   "name": "Bases numéricas"
+  },
+  {
+   "path": "Barcelona42/C/Buffer de stdout.md",
+   "name": "Buffer de stdout"
+  },
+  {
    "path": "Barcelona42/C/Carácter nulo y puntero NULL.md",
    "name": "Carácter nulo y puntero NULL"
+  },
+  {
+   "path": "Barcelona42/C/Comportamiento indefinido.md",
+   "name": "Comportamiento indefinido"
   },
   {
    "path": "Barcelona42/C/Control de errores en C.md",

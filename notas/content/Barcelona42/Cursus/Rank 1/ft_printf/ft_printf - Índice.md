@@ -260,7 +260,7 @@ cc -Wall -Wextra -Werror main.c -L. -lftprintf -o test_printf
 ```
 
 > [!warning] Mezclar `printf` y `ft_printf` en el mismo programa
-> `printf` usa un buffer y tu `ft_printf` escribe directamente con `write`. Si rediriges a un fichero o a una tubería, el orden de las líneas puede salir mezclado. Para comparar, escribe la salida de cada una en un programa distinto y usa `diff`, o llama a `fflush(stdout)` tras cada `printf`.
+> `printf` usa un buffer y tu `ft_printf` escribe directamente con `write`. Si rediriges a un fichero o a una tubería, el orden de las líneas puede salir mezclado. Para comparar, escribe la salida de cada una en un programa distinto y usa `diff`, o llama a `fflush(stdout)` tras cada `printf`. Explicado en [[Buffer de stdout]].
 
 > [!warning] gcc y `%s` con `NULL`
 > Con `printf("%s\n", NULL)` gcc puede sustituir la llamada por `puts(NULL)`, que **crashea**. No es un fallo tuyo: para probar ese caso usa un formato con más texto (`"[%s]\n"`) o compila con `-fno-builtin`. gcc además avisa del `NULL` con `-Wall`; en tu `main` de pruebas quita `-Werror` si hace falta.
@@ -318,7 +318,7 @@ Herramientas útiles:
 
 ## Relacionadas
 
-[[ft_printf - Guía paso a paso]] · [[ft_printf - Funciones auxiliares]] · [[ft_printf - Pruebas y depuración]] · [[printf]] · [[stdarg y funciones variádicas]] · [[Tipos enteros y conversiones]] · [[Recursión]] · [[Makefile y librerías estáticas]] · [[Valgrind y sanitizers]] · [[libft - Índice]] · [[get_next_line - Índice]] · [[Born2beroot - Índice]]
+[[ft_printf - Guía paso a paso]] · [[ft_printf - Funciones auxiliares]] · [[ft_printf - Pruebas y depuración]] · [[printf]] · [[stdarg y funciones variádicas]] · [[Tipos enteros y conversiones]] · [[Recursión]] · [[Makefile y librerías estáticas]] · [[Valgrind y sanitizers]] · [[libft - Índice]] · [[get_next_line - Índice]] · [[Born2beroot - Índice]] · [[Bases numéricas]] · [[Buffer de stdout]] · [[Comportamiento indefinido]]
 
 ## Referencias
 

@@ -280,7 +280,7 @@ Por eso, al llamar a `isalpha`/`ft_isalpha` con un `char`, lo correcto es conver
 
 ## Relacionadas
 
-[[Operadores de bits]] · [[Punteros en C]] · [[ft_atoi]] · [[ft_itoa]] · [[ft_calloc]] · [[ft_putnbr_fd]] · [[ft_isalpha]] · [[ft_memcmp]] · [[printf]] · [[Valgrind y sanitizers]] · [[Cómo compila C]]
+[[Operadores de bits]] · [[Punteros en C]] · [[ft_atoi]] · [[ft_itoa]] · [[ft_calloc]] · [[ft_putnbr_fd]] · [[ft_isalpha]] · [[ft_memcmp]] · [[printf]] · [[Valgrind y sanitizers]] · [[Cómo compila C]] · [[Comportamiento indefinido]] · [[Bases numéricas]]
 
 ## Referencias
 

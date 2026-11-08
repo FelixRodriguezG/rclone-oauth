@@ -628,7 +628,7 @@ Casos con `NULL` (glibc en Linux, medidos):
 
 Una sola función, `ft_print_number`, sirve para `d i u x X` **y** `p`. Recibe el número ya **sin signo** (`unsigned long`) y el prefijo ya elegido. La base la saca de la letra.
 
-**Pasar un número a texto en cualquier base**, sin `malloc`:
+**Pasar un número a texto en cualquier base**, sin `malloc` (la teoría, en [[Bases numéricas]]):
 
 ```text
 ft_utoa_base(n, base, buf):           base = "0123456789abcdef", por ejemplo
@@ -899,7 +899,7 @@ Esto es lo que te preguntarán: «¿dónde gestionas el `0` con `-`?». Cada reg
 | `%p` con ancho | `%20p` → `[      0x7ffd1234abcd]`, `%10p` NULL → `[     (nil)]` | `ft_print_ptr` |
 | `%%` con banderas | `%5%` → `[%]` | `ft_convert`: `%%` se escribe tal cual, sin campo |
 
-Combinaciones que el estándar de C declara **indefinidas** y que no tienes que imitar: `#` en `d`, `+` o espacio en `u x X c s p`, precisión en `c` y `p`, `0` en `c s p`. Los testers no las comprueban. Esta solución da lo mismo que glibc en `%015p` y `%.5p` porque salen solas del diseño.
+Combinaciones que el estándar de C declara **indefinidas** (ver [[Comportamiento indefinido]]) y que no tienes que imitar: `#` en `d`, `+` o espacio en `u x X c s p`, precisión en `c` y `p`, `0` en `c s p`. Los testers no las comprueban. Esta solución da lo mismo que glibc en `%015p` y `%.5p` porque salen solas del diseño.
 
 ## 10. Por dentro: `ft_printf("[%08.3d]", -42)`
 
@@ -1010,7 +1010,7 @@ Mirar a ojo no escala. Este tester redirige la salida a un fichero, llama a `pri
 > make bonus && cc -Wall -Wextra -Wno-format -Iincludes -Ilibft -DBONUS -DBONUS_NAME='"bonus"' tester.c libftprintf.a -o t && ./t
 > ```
 > - `-Wno-format`: gcc/clang avisan de combinaciones indefinidas como `% s` y de `%s` con `NULL`. En el tester queremos probarlas igualmente.
-> - Las comparaciones se hacen sobre ficheros porque `printf` usa buffer y `ft_printf` no: en la terminal saldrían desordenadas (ver [[ft_printf - Pruebas y depuración#2. No mezcles printf y ft_printf en la terminal]]).
+> - Las comparaciones se hacen sobre ficheros porque `printf` usa buffer y `ft_printf` no ([[Buffer de stdout]]): en la terminal saldrían desordenadas (ver [[ft_printf - Pruebas y depuración#2. No mezcles printf y ft_printf en la terminal]]).
 
 Resultado con la solución de esta guía:
 
@@ -1095,7 +1095,7 @@ Con este diseño cada una toca **una o dos líneas**. Practícalas (ejemplos, no
 
 ## Relacionadas
 
-[[ft_printf - Índice]] · [[ft_printf - Funciones auxiliares]] · [[ft_printf - Pruebas y depuración]] · [[printf]] · [[stdarg y funciones variádicas]] · [[Structs y typedef]] · [[Tipos enteros y conversiones]] · [[Makefile y librerías estáticas]] · [[Control de errores en C]] · [[Valgrind y sanitizers]] · [[README de un proyecto]] · [[La Norma]] · [[get_next_line - Guía paso a paso]]
+[[ft_printf - Índice]] · [[ft_printf - Funciones auxiliares]] · [[ft_printf - Pruebas y depuración]] · [[printf]] · [[stdarg y funciones variádicas]] · [[Structs y typedef]] · [[Tipos enteros y conversiones]] · [[Makefile y librerías estáticas]] · [[Control de errores en C]] · [[Valgrind y sanitizers]] · [[README de un proyecto]] · [[La Norma]] · [[get_next_line - Guía paso a paso]] · [[Bases numéricas]] · [[Comportamiento indefinido]] · [[Buffer de stdout]]
 
 ## Referencias
 

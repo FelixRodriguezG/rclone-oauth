@@ -66,7 +66,7 @@ $ ./mix                 $ ./mix | cat
 4. ft_printf            3. printf
 ```
 
-En la terminal, `printf` vacía su buffer en cada `'\n'`. En una tubería o un fichero, lo vacía **al final del programa**. Tu ft_printf no está mal: es el buffer de `printf`. Soluciones: `fflush(stdout)` después de cada `printf`, o comparar en ficheros separados como hace el tester.
+En la terminal, `printf` vacía su buffer en cada `'\n'`. En una tubería o un fichero, lo vacía **al final del programa**. Tu ft_printf no está mal: es el buffer de `printf` (explicado en [[Buffer de stdout]]). Soluciones: `fflush(stdout)` después de cada `printf`, o comparar en ficheros separados como hace el tester.
 
 ## 3. El tester: comparar contra printf automáticamente
 
@@ -293,7 +293,7 @@ Fíjate: en el primero `zero=0` aunque el formato tenga `0` (el `-` lo anula); e
 
 ### Con gdb
 
-Compila con `-g` (en `CFLAGS` del Makefile y en el `main`) y para en `ft_out_field`, donde ya están todas las piezas:
+Si no has usado gdb nunca, empieza por [[Depurar con gdb]]. Compila con `-g` (en `CFLAGS` del Makefile y en el `main`) y para en `ft_out_field`, donde ya están todas las piezas:
 
 ```bash
 make fclean && make bonus CFLAGS="-Wall -Wextra -Werror -g -Iincludes -Ilibft"
@@ -405,7 +405,7 @@ Enlaces en [[ft_printf - Índice#Referencias]].
 
 ## Relacionadas
 
-[[ft_printf - Guía paso a paso]] · [[ft_printf - Funciones auxiliares]] · [[ft_printf - Índice]] · [[printf]] · [[Valgrind y sanitizers]] · [[Makefile y librerías estáticas]] · [[Control de errores en C]] · [[get_next_line - Pruebas y depuración]]
+[[ft_printf - Guía paso a paso]] · [[ft_printf - Funciones auxiliares]] · [[ft_printf - Índice]] · [[printf]] · [[Valgrind y sanitizers]] · [[Makefile y librerías estáticas]] · [[Control de errores en C]] · [[get_next_line - Pruebas y depuración]] · [[Buffer de stdout]] · [[Depurar con gdb]] · [[Comportamiento indefinido]]
 
 ## Referencias
 

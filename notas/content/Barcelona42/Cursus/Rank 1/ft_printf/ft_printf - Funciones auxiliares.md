@@ -255,7 +255,7 @@ Así cada regla vive en un solo sitio y `ft_out_field` se queda en 17 líneas.
 > }
 > ```
 
-Dos pasadas:
+Es el método de las divisiones sucesivas de [[Bases numéricas]], escrito sin recursión. Dos pasadas:
 
 1. **Contar cifras.** Divide una copia (`tmp`) entre la base hasta que sea menor que la base. Empieza en `len = 1` porque el `0` tiene una cifra.
 2. **Rellenar de derecha a izquierda.** La última cifra es `n % b`; luego `n /= b` y a por la anterior. Como sabes `len`, empiezas en `buf[len - 1]` y no hace falta dar la vuelta a la cadena después.
@@ -313,7 +313,7 @@ Existe para que `ft_print_number` no necesite un quinto parámetro (la [[La Norm
 
 ## Relacionadas
 
-[[ft_printf - Guía paso a paso]] · [[ft_printf - Pruebas y depuración]] · [[ft_printf - Índice]] · [[Structs y typedef]] · [[Tipos enteros y conversiones]] · [[Control de errores en C]] · [[Recursión]] · [[La Norma]]
+[[ft_printf - Guía paso a paso]] · [[ft_printf - Pruebas y depuración]] · [[ft_printf - Índice]] · [[Structs y typedef]] · [[Tipos enteros y conversiones]] · [[Control de errores en C]] · [[Recursión]] · [[La Norma]] · [[Bases numéricas]] · [[Comportamiento indefinido]]
 
 ## Referencias
 

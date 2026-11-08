@@ -271,7 +271,7 @@ Usa recursión cuando el problema **es** recursivo y la profundidad está acotad
 
 ## Relacionadas
 
-[[Segmentos de memoria en C]] · [[ft_putnbr_fd]] · [[ft_itoa]] · [[Depurar con gdb]] · [[Tipos enteros y conversiones]] · [[Algoritmos de ordenación y complejidad]] · [[A-Maze-ing - Índice]] · [[Exam Rank 02]] · [[Listas enlazadas]]
+[[Segmentos de memoria en C]] · [[ft_putnbr_fd]] · [[ft_itoa]] · [[Depurar con gdb]] · [[Tipos enteros y conversiones]] · [[Algoritmos de ordenación y complejidad]] · [[A-Maze-ing - Índice]] · [[Exam Rank 02]] · [[Listas enlazadas]] · [[Bases numéricas]]
 
 ## Referencias
 

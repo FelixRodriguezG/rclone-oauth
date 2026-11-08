@@ -307,7 +307,7 @@ $ cc -Wall -Wextra -Werror -fsanitize=undefined … && ./b6     # printf("%d\n",
 
 ## Relacionadas
 
-[[Tipos enteros y conversiones]] · [[push_swap - Índice]] · [[A-Maze-ing - Índice]] · [[Algoritmos de ordenación y complejidad]] · [[ft_printf - Índice]] · [[Exam Rank 02]] · [[ft_toupper]] · [[ft_tolower]]
+[[Tipos enteros y conversiones]] · [[push_swap - Índice]] · [[A-Maze-ing - Índice]] · [[Algoritmos de ordenación y complejidad]] · [[ft_printf - Índice]] · [[Exam Rank 02]] · [[ft_toupper]] · [[ft_tolower]] · [[Bases numéricas]]
 
 ## Referencias
 
