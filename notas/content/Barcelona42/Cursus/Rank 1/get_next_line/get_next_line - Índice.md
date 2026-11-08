@@ -349,5 +349,5 @@ Es un fragmento incompleto: el comentario dentro de la función lo marcaría nor
 - [malloc(3) — Linux man-pages](https://man7.org/linux/man-pages/man3/malloc.3.html) y [free(3)](https://man7.org/linux/man-pages/man3/free.3.html) — memoria dinámica.
 - [Valgrind: Memcheck manual](https://valgrind.org/docs/manual/mc-manual.html) — tipos de leak (*definitely lost*, *still reachable*).
 - [gnlTester (Tripouille)](https://github.com/Tripouille/gnlTester) — tester público de la comunidad.
-- Subject de get_next_line v14.0 (`~/cursus/es.subject_get_next_line.pdf`): requisitos, prohibiciones, comportamientos indefinidos, README, bonus y modificación en la evaluación.
+- Subject de get_next_line v14.0: requisitos, prohibiciones, comportamientos indefinidos, README, bonus y modificación en la evaluación.
 - El esqueleto de código se ha compilado y probado con `BUFFER_SIZE` 1, 3, 42 y 10 000 000 y valgrind sin errores.

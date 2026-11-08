@@ -35,7 +35,7 @@ int	ft_printf(char const *, ...);
 
 que imita a `printf`: recorre la cadena de formato, escribe el texto normal tal cual y sustituye cada `%algo` por el siguiente argumento convertido a texto. Devuelve **cuántos caracteres ha escrito** (o `-1` si `write` falla).
 
-Lo que dice el subject v12.0 (`~/cursus/rank-1/es.subject_ft_printf.pdf`):
+Lo que dice el subject v12.0:
 
 | Aspecto | Requisito |
 |---|---|
@@ -187,36 +187,33 @@ flowchart LR
 > [!question] «Pero el relleno está en ficheros que no son `_bonus`»
 > Es la pregunta que te puede hacer un evaluador. Respuesta: la funcionalidad del bonus (que `ft_printf` entienda banderas) **solo existe** si se compila `ft_flags_bonus.c`. Con `make`, `ft_printf("%5d", 1)` no tiene ancho. El código común trata «ancho 0, sin precisión» como un caso más, igual que trata un número de 1 o de 10 cifras. Si tu evaluador no lo acepta, la alternativa estricta es copiar los comunes como `ft_printf_bonus.c`, `ft_output_bonus.c`… y que `SRCS_BONUS` sea la lista completa de copias. Con este diseño es un `cp` y cambiar el Makefile; no hay que reescribir nada.
 
-## 6. Qué cambiar en lo que ya tienes
+## 6. Errores típicos al montar el header y el Makefile
 
-He revisado `~/cursus/rank-1/ft_printf` (Makefile, `includes/ft_printf.h`, `srcs/ft_printf.c` vacío). Vas bien encaminado: ya tienes `t_flags` y separas ficheros bonus. Lo que hay que corregir:
+Antes de escribir código, revisa estos fallos frecuentes en el esqueleto del proyecto. Muchos no dan error al compilar y se descubren tarde (o en la evaluación).
 
 ### En el header
 
-| Qué hay | Problema | Cambio |
+| Error típico | Problema | Solución |
 |---|---|---|
-| `int ft_parse_flags_safely(...)` sin `;` al final | No compila: error de sintaxis antes del `#endif` | Añadir `;` (o borrarla, ver abajo) |
-| `t_buffer` con `char data[BUFFER_SIZE]` e `index` | El subject dice *«No se debe implementar la gestión del buffer del printf() original»*. Un evaluador puede considerarlo eso. Además, si mezclas `printf` y `ft_printf` en un test, el orden de salida cambia | Quedarte solo con el contador: `t_out { len; error; }` |
-| `BUFFER_SIZE` | Ya no hace falta, y confunde con el de get_next_line | Borrarlo |
-| Campos de `t_flags` con espacios y comentarios `//` al final de línea | norminette exige tabuladores para alinear | Alinear con tabs, como en la sección 4 |
-| `t_flags` sin la letra | Tendrás que pasar la letra aparte a cada función | Añadir `char spec;` |
+| Un prototipo sin `;` al final | No compila: error de sintaxis antes del `#endif` | Añadir el `;` |
+| Un `t_buffer` con `char data[BUFFER_SIZE]` e `index` para acumular la salida | El subject dice *«No se debe implementar la gestión del buffer del printf() original»*. Un evaluador puede considerarlo eso. Además, si mezclas `printf` y `ft_printf` en un test, el orden de salida cambia | Quedarte solo con un contador: `t_out { len; error; }` |
+| Una macro `BUFFER_SIZE` | No hace falta y confunde con la de get_next_line | No definirla |
+| Campos de la `struct` alineados con espacios y comentarios `//` al final de línea | norminette exige tabuladores para alinear | Alinear con tabs, como en la sección 4 |
+| `t_flags` sin la letra de la conversión | Tendrás que pasar la letra aparte a cada función | Añadir `char spec;` |
 | `#include <stdio.h>` | No se usa `printf` dentro de la librería | Quitarlo; incluir `"libft.h"` |
-| Comentario «MAIN FUNCTION GET_NEXT_LINE PROTOTYPE» | Copiado de GNL | Cambiarlo |
-| `ft_set_flags`, `ft_parse_flags_safely`, `ft_is_specifier` | Tres funciones para lo mismo | Una sola: `t_flags ft_set_flags(const char *s, int *i);`, que es la que ya tenías |
+| Comentarios copiados de otro proyecto (p. ej. de get_next_line) | Confunden al evaluador | Revisarlos |
+| Varias funciones para leer las banderas (`ft_set_flags`, `ft_parse_flags`, `ft_is_specifier`…) | Hacen lo mismo y se pisan | Una sola: `t_flags ft_set_flags(const char *s, int *i);` |
 
 ### En el Makefile
 
-Lo he comprobado en una copia de tu proyecto:
+1. **Una regla de patrón que no coincide con los objetos.** Si los objetos son `srcs/ft_print_char.o` y la regla es `%.o: $(SRCS)/%.c $(HEADER)`, make busca `srcs/srcs/ft_print_char.c`, no lo encuentra y usa su regla interna. Consecuencias: no ves tu mensaje de compilación y, lo grave, **si cambias `ft_printf.h` no se recompila nada** (compruébalo con `touch includes/ft_printf.h && make`). Solución: `$(SRCS)/%.o: $(SRCS)/%.c $(HEADER)`.
+2. **Olvidar `ft_printf.c` en la lista de fuentes.** La librería compila, pero sale sin la función `ft_printf`. Compruébalo con `ar t libftprintf.a`.
+3. **Añadir el bonus encima de la obligatoria.** Con el diseño de la sección 5, el fichero de banderas bonus **sustituye** al obligatorio: necesitas tres listas (comunes, solo obligatoria, solo bonus).
+4. **Olvidar `bonus` en `.PHONY`.**
 
-1. **La regla `%.o: $(SRCS)/%.c $(HEADER)` nunca se usa.** Tus objetos se llaman `srcs/ft_print_char.o`, así que make busca `srcs/srcs/ft_print_char.c`, no lo encuentra y usa su regla interna. Consecuencias: no ves tu mensaje `[ COMPILANDO ]` y, lo grave, **si cambias `ft_printf.h` no se recompila nada** (probado: 0 ficheros recompilados tras `touch includes/ft_printf.h`). Cambio: `$(SRCS)/%.o: $(SRCS)/%.c $(HEADER)`.
-2. **`ft_printf.c` no está en la lista de fuentes.** La librería saldría sin la función `ft_printf`.
-3. **El bonus se añade encima de la obligatoria.** Con el diseño de la sección 5, el fichero de banderas bonus **sustituye** al obligatorio: necesitas tres listas (comunes, solo obligatoria, solo bonus).
-4. **Falta `bonus` en `.PHONY`.**
-5. Detalle: `duble` → `decimal` en los nombres de fichero. Con el diseño de esta guía tendrás menos ficheros (ver etapa 0), pero si prefieres uno por conversión también vale.
+Ideas que sí conviene usar: `cp $(LIBFT) $(NAME)` seguido de `ar` (mete libft dentro de `libftprintf.a`), `$(MAKE) WITH_BONUS=1 all` para el bonus y compilar libft con su propio Makefile (`$(MAKE) -C libft`).
 
-Lo que ya está bien y se queda: el `cp $(LIBFT) $(NAME)` + `ar` (mete libft dentro de `libftprintf.a`), el `$(MAKE) WITH_BONUS=1 all` para el bonus, compilar libft con su propio Makefile y los colores.
-
-> [!faq]- Ver la parte del Makefile que cambia
+> [!faq]- Ver la parte del Makefile que gestiona obligatoria y bonus
 > ```makefile
 > # Ficheros que se compilan SIEMPRE
 > SRCS_COMMON    = ft_printf.c        ft_output.c \
@@ -233,20 +230,20 @@ Lo que ya está bien y se queda: el `cp $(LIBFT) $(NAME)` + `ar` (mete libft den
 >
 > OBJS        = $(addprefix $(SRCS)/, $(SRC_FILES:.c=.o))
 >
-> # ... all, bonus, $(NAME) y $(LIBFT) como los tienes ...
+> # ... all, bonus, $(NAME) y $(LIBFT) ...
 >
 > $(SRCS)/%.o: $(SRCS)/%.c $(HEADER)
-> 	@printf "$(CYAN)⚙  %-16s$(DEF_COLOR) %-20s $(CYAN)->$(DEF_COLOR) $(GREEN)%s$(DEF_COLOR)\n" "[ COMPILANDO ]" "$<" "$@"
+> 	@printf "[ COMPILANDO ] %s -> %s\n" "$<" "$@"
 > 	@$(CC) $(CFLAGS) -c $< -o $@
 >
 > clean:
 > 	@$(RM) $(SRCS)/*.o
-> 	@make clean -C $(LIBFT_DIR)
+> 	@$(MAKE) clean -C $(LIBFT_DIR)
 >
 > .PHONY: all bonus clean fclean re
 > ```
 > - `clean` borra `$(SRCS)/*.o` y no `$(OBJS)`: si acabas de hacer `make bonus`, `$(OBJS)` (calculado **sin** `WITH_BONUS`) no incluye `ft_flags_bonus.o` y se quedaría sin borrar.
-> - Comprobado sin relink: `make` dos veces → `Nothing to be done for 'all'`; `make bonus` dos veces → la segunda no ejecuta ni `cc` ni `ar`; después de `make bonus`, `ar t libftprintf.a` contiene `ft_flags_bonus.o` y **no** `ft_flags.o` (el `cp` de libft machaca la librería anterior antes del `ar`).
+> - Comprueba que no hay relink: `make` dos veces → `Nothing to be done for 'all'`; `make bonus` dos veces → la segunda no ejecuta ni `cc` ni `ar`; después de `make bonus`, `ar t libftprintf.a` contiene `ft_flags_bonus.o` y **no** `ft_flags.o` (el `cp` de libft machaca la librería anterior antes del `ar`).
 
 ## 7. Antes de programar: lo que tienes que dominar
 
@@ -1099,8 +1096,8 @@ Con este diseño cada una toca **una o dos líneas**. Practícalas (ejemplos, no
 
 ## Referencias
 
-- Subject de ft_printf v12.0 (`~/cursus/rank-1/es.subject_ft_printf.pdf`): prototipo, funciones permitidas, buffer, conversiones, `ar`, bonus en `_bonus.{c/h}`, aviso de «pensar el bonus desde el principio», README y modificación en la evaluación.
+- Subject de ft_printf v12.0: prototipo, funciones permitidas, buffer, conversiones, `ar`, bonus en `_bonus.{c/h}`, aviso de «pensar el bonus desde el principio», README y modificación en la evaluación.
 - [printf(3), man7.org](https://man7.org/linux/man-pages/man3/printf.3.html): banderas `#0- +`, ancho, precisión, `%.0d` con 0 y combinaciones indefinidas.
 - [cppreference: printf](https://en.cppreference.com/w/c/io/fprintf): las mismas reglas según el estándar de C.
 - [stdarg(3), man7.org](https://man7.org/linux/man-pages/man3/stdarg.3.html): `va_list` y `va_arg`.
-- Todo el código de esta nota se ha compilado con `cc -Wall -Wextra -Werror` (Ubuntu clang 12.0.1, Ubuntu 22.04) junto a tu libft, pasa norminette (salvo la cabecera de 42), y se ha comparado contra el `printf` de glibc con el tester de la sección 11 (9/9 obligatoria, 26/26 bonus) y Valgrind sin errores. Las salidas de `printf` de las tablas son reales. Las comprobaciones del Makefile se hicieron en una copia de `~/cursus/rank-1/ft_printf`.
+- Todo el código de esta nota se ha compilado con `cc -Wall -Wextra -Werror` (Ubuntu clang 12.0.1, Ubuntu 22.04) junto a una libft, pasa norminette (salvo la cabecera de 42), y se ha comparado contra el `printf` de glibc con el tester de la sección 11 (9/9 obligatoria, 26/26 bonus) y Valgrind sin errores. Las salidas de `printf` de las tablas son reales. Las comprobaciones de la sección 6 se hicieron con el Makefile de esa sección.

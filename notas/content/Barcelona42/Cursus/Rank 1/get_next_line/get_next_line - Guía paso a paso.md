@@ -713,7 +713,7 @@ Cada uno de estos, con la salida real de Valgrind, en [[get_next_line - Pruebas 
 
 ## Referencias
 
-- Subject de get_next_line v14.0 (`~/cursus/es.subject_get_next_line.pdf`): prototipo, funciones permitidas, `\n` final, `BUFFER_SIZE`, «leer lo menos posible», prohibiciones, README, bonus y modificación en la evaluación.
+- Subject de get_next_line v14.0: prototipo, funciones permitidas, `\n` final, `BUFFER_SIZE`, «leer lo menos posible», prohibiciones, README, bonus y modificación en la evaluación.
 - [read(2), man7.org](https://man7.org/linux/man-pages/man2/read.2.html): valores de retorno y lecturas parciales.
 - [malloc(3), man7.org](https://man7.org/linux/man-pages/man3/malloc.3.html): `malloc` y `free`.
 - [cppreference: Storage duration](https://en.cppreference.com/w/c/language/storage_duration): duración estática e inicialización a cero.

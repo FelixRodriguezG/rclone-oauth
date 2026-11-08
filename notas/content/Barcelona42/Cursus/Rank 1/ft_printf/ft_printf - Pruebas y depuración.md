@@ -409,7 +409,7 @@ Enlaces en [[ft_printf - Índice#Referencias]].
 
 ## Referencias
 
-- Subject de ft_printf v12.0 (`~/cursus/rank-1/es.subject_ft_printf.pdf`): comparación con `printf`, programas de prueba, Makefile sin relink.
+- Subject de ft_printf v12.0: comparación con `printf`, programas de prueba, Makefile sin relink.
 - [write(2), man7.org](https://man7.org/linux/man-pages/man2/write.2.html): errores `EBADF` y `ENOSPC`.
 - [setbuf(3), man7.org](https://man7.org/linux/man-pages/man3/setbuf.3.html): por qué `stdout` va con buffer de línea en una terminal y con buffer completo en un fichero o tubería.
 - [GNU make: Instead of Executing Recipes](https://www.gnu.org/software/make/manual/html_node/Instead-of-Execution.html): `make -n` y `make -q`.

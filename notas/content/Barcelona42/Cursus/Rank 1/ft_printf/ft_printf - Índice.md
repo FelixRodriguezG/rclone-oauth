@@ -9,7 +9,7 @@ aliases: ["ft_printf", "libftprintf"]
 > **ft_printf** consiste en reprogramar una versión reducida de [[printf]]: una función que recibe una cadena de formato y un número variable de argumentos, y escribe el resultado con `write`. Sirve para aprender [[stdarg y funciones variádicas|funciones variádicas]], conversiones de números a texto en distintas bases y a organizar un proyecto en varios ficheros.
 
 > [!warning] Comprueba el subject
-> Resumen basado en versiones públicas del subject; los detalles cambian entre versiones. Lo que manda es el PDF de tu intra. Los requisitos exactos de la v12.0 (`~/cursus/rank-1/es.subject_ft_printf.pdf`) están en [[ft_printf - Guía paso a paso#1. Qué te piden, en una frase|la guía]].
+> Resumen basado en versiones públicas del subject; los detalles cambian entre versiones. Lo que manda es el PDF de tu intra. Los requisitos exactos de la v12.0 están en [[ft_printf - Guía paso a paso#1. Qué te piden, en una frase|la guía]].
 
 > [!abstract] Notas de esta serie
 > 1. [[ft_printf - Guía paso a paso]]: construir ft_printf **con el bonus pensado desde el principio**, etapa a etapa.

@@ -169,4 +169,4 @@ MIT — ver [LICENSE](LICENSE).
 - [GitHub Docs: About READMEs](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes) — dónde se coloca y qué incluir.
 - [GitHub Flavored Markdown Spec](https://github.github.com/gfm/) — tablas, listas de tareas, tachado.
 - [shields.io](https://shields.io) — generador de badges.
-- Subject de libft (`~/cursus/es.subject_libft.pdf`), capítulo «Requisitos del Readme».
+- Subject de libft, capítulo «Requisitos del Readme».
