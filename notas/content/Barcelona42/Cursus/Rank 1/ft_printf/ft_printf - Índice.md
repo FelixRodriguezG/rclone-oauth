@@ -23,7 +23,7 @@ Lo comúnmente conocido del subject (no lo tienes delante en este vault):
 
 | Aspecto | Lo habitual |
 |---|---|
-| Prototipo | `int ft_printf(const char *, ...);` |
+| Prototipo | `int ft_printf(char const *, ...);` |
 | Entrega | Una librería estática `libftprintf.a` creada con `ar` (no `libtool`) |
 | Funciones externas | `malloc`, `free`, `write`, `va_start`, `va_arg`, `va_copy`, `va_end` |
 | libft | Se puede usar: se copia la carpeta `libft` con su Makefile dentro del repo |
@@ -66,142 +66,102 @@ Ejemplos de lo que hacen en [[printf#Ancho, precisión y banderas]].
 | Funciones variádicas | Leer los argumentos de `...` | [[stdarg y funciones variádicas]] |
 | `printf` original | Saber qué salida debes imitar | [[printf]] |
 | Tipos enteros | `int` vs `unsigned int` vs `unsigned long`, desbordamiento de `INT_MIN` | [[Tipos enteros y conversiones]] |
-| Recursión | Imprimir un número en cualquier base | [[Recursión]] |
+| Bases numéricas | Pasar un número a texto en base 10 o 16 (`ft_utoa_base`) | [[Bases numéricas]] |
 | Punteros | Qué es una dirección y cómo convertirla a número | [[Punteros en C]] |
 | `write` y descriptores | Escribir en la salida estándar (fd 1) | [[Descriptores de fichero y read]] |
 | Librería estática | Generar `libftprintf.a` e incluir libft | [[Makefile y librerías estáticas]] |
 | Headers | Un `ft_printf.h` limpio con prototipos | [[Preprocesador y headers]] |
-| Errores | Propagar el `-1` de `write` | [[Control de errores en C]] |
+| Errores | Que un fallo de `write` acabe en `-1` (`t_out.error`) | [[Control de errores en C]] |
 
-Funciones de libft que reutilizarás: [[ft_putchar_fd]], [[ft_putstr_fd]], [[ft_strlen]] y la idea de [[ft_putnbr_fd]] (pero ojo: esas no devuelven cuántos caracteres han escrito, y tú lo necesitas).
+Funciones de libft que reutilizarás: [[ft_strlen]], [[ft_strchr]] y [[ft_isdigit]]. [[ft_putchar_fd]], [[ft_putstr_fd]] y [[ft_putnbr_fd]] no sirven tal cual: no dicen si `write` ha fallado ni cuántos caracteres han escrito (ver [[ft_printf - Funciones auxiliares]]).
 
 ## Cómo organizar el código
 
-> [!note] Esta sección es el diseño solo para la obligatoria
-> Aquí cada conversión escribe directamente y devuelve cuántos caracteres ha escrito. Es lo más sencillo si **no** vas a hacer el bonus. Si vas a hacerlo, sigue el diseño de [[ft_printf - Guía paso a paso]]: las conversiones preparan las piezas y una sola función (`ft_out_field`) las escribe con ancho, `-` y `0`.
+> [!note] Un solo diseño en toda la serie
+> Esta nota usa los **mismos nombres y prototipos** que [[ft_printf - Guía paso a paso|la guía]], [[ft_printf - Funciones auxiliares]] y [[ft_printf - Pruebas y depuración]]. Es un diseño pensado para el bonus desde el principio, pero la parte obligatoria funciona sola. El código completo, etapa a etapa, está en la guía.
 
-Idea general: recorres `format` carácter a carácter. Si no es `%`, lo escribes. Si es `%`, miras la letra siguiente y llamas a la función que toca. **Cada función devuelve cuántos caracteres ha escrito** (o `-1` si falló `write`), y el bucle principal los va sumando.
+La idea general: recorres `format` carácter a carácter. Si no es `%`, lo escribes. Si es `%`, `ft_set_flags` lee lo que viene detrás (en la obligatoria, solo la letra) y `ft_convert` llama a la función de esa conversión. Ninguna función devuelve cuántos caracteres ha escrito: todas **apuntan en un `t_out`** lo que escriben (`len`) y si `write` ha fallado (`error`). Al final, `ft_printf` devuelve `-1` si hubo error y `len` si no.
 
 ```text
 ft_printf("Hola %s, tienes %d años\n", "Ana", 20)
 
 format:  H o l a ␣ % s , ␣ t i e n e s ␣ % d ␣ a ñ o s \n
-         └─ write ─┘ │                     │
-                     └→ print_str("Ana")    └→ print_nbr(20)
-cuenta:  5         + 3 + 9               + 2 + ...
+         └ out_char┘ │                     │
+                     └→ ft_print_str        └→ ft_print_int
+                        → ft_out_field          → ft_print_number → ft_out_field
+out.len: 5         + 3 + 9               + 2 + ...
 ```
 
-Una estructura de ficheros típica:
+La estructura de ficheros:
 
 ```text
 ft_printf/
 ├── Makefile
-├── ft_printf.h
-├── ft_printf.c          ← ft_printf() y el reparto por conversión
-├── ft_print_chars.c     ← %c, %s, %%
-├── ft_print_nums.c      ← %d, %i, %u, %x, %X
-├── ft_print_ptr.c       ← %p
-└── libft/               ← si usas tu libft
+├── README.md
+├── includes/
+│   └── ft_printf.h          ← las tres struct y todos los prototipos
+├── libft/                   ← tu libft con su Makefile
+└── srcs/
+    ├── ft_printf.c          ← ft_printf, ft_init_flags y ft_convert (el reparto por letra)
+    ├── ft_output.c          ← lo ÚNICO que llama a write: ft_out_char, ft_out_nstr, ft_out_field
+    ├── ft_print_chars.c     ← %c, %s, %p
+    ├── ft_print_nums.c      ← %d %i %u %x %X, ft_utoa_base y ft_base
+    ├── ft_flags.c           ← ft_set_flags OBLIGATORIA (solo lee la letra)
+    └── ft_flags_bonus.c     ← ft_set_flags BONUS (banderas, ancho, precisión)
 ```
 
-### Bucle principal y reparto
+### Los prototipos
 
-Ejemplo orientativo que cumple la [[La Norma|Norma]] (máx. 25 líneas, declaraciones arriba, sin `for`):
+Lo que hay en `ft_printf.h` (las `struct` explicadas en [[ft_printf - Guía paso a paso#4. Tres estructuras|la guía]]):
 
 ```c
-static int	ft_convert(char c, va_list *args)
-{
-	if (c == 'c')
-		return (ft_print_char(va_arg(*args, int)));
-	if (c == 's')
-		return (ft_print_str(va_arg(*args, char *)));
-	if (c == 'p')
-		return (ft_print_ptr(va_arg(*args, void *)));
-	if (c == 'd' || c == 'i')
-		return (ft_print_nbr(va_arg(*args, int)));
-	if (c == 'u')
-		return (ft_print_base(va_arg(*args, unsigned int), "0123456789"));
-	if (c == 'x')
-		return (ft_print_base(va_arg(*args, unsigned int), HEX_LOW));
-	if (c == 'X')
-		return (ft_print_base(va_arg(*args, unsigned int), HEX_UP));
-	if (c == '%')
-		return (ft_print_char('%'));
-	return (0);
-}
-
-int	ft_printf(const char *format, ...)
-{
-	va_list	args;
-	int		count;
-	int		ret;
-
-	if (!format)
-		return (-1);
-	va_start(args, format);
-	count = 0;
-	while (*format)
-	{
-		if (*format == '%' && *(format + 1))
-			ret = ft_convert(*(++format), &args);
-		else
-			ret = ft_print_char(*format);
-		if (ret == -1)
-		{
-			va_end(args);
-			return (-1);
-		}
-		count += ret;
-		format++;
-	}
-	va_end(args);
-	return (count);
-}
+int		ft_printf(char const *format, ...);
+t_flags	ft_init_flags(void);
+t_flags	ft_set_flags(const char *s, int *i);
+void	ft_out_char(t_out *o, char c);
+void	ft_out_nstr(t_out *o, const char *s, int n);
+void	ft_out_field(t_out *o, t_flags *f, t_field *fl);
+void	ft_print_char(t_out *o, t_flags *f, int c);
+void	ft_print_str(t_out *o, t_flags *f, const char *s);
+void	ft_print_ptr(t_out *o, t_flags *f, void *p);
+void	ft_print_int(t_out *o, t_flags *f, int n);
+void	ft_print_unsigned(t_out *o, t_flags *f, unsigned int n);
+void	ft_print_number(t_out *o, t_flags *f, unsigned long n,
+			const char *prefix);
 ```
 
-`HEX_LOW` y `HEX_UP` serían macros del header (`"0123456789abcdef"` y `"0123456789ABCDEF"`). La `va_list` se pasa **por puntero** a `ft_convert` por el motivo explicado en [[stdarg y funciones variádicas#Aplicación en ft_printf]].
+Y las `static`, que no van en el header:
 
-### Imprimir en cualquier base
+| Función | Fichero | Para qué |
+|---|---|---|
+| `static void ft_convert(t_out *o, t_flags *f, va_list *args)` | `ft_printf.c` | Llama a la `ft_print_*` de la letra |
+| `static void ft_out_repeat(t_out *o, char c, int n)` | `ft_output.c` | Relleno: `n` veces el mismo carácter |
+| `static int ft_utoa_base(unsigned long n, const char *base, char *buf)` | `ft_print_nums.c` | Número a texto en cualquier base, sin `malloc` |
+| `static const char *ft_base(char spec)` | `ft_print_nums.c` | La base según la letra (`x`/`p` → hex minúscula, `X` → mayúscula, resto → decimal) |
+| `static int ft_read_number(const char *s, int *i)` | `ft_flags_bonus.c` | Lee el ancho o la precisión |
+| `static void ft_set_one_flag(t_flags *f, char c)` | `ft_flags_bonus.c` | Activa una bandera de `-0# +` |
 
-Una sola función recursiva sirve para `%u`, `%x`, `%X` y `%p`. Primero imprime «todo menos la última cifra» y luego la última:
+Cada una explicada en [[ft_printf - Funciones auxiliares]].
 
-```c
-int	ft_print_base(unsigned long n, char *base)
-{
-	unsigned long	len;
-	int				count;
-	int				ret;
+### El reparto por conversión
 
-	len = ft_strlen(base);
-	count = 0;
-	if (n >= len)
-	{
-		count = ft_print_base(n / len, base);
-		if (count == -1)
-			return (-1);
-	}
-	ret = ft_print_char(base[n % len]);
-	if (ret == -1)
-		return (-1);
-	return (count + ret);
-}
-```
+| Conversión | Lees con `va_arg` | Función |
+|---|---|---|
+| `%c` | `int` | `ft_print_char` |
+| `%s` | `char *` | `ft_print_str` |
+| `%p` | `void *` | `ft_print_ptr` → `ft_print_number(o, f, (unsigned long)p, "0x")` |
+| `%d` `%i` | `int` | `ft_print_int` → `ft_print_number` con prefijo `"-"`, `"+"`, `" "` o `""` |
+| `%u` `%x` `%X` | `unsigned int` | `ft_print_unsigned` → `ft_print_number` (la base la elige `ft_base`) |
+| `%%` | Nada | `ft_out_char(o, '%')` |
 
-```text
-ft_print_base(42, hex)
- └ 42 >= 16 → ft_print_base(2, hex)   escribe "2"  (devuelve 1)
- └ escribe base[42 % 16] = base[10] = "a"           (1 + 1 = 2)
-salida: 2a
-```
-
-Recibe `unsigned long` para que también valga para punteros (64 bits en Linux x86_64). Pasar un `unsigned int` a un parámetro `unsigned long` es seguro: el valor se conserva.
+La `va_list` se pasa **por puntero** a `ft_convert` por el motivo explicado en [[stdarg y funciones variádicas#Aplicación en ft_printf]]. `ft_print_number` recibe `unsigned long` para que valga también para punteros (64 bits en Linux x86_64); pasar un `unsigned int` a un parámetro `unsigned long` es seguro: el valor se conserva.
 
 ## Casos límite
 
 > [!danger] Los que más suspenden
 > | Caso | Qué hace la `printf` de glibc (Linux) | Cómo resolverlo |
 > |---|---|---|
-> | `%s` con `NULL` | Escribe `(null)` | `if (!s) return (ft_print_str("(null)"));` |
+> | `%s` con `NULL` | Escribe `(null)` | En `ft_print_str`: `if (!s) s = "(null)";` |
 > | `%p` con `NULL` | Escribe `(nil)` (macOS: `0x0`) | Caso especial antes de convertir |
 > | `%d` con `INT_MIN` | `-2147483648` | No hagas `n = -n` sobre un `int`: pásalo a `long` antes |
 > | `%u` con `-1` | `4294967295` | Leerlo como `unsigned int`, nunca como `int` |
@@ -221,7 +181,7 @@ Más detalle en [[Tipos enteros y conversiones]].
 
 ### El `-1` de `write`
 
-`write` devuelve `-1` si no puede escribir (por ejemplo, si la salida estándar está cerrada). La `printf` original devuelve entonces un valor negativo. Muchas correcciones prueban esto, así que **comprueba el retorno de cada `write`** y propaga el `-1` hasta arriba (como en el código de ejemplo).
+`write` devuelve `-1` si no puede escribir (por ejemplo, si la salida estándar está cerrada). La `printf` original devuelve entonces un valor negativo. Muchas correcciones prueban esto, así que **comprueba el retorno de cada `write`**. En este diseño solo lo hacen `ft_out_char` y `ft_out_nstr`: anotan `o->error = 1` y, al final, `ft_printf` devuelve `-1` (explicado en [[ft_printf - Funciones auxiliares#`ft_out_char` y `ft_out_nstr`: escribir y contar|Funciones auxiliares]]).
 
 ```bash
 ./test_printf >&-        # ejecuta con stdout cerrado: write falla con EBADF
@@ -275,13 +235,13 @@ Herramientas útiles:
 1. Lee el subject de tu intra y anota las conversiones y funciones permitidas.
 2. Repasa [[stdarg y funciones variádicas]] y escribe el ejemplo de sumar N enteros.
 3. Crea el `Makefile` que genera `libftprintf.a` (y compila libft si la usas). Ver [[Makefile y librerías estáticas]].
-4. Escribe `ft_printf` con solo `%c`, `%s` y `%%`. Prueba el valor de retorno.
-5. Añade `ft_print_base` y con ella `%u`, `%x`, `%X`.
-6. Añade `%d`/`%i` con el caso `INT_MIN`.
+4. Escribe la salida (`ft_out_char`, `ft_out_nstr`) y `ft_out_field`.
+5. Escribe `ft_printf`, `ft_set_flags` obligatoria y `ft_convert` con `%c`, `%s` y `%%`. Prueba el valor de retorno.
+6. Añade `ft_utoa_base`, `ft_base` y `ft_print_number`, y con ellas `%d`/`%i` (caso `INT_MIN`), `%u`, `%x`, `%X`.
 7. Añade `%p` con el caso `NULL`.
-8. Comprueba el `-1` de `write` en todas las funciones.
+8. Comprueba que un fallo de `write` acaba en `-1` (`./test_printf >&-`).
 9. Pasa norminette, valgrind y los testers.
-10. Bonus (opcional): diseña una `struct` con las banderas leídas antes de convertir. Ver [[Structs y typedef]]. Si vas a por el bonus, este plan cambia: sigue las etapas de [[ft_printf - Guía paso a paso#8. Construirlo por etapas|la guía]] desde el paso 3.
+10. Bonus (opcional): escribe `ft_flags_bonus.c` con la `ft_set_flags` que lee banderas, ancho y precisión. El resto no cambia. Detalle en [[ft_printf - Guía paso a paso#Etapa 7: el bonus (`ft_flags_bonus.c`)|la guía]].
 
 ## Errores frecuentes que suspenden
 
@@ -314,7 +274,7 @@ Herramientas útiles:
 > En `printf`, ninguna. Solo se comportan distinto en `scanf` (`%i` acepta octal y hexadecimal).
 
 > [!question] Cambia algo en directo
-> Es habitual que el evaluador pida, por ejemplo, añadir una conversión `%b` (binario). Con `ft_print_base` basta una línea: `ft_print_base(va_arg(*args, unsigned int), "01")`.
+> Es habitual que el evaluador pida, por ejemplo, añadir una conversión `%b` (binario). Basta con dos líneas: `if (spec == 'b') return ("01");` en `ft_base`, y añadir `'b'` junto a `u x X` en el `if` de `ft_convert`. Más ejemplos en [[ft_printf - Guía paso a paso#Modificaciones en directo|la guía]].
 
 ## Relacionadas
 
