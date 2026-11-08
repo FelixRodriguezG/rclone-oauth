@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-08T13:09:51+01:00",
+ "updated": "2026-11-08T19:19:13+01:00",
  "files": [
   {
    "path": "Barcelona42/2026-10-29.md",
@@ -456,6 +456,10 @@
   {
    "path": "Barcelona42/Cursus/Rank 1/ft_printf/ft_printf - Pruebas y depuración.md",
    "name": "ft_printf - Pruebas y depuración"
+  },
+  {
+   "path": "Barcelona42/Cursus/Rank 1/ft_printf/ft_printf - Ruta de trabajo.md",
+   "name": "ft_printf - Ruta de trabajo"
   },
   {
    "path": "Barcelona42/Cursus/Rank 1/ft_printf/ft_printf - Índice.md",

@@ -15,7 +15,8 @@ aliases: ["ft_printf", "libftprintf"]
 > 1. [[ft_printf - Guía paso a paso]]: construir ft_printf **con el bonus pensado desde el principio**, etapa a etapa.
 > 2. [[ft_printf - Funciones auxiliares]]: `ft_out_field`, `ft_utoa_base` y el resto de piezas explicadas una a una.
 > 3. [[ft_printf - Pruebas y depuración]]: tester contra `printf`, revisión del Makefile, gdb y cómo se ve cada error típico.
-> 4. **Esta nota**: el resumen del proyecto, para repasar.
+> 4. [[ft_printf - Ruta de trabajo]]: el orden de trabajo, función a función, con un `main` de prueba y la salida esperada en cada paso.
+> 5. **Esta nota**: el resumen del proyecto, para repasar.
 
 ## Qué se pide
 
@@ -274,11 +275,11 @@ Herramientas útiles:
 > En `printf`, ninguna. Solo se comportan distinto en `scanf` (`%i` acepta octal y hexadecimal).
 
 > [!question] Cambia algo en directo
-> Es habitual que el evaluador pida, por ejemplo, añadir una conversión `%b` (binario). Basta con dos líneas: `if (spec == 'b') return ("01");` en `ft_base`, y añadir `'b'` junto a `u x X` en el `if` de `ft_convert`. Más ejemplos en [[ft_printf - Guía paso a paso#Modificaciones en directo|la guía]].
+> Es habitual que el evaluador pida, por ejemplo, añadir una conversión `%b` (binario). Basta con dos líneas: `if (spec == 'b') return ("01");` en `ft_base`, y añadir `'b'` junto a `u x X` en el `if` de `ft_convert`. El buffer `digits[MAX_DIGITS]` (64) ya tiene sitio para las 32 cifras binarias de un `unsigned int`. Más ejemplos en [[ft_printf - Guía paso a paso#Modificaciones en directo|la guía]].
 
 ## Relacionadas
 
-[[ft_printf - Guía paso a paso]] · [[ft_printf - Funciones auxiliares]] · [[ft_printf - Pruebas y depuración]] · [[printf]] · [[stdarg y funciones variádicas]] · [[Tipos enteros y conversiones]] · [[Recursión]] · [[Makefile y librerías estáticas]] · [[Valgrind y sanitizers]] · [[libft - Índice]] · [[get_next_line - Índice]] · [[Born2beroot - Índice]] · [[Bases numéricas]] · [[Buffer de stdout]] · [[Comportamiento indefinido]]
+[[ft_printf - Guía paso a paso]] · [[ft_printf - Ruta de trabajo]] · [[ft_printf - Funciones auxiliares]] · [[ft_printf - Pruebas y depuración]] · [[printf]] · [[stdarg y funciones variádicas]] · [[Tipos enteros y conversiones]] · [[Recursión]] · [[Makefile y librerías estáticas]] · [[Valgrind y sanitizers]] · [[libft - Índice]] · [[get_next_line - Índice]] · [[Born2beroot - Índice]] · [[Bases numéricas]] · [[Buffer de stdout]] · [[Comportamiento indefinido]]
 
 ## Referencias
 

@@ -19,6 +19,7 @@ aliases: ["Guía ft_printf", "ft_printf paso a paso", "ft_printf con bonus"]
 > - [[printf]]: cómo se comporta la `printf` original.
 > - [[stdarg y funciones variádicas]]: `va_list`, `va_start`, `va_arg`, `va_end` y la promoción de tipos.
 > - [[Structs y typedef]]: las tres `struct` de esta guía.
+> - [[ft_printf - Ruta de trabajo]]: **el orden de trabajo**, una función por paso, con su `main` de prueba y la salida exacta que debe dar.
 > - [[ft_printf - Funciones auxiliares]]: `ft_out_field`, `ft_utoa_base` y el resto de piezas, una a una.
 > - [[ft_printf - Pruebas y depuración]]: tester contra `printf`, Makefile, gdb y errores típicos.
 > - [[get_next_line - Guía paso a paso]]: la guía hermana, con el mismo formato.
@@ -247,7 +248,7 @@ typedef struct s_field
 > «No hay precisión» y «precisión 0» son cosas distintas: `printf("[%d]", 0)` da `[0]`, pero `printf("[%.0d]", 0)` da `[]` (¡no imprime nada!). Y `%.0s` imprime una cadena vacía. Si inicializas la precisión a `0` no puedes distinguir los dos casos. Es la decisión de diseño que más fallos evita.
 
 > [!note] ¿Por qué `body` es `const char *` y no una cadena con `malloc`?
-> Los dígitos de un número caben siempre en 20 caracteres (un `unsigned long` de 64 bits tiene como mucho 20 cifras decimales y 16 hexadecimales). Así que se escriben en un `char digits[20]` en la pila y no hace falta `malloc`: **no hay memoria que liberar y es imposible tener leaks**. Para `%s`, `body` apunta directamente a la cadena del usuario. Y como llevas `body_len`, no necesitas el `'\0'`.
+> Los dígitos de un número caben siempre en 64 caracteres: un `unsigned long` de 64 bits tiene como mucho 20 cifras decimales, 16 hexadecimales y 64 binarias (el peor caso de cualquier base). Así que se escriben en un `char digits[MAX_DIGITS]` en la pila, con `MAX_DIGITS` definido a `64` en el header, y no hace falta `malloc`: **no hay memoria que liberar y es imposible tener leaks**. Para `%s`, `body` apunta directamente a la cadena del usuario. Y como llevas `body_len`, no necesitas el `'\0'`.
 
 ## 5. Obligatoria y bonus sin duplicar código
 
@@ -353,7 +354,7 @@ Ideas que sí conviene usar: `cp $(LIBFT) $(NAME)` seguido de `ar` (mete libft d
 
 ## 8. Construirlo por etapas
 
-Igual que en get_next_line: **pieza a pieza y probando cada una**. Las etapas 1 a 6 son la obligatoria; la 7 es el bonus. **Al final de cada etapa, el proyecto compila y se puede probar.**
+Igual que en get_next_line: **pieza a pieza y probando cada una**. Si quieres ir función a función con un `main` de prueba en cada paso, sigue [[ft_printf - Ruta de trabajo]] a la vez que esta sección. Las etapas 1 a 6 son la obligatoria; la 7 es el bonus. **Al final de cada etapa, el proyecto compila y se puede probar.**
 
 ### El mapa: todas las funciones del proyecto
 
@@ -390,7 +391,7 @@ Solo ft_out_char y ft_out_nstr llaman a write.
 | `ft_printf` | `ft_printf.c` | Recorre el formato | 3 |
 | `ft_print_char` | `ft_print_chars.c` | Prepara el campo de `%c` | 4 |
 | `ft_print_str` | `ft_print_chars.c` | Prepara el campo de `%s` | 4 |
-| `ft_utoa_base` (`static`) | `ft_print_nums.c` | Número → cifras en un `char[20]` | 5 |
+| `ft_utoa_base` (`static`) | `ft_print_nums.c` | Número → cifras en un `char[MAX_DIGITS]` | 5 |
 | `ft_base` (`static`) | `ft_print_nums.c` | La base según la letra | 5 |
 | `ft_print_number` | `ft_print_nums.c` | Prepara el campo de **cualquier** número sin signo con el prefijo que le den | 5 |
 | `ft_print_int` | `ft_print_nums.c` | `%d` `%i`: elige el prefijo (`-`, `+`, espacio) | 5 |
@@ -430,6 +431,8 @@ ft_printf/
 > # include <stdarg.h>
 > # include <unistd.h>
 > # include "libft.h"
+>
+> # define MAX_DIGITS 64
 >
 > typedef struct s_out
 > {
@@ -474,6 +477,7 @@ ft_printf/
 > #endif
 > ```
 > - `"libft.h"` aporta `ft_strlen`, `ft_strchr` y `ft_isdigit`. Tu Makefile ya pasa `-I$(LIBFT_DIR)`.
+> - `MAX_DIGITS`: el tamaño del buffer de cifras de `ft_print_number`. 64 es el máximo de cifras de un `unsigned long` de 64 bits en **cualquier** base (base 2 es el peor caso). Explicado en la etapa 5.
 > - `ft_print_number` ocupa dos líneas: la Norma no deja pasar de 80 columnas. La segunda línea se indenta con tabuladores.
 > - Falta la cabecera de 42 (`:+:`); ponla con tu editor.
 
@@ -879,7 +883,7 @@ ft_print_number(o, f, n, prefix):
 > void	ft_print_number(t_out *o, t_flags *f, unsigned long n,
 > 			const char *prefix)
 > {
-> 	char	digits[20];
+> 	char	digits[MAX_DIGITS];
 > 	t_field	fl;
 >
 > 	fl.prefix = prefix;
@@ -918,7 +922,7 @@ ft_print_number(o, f, n, prefix):
 > }
 > ```
 > - `ft_base` devuelve la base según la letra: así `ft_print_number` cabe en 4 parámetros.
-> - `char digits[20]`: 20 cifras es el máximo de un `unsigned long` de 64 bits en base 10.
+> - `char digits[MAX_DIGITS]` (64): en base 10 bastarían 20 cifras (`18446744073709551615`) y en base 16, 16. Pero si en la evaluación te piden `%b`, `4294967295` en binario son **32** cifras: con `digits[20]` se escribiría fuera del array (AddressSanitizer: *stack-buffer-overflow*). Con 64 vale cualquier base sin tocar nada, y el número tiene nombre.
 > - `%u` recibe `unsigned int`, que se convierte solo a `unsigned long` al llamar.
 > - `ft_print_number` no la llama `ft_convert`: la llaman `ft_print_int`, `ft_print_unsigned` y (en la etapa 6) `ft_print_ptr`.
 
@@ -1254,7 +1258,7 @@ Requisitos del subject v12.0: primera línea en cursiva (*Este proyecto ha sido 
 > Las dos versiones definen `ft_set_flags` con el mismo prototipo. La obligatoria se salta las banderas, el ancho y la precisión sin guardarlos (así cada conversión lee su argumento y nunca se desplazan) y lee la letra; la bonus los guarda en `t_flags`. El Makefile compila una u otra. El resto del código es común y trata «sin banderas» como un caso más.
 
 > [!question]- ¿Por qué no usas `malloc`?
-> Los dígitos caben en un `char[20]` en la pila y para `%s` apunto a la cadena original. Sin `malloc` no hay leaks posibles ni fallos de memoria que gestionar.
+> Los dígitos caben en un `char[MAX_DIGITS]` (64) en la pila y para `%s` apunto a la cadena original. Sin `malloc` no hay leaks posibles ni fallos de memoria que gestionar.
 
 > [!question]- ¿Qué pasa si `write` falla?
 > `ft_out_char`/`ft_out_nstr` marcan `error = 1` y dejan de escribir. El bucle de `ft_printf` termina, se hace `va_end` y se devuelve `-1`.
@@ -1269,7 +1273,7 @@ Requisitos del subject v12.0: primera línea en cursiva (*Este proyecto ha sido 
 
 Con este diseño cada una toca **una o dos líneas**. Practícalas (ejemplos, no la lista oficial):
 
-- [ ] Añadir `%b` (binario): una letra en `ft_base` (`"01"`) y otra en el `if` de `ft_convert` junto a `u x X`.
+- [ ] Añadir `%b` (binario): una letra en `ft_base` (`"01"`) y otra en el `if` de `ft_convert` junto a `u x X`. Funciona sin más gracias a `MAX_DIGITS` (64): con un `digits[20]`, `%b` de `4294967295` (32 cifras) se saldría del array.
 - [ ] Añadir `%o` (octal) y que `#` ponga el prefijo `"0"`.
 - [ ] Que `%s` con `NULL` imprima `(nada)` en vez de `(null)`.
 - [ ] Que `%p` con `NULL` imprima `0x0` como en macOS.
@@ -1306,7 +1310,7 @@ Con este diseño cada una toca **una o dos líneas**. Practícalas (ejemplos, no
 
 ## Relacionadas
 
-[[ft_printf - Índice]] · [[ft_printf - Funciones auxiliares]] · [[ft_printf - Pruebas y depuración]] · [[printf]] · [[stdarg y funciones variádicas]] · [[Structs y typedef]] · [[Tipos enteros y conversiones]] · [[Makefile y librerías estáticas]] · [[Control de errores en C]] · [[Valgrind y sanitizers]] · [[README de un proyecto]] · [[La Norma]] · [[get_next_line - Guía paso a paso]] · [[Bases numéricas]] · [[Comportamiento indefinido]] · [[Buffer de stdout]]
+[[ft_printf - Índice]] · [[ft_printf - Ruta de trabajo]] · [[ft_printf - Funciones auxiliares]] · [[ft_printf - Pruebas y depuración]] · [[printf]] · [[stdarg y funciones variádicas]] · [[Structs y typedef]] · [[Tipos enteros y conversiones]] · [[Makefile y librerías estáticas]] · [[Control de errores en C]] · [[Valgrind y sanitizers]] · [[README de un proyecto]] · [[La Norma]] · [[get_next_line - Guía paso a paso]] · [[Bases numéricas]] · [[Comportamiento indefinido]] · [[Buffer de stdout]]
 
 ## Referencias
 

@@ -278,13 +278,21 @@ buf = [ B | E | E ]   → "BEE"   (printf("%X", 3054) da BEE)
 |---|---|---|
 | `unsigned long` | `int` | `%p` necesita 64 bits; `%u` y `%x` necesitan el rango de `unsigned int`. Un solo tipo sirve para todos |
 | Sin signo | Gestionar el `-` dentro | El signo es el **prefijo** del campo, no parte del cuerpo; si estuviera dentro, los ceros de `%05d` irían delante del `-` |
-| Buffer del que llama (`char digits[20]`) | `malloc` | Sin `malloc` no hay leaks ni fallo de memoria que gestionar |
+| Buffer del que llama (`char digits[MAX_DIGITS]`) | `malloc` | Sin `malloc` no hay leaks ni fallo de memoria que gestionar |
 | La base como cadena | Un número `16` | La cadena da a la vez la base (`strlen`) y los caracteres; `%X` es solo otra cadena |
 | Iterativa | Recursiva ([[Recursión]]) | La recursiva escribe al volver de cada llamada: no sirve para **preparar** el cuerpo antes de escribir |
 | No pone `'\0'` | Ponerlo | No hace falta: se devuelve la longitud y `ft_out_nstr` escribe exactamente esos bytes |
 
 > [!danger] El tamaño del buffer
-> 20 es el máximo para un `unsigned long` de 64 bits **en base 10** (`18446744073709551615`). En base 16 son 16. Si añades `%b` (binario) en la evaluación, un `unsigned int` necesita **32** cifras: tendrás que agrandar `digits`. Es una pregunta trampa buena.
+> `ft_utoa_base` no sabe cuánto mide `buf`: confía en que quepan todas las cifras. Por eso `digits` mide `MAX_DIGITS` (`# define MAX_DIGITS 64` en `ft_printf.h`):
+>
+> | Base | Cifras máximas de un `unsigned long` de 64 bits |
+> |---|---|
+> | 10 | 20 (`18446744073709551615`) |
+> | 16 | 16 (`ffffffffffffffff`) |
+> | 2 | **64** ← el peor caso |
+>
+> Con un `digits[20]` la obligatoria funciona, pero si en la evaluación te piden `%b`, `4294967295` en binario son 32 cifras y se escriben **fuera del array** (AddressSanitizer: *stack-buffer-overflow*). Con 64 vale cualquier base. Es una pregunta trampa buena.
 
 ## `ft_base`: la base según la letra
 
