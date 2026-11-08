@@ -237,7 +237,7 @@ if (!line)
 
 ## Relacionadas
 
-[[Segmentos de memoria en C]] · [[Control de errores en C]] · [[Punteros en C]] · [[Valgrind y sanitizers]] · [[Variables static y ámbito]] · [[ft_strdup]] · [[ft_strjoin]] · [[ft_calloc]] · [[get_next_line - Funciones auxiliares]] · [[get_next_line - Guía paso a paso]]
+[[Segmentos de memoria en C]] · [[Control de errores en C]] · [[Punteros en C]] · [[Valgrind y sanitizers]] · [[Variables static y ámbito]] · [[ft_strdup]] · [[ft_strjoin]] · [[ft_calloc]] · [[get_next_line - Funciones auxiliares]] · [[get_next_line - Guía paso a paso]] · [[Puntero a puntero]]
 
 ## Referencias
 

@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-08T12:56:08+01:00",
+ "updated": "2026-11-08T13:09:51+01:00",
  "files": [
   {
    "path": "Barcelona42/2026-10-29.md",
@@ -136,6 +136,10 @@
   {
    "path": "Barcelona42/C/printf.md",
    "name": "printf"
+  },
+  {
+   "path": "Barcelona42/C/Puntero a puntero.md",
+   "name": "Puntero a puntero"
   },
   {
    "path": "Barcelona42/C/Punteros en C.md",

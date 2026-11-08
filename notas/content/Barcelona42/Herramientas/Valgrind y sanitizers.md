@@ -136,7 +136,7 @@ Se lee **de abajo arriba**: la línea `by ... main (leak.c:17)` es **dónde se r
 |---|---|---|
 | **definitely lost** | Ya no queda ningún puntero al bloque. Leak seguro | `s` (línea 17) y el nodo (línea 20) |
 | **indirectly lost** | Solo se puede llegar a él desde otro bloque que está perdido. Arregla el «definitely» y desaparece | `n->str` (línea 21) |
-| **possibly lost** | Solo queda un puntero al **interior** del bloque (p. ej. hiciste `s++`) | — |
+| **possibly lost** | Solo queda un puntero al **interior** del bloque (p. ej. hiciste `s++`) | — (ejemplo en [[#Possibly lost: un puntero al interior del bloque]]) |
 | **still reachable** | Al salir aún había un puntero (global o `static`) al bloque, pero nadie hizo `free` | `g_keep` (línea 24) |
 
 > [!warning] «Still reachable» también cuenta
@@ -231,6 +231,209 @@ Doble `free`, o `free` de algo que no salió de `malloc` (un array local, un lit
 > [!tip] Arregla el primer error primero
 > Un error suele provocar otros en cascada. Corrige el primero que aparezca, recompila y vuelve a pasar Valgrind.
 
+## Leer una pila de varias funciones
+
+En un proyecto real los errores no salen en `main`, sino varias llamadas más abajo. Valgrind enseña la **pila de llamadas** completa. Programa (`pila.c`) con el clásico olvido del `+ 1` dentro de un helper:
+
+```c
+static char	*ft_join(const char *a, const char *b)
+{
+	char	*r;
+
+	r = malloc(strlen(a) + strlen(b));      /* línea 8: falta + 1 para el '\0' */
+	strcpy(r, a);
+	strcat(r, b);                           /* línea 10 */
+	return (r);
+}
+
+static char	*leer_linea(void)
+{
+	return (ft_join("hola ", "mundo"));     /* línea 16 */
+}
+
+int	main(void)
+{
+	/* ... */
+	linea = leer_linea();                   /* línea 23 */
+```
+
+```text
+==3286074== Invalid write of size 1
+==3286074==    at 0x484EA5E: strcat (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3286074==    by 0x40120F: ft_join (pila.c:10)
+==3286074==    by 0x4011BC: leer_linea (pila.c:16)
+==3286074==    by 0x401183: main (pila.c:23)
+==3286074==  Address 0x4a9e04a is 0 bytes after a block of size 10 alloc'd
+==3286074==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==3286074==    by 0x4011F1: ft_join (pila.c:8)
+==3286074==    by 0x4011BC: leer_linea (pila.c:16)
+==3286074==    by 0x401183: main (pila.c:23)
+```
+
+Cómo leerla:
+
+| Parte | Qué dice |
+|---|---|
+| `at` (la primera línea) | La función donde **ocurrió** el acceso. Aquí es `strcat`, que **no es tuya** (viene de una librería: no tiene `fichero.c:línea` tuyo) |
+| `by` (las siguientes) | Quién llamó a quién, **de dentro hacia fuera**: `ft_join` → la llamó `leer_linea` → la llamó `main` |
+| La **primera línea con un fichero tuyo** | Es la que tienes que mirar: `ft_join (pila.c:10)` |
+| El segundo bloque (`alloc'd`) | La pila **del `malloc`** que creó el bloque: `pila.c:8`. A menudo el fallo está aquí (el tamaño) y no donde se notó (el `strcat`) |
+
+```text
+leer de arriba abajo = de dentro afuera
+
+  at  strcat          ← librería: sáltatela
+  by  ft_join  :10    ← ⭐ tu código: aquí se escribió fuera
+  by  leer_linea :16
+  by  main     :23
+```
+
+> [!tip] Pregúntate «¿dónde se notó?» y «¿dónde se creó?»
+> La línea 10 es donde **se notó** el error; la 8 es donde **se creó** (reservaste 10 bytes para 11 caracteres). Arréglalo en el `malloc`, no en el `strcat`.
+
+> [!note] Sin `-g` no hay números de línea
+> Si en lugar de `pila.c:10` ves solo `by 0x40120F: ft_join (in /home/.../pila)`, compilaste sin `-g`. Recuerda que en un proyecto con librería hay que poner `-g` **también** al compilar la librería, no solo el `main` (ver [[Depurar con gdb]]).
+
+## Segfault dentro de Valgrind
+
+Si el programa crashea, Valgrind te dice **dónde** y **a qué dirección** intentó acceder. Programa (`segv.c`) que cuenta los nodos de una lista sin comprobar que esté vacía:
+
+```c
+static int	contar(t_list *lst)
+{
+	/* ... */
+	while (lst->next)          /* línea 14: con lst == NULL */
+```
+
+```text
+==3286078== Invalid read of size 8
+==3286078==    at 0x401183: contar (segv.c:14)
+==3286078==    by 0x40114F: main (segv.c:27)
+==3286078==  Address 0x8 is not stack'd, malloc'd or (recently) free'd
+==3286078==
+==3286078== Process terminating with default action of signal 11 (SIGSEGV)
+==3286078==  Access not within mapped region at address 0x8
+==3286078==    at 0x401183: contar (segv.c:14)
+==3286078==    by 0x40114F: main (segv.c:27)
+```
+
+Sin Valgrind solo verías `Segmentation fault (core dumped)` y código de salida `139`.
+
+- **`signal 11 (SIGSEGV)`**: el programa ha crasheado. Lo que va después es **dónde**.
+- **`not stack'd, malloc'd or (recently) free'd`**: la dirección no es de ninguna variable, ni de `malloc`, ni de algo liberado hace poco. Es una dirección inventada: casi siempre un puntero `NULL` o sin inicializar.
+- **`Invalid read of size 8`**: intentaba leer 8 bytes, el tamaño de un puntero: `lst->next`.
+
+> [!example] Dirección pequeña = `NULL` + algo
+> `Address 0x8` no es casualidad. `lst->next` lee el campo `next`, que está 8 bytes después del principio de la struct (detrás de `content`, ver [[Padding y alineación de memoria]]). Si `lst` es `NULL` (0), `lst->next` lee en `0 + 8 = 0x8`. **Una dirección muy pequeña (`0x0`, `0x8`, `0x10`…) casi siempre es un campo de un puntero `NULL`.** Una dirección enorme y rara suele ser un puntero sin inicializar.
+
+## `Syscall param write(buf) points to uninitialised byte(s)`
+
+Aparece cuando le das a una llamada al sistema (`write`, `read`…) memoria que tiene **bytes sin inicializar**. Programa (`syscall.c`):
+
+```c
+buf = malloc(8);              /* línea 8 */
+buf[0] = 'h';
+buf[1] = 'i';
+write(1, buf, 8);             /* línea 11: escribe 8 bytes, solo 2 tienen valor */
+```
+
+```text
+==3286192== Syscall param write(buf) points to uninitialised byte(s)
+==3286192==    at 0x49869D7: write (write.c:26)
+==3286192==    by 0x40118E: main (syscall.c:11)
+==3286192==  Address 0x4a9e042 is 2 bytes inside a block of size 8 alloc'd
+==3286192==    at 0x4848899: malloc (...)
+==3286192==    by 0x401168: main (syscall.c:8)
+==3286192==  Uninitialised value was created by a heap allocation
+==3286192==    at 0x4848899: malloc (...)
+==3286192==    by 0x401168: main (syscall.c:8)
+```
+
+- **`2 bytes inside a block of size 8`**: el **primer** byte sin inicializar está en la posición 2. Los dos primeros (`h`, `i`) sí tenían valor.
+- Casi siempre es un **tamaño mal calculado**: escribes más bytes de los que has rellenado. En ft_printf, pasar a `write` una longitud mayor que el texto. En get_next_line, olvidar `buf[bytes] = '\0'` y luego copiar con un `strlen` que se pasa (ver [[get_next_line - Pruebas y depuración]]).
+
+## Descriptores de fichero abiertos: `--track-fds=yes`
+
+Valgrind también encuentra los `open` sin su `close`. No los busca por defecto: hay que pedírselo. Programa (`fds.c`):
+
+```c
+fd1 = open("pila.c", O_RDONLY);
+fd2 = open("segv.c", O_RDONLY);     /* línea 10 */
+close(fd1);
+/* fd2 nunca se cierra */
+```
+
+```text
+$ valgrind -q --track-fds=yes ./fds
+==3286193== FILE DESCRIPTORS: 4 open (3 std) at exit.
+==3286193== Open file descriptor 4: segv.c
+==3286193==    at 0x498668B: open (open64.c:41)
+==3286193==    by 0x401177: main (fds.c:10)
+```
+
+- **`4 open (3 std)`**: al salir había 4 fds abiertos, de los cuales 3 son los estándar (`0`, `1`, `2`), que es normal. El que sobra es el que te dice debajo.
+- Te da **el fichero** (`segv.c`) y **la línea del `open`** (`fds.c:10`).
+- Es **imprescindible en pipex y minishell**, donde cada `pipe` y cada `dup2` crean fds que hay que cerrar. Un fd de una tubería que no se cierra puede hacer que un programa se quede **colgado** esperando un final de fichero que nunca llega (ver [[Descriptores de fichero y read]]).
+
+> [!warning] fds heredados de la terminal
+> Según desde dónde lances el programa (algunos editores, `script`, tmux), puede aparecer algún fd abierto que **no es tuyo**, heredado del proceso padre. Para saber si es tuyo, mira si tiene una pila con un `open` o `pipe` de tu código. Si dice `<inherited from parent>`, no es tuyo.
+
+## Possibly lost: un puntero al interior del bloque
+
+La tabla de leaks dice que *possibly lost* es «solo queda un puntero al interior del bloque». Así se ve (`possibly.c`):
+
+```c
+static char	*g_p;
+
+int	main(void)
+{
+	g_p = malloc(10);        /* línea 8 */
+	strcpy(g_p, "hola");
+	g_p += 2;                /* ahora apunta a "la", en mitad del bloque */
+	return (0);
+}
+```
+
+```text
+==3286197== 10 bytes in 1 blocks are possibly lost in loss record 1 of 1
+==3286197==    at 0x4848899: malloc (...)
+==3286197==    by 0x401158: main (possibly.c:8)
+==3286197==
+==3286197== LEAK SUMMARY:
+==3286197==    definitely lost: 0 bytes in 0 blocks
+==3286197==    indirectly lost: 0 bytes in 0 blocks
+==3286197==      possibly lost: 10 bytes in 1 blocks
+==3286197==    still reachable: 0 bytes in 0 blocks
+```
+
+- Sin el `g_p += 2` sería *still reachable* (la global sigue apuntando al principio). Sin la global, sería *definitely lost*.
+- Valgrind dice «posiblemente» porque no sabe si guardas el puntero desplazado **a propósito** (y luego harás `free(g_p - 2)`). En 42 trátalo como un leak.
+- **Además es un error aunque llegues a liberarlo**: `free(g_p)` con el puntero desplazado da `Invalid free()`. `free` solo acepta la dirección **exacta** que devolvió `malloc`. Es el error de [[get_next_line - Guía paso a paso|get_next_line]] de mover el stash (`stash = nl + 1`) en vez de copiar el resto.
+
+## Leer el resumen final
+
+Las últimas líneas son las que hay que mirar primero:
+
+```text
+==PID== HEAP SUMMARY:
+==PID==     in use at exit: 0 bytes in 0 blocks
+==PID==   total heap usage: 1 allocs, 1 frees, 10 bytes allocated
+==PID==
+==PID== All heap blocks were freed -- no leaks are possible
+==PID==
+==PID== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+```
+
+| Línea | Qué mirar |
+|---|---|
+| `in use at exit` | Memoria sin liberar al salir. Tiene que ser `0 bytes in 0 blocks` |
+| `total heap usage: N allocs, M frees` | Si `N != M`, falta algún `free` (o sobra) |
+| `All heap blocks were freed` | Sin leaks |
+| `ERROR SUMMARY: N errors` | **Errores de acceso**, no leaks. Tiene que ser `0` |
+
+> [!danger] «No leaks» no significa «sin errores»
+> El ejemplo de `pila.c` de arriba dice `All heap blocks were freed -- no leaks are possible`… y a la vez `ERROR SUMMARY: 1 errors`. Liberó todo, pero escribió fuera del bloque. **Mira siempre las dos cosas.** Un evaluador que solo mire los leaks se lo salta; uno que mire el `ERROR SUMMARY`, no.
+
 ## AddressSanitizer: `-fsanitize=address`
 
 Se añade al compilar **y** al enlazar:
@@ -323,7 +526,7 @@ Al terminar el programa, `leaks` dice cuántos bloques quedan sin liberar (`Proc
 
 ## Relacionadas
 
-[[Depurar con gdb]] · [[Segmentos de memoria en C]] · [[Cómo compila C]] · [[Makefile y librerías estáticas]] · [[Control de errores en C]] · [[Listas enlazadas]] · [[ft_calloc]] · [[ft_split]] · [[Comportamiento indefinido]]
+[[Depurar con gdb]] · [[Segmentos de memoria en C]] · [[Cómo compila C]] · [[Makefile y librerías estáticas]] · [[Control de errores en C]] · [[Listas enlazadas]] · [[ft_calloc]] · [[ft_split]] · [[Comportamiento indefinido]] · [[Padding y alineación de memoria]] · [[Descriptores de fichero y read]] · [[Puntero a puntero]]
 
 ## Referencias
 

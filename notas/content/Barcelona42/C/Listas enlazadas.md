@@ -193,7 +193,7 @@ Antes:            lst ──► [B] ──► [C] ──► NULL        new ─�
 
 Si inviertes el orden (`*lst = new;` primero), `new->next = *lst` haría que `A` apunte a sí mismo y perderías `B` y `C`: **leak** y bucle infinito al recorrer.
 
-¿Por qué `t_list **lst`? Porque la función tiene que **cambiar el puntero `lst` de quien llama** (la cabeza pasa a ser `A`). Con un `t_list *` solo cambiaría su copia. Ver [[Punteros en C#Puntero a puntero|puntero a puntero]].
+¿Por qué `t_list **lst`? Porque la función tiene que **cambiar el puntero `lst` de quien llama** (la cabeza pasa a ser `A`). Con un `t_list *` solo cambiaría su copia. Ver [[Puntero a puntero]].
 
 ### Añadir detrás: `ft_lstadd_back`
 
@@ -282,7 +282,7 @@ Si te olvidas del paso 3, los testers que simulan fallos de `malloc` detectarán
 
 ## Relacionadas
 
-[[Structs y typedef]] · [[Punteros en C]] · [[Carácter nulo y puntero NULL]] · [[Segmentos de memoria en C]] · [[Valgrind y sanitizers]] · [[ft_lstnew]] · [[ft_lstadd_front]] · [[ft_lstsize]] · [[ft_lstlast]] · [[ft_lstadd_back]] · [[ft_lstdelone]] · [[ft_lstclear]] · [[ft_lstiter]] · [[ft_lstmap]] · [[libft - Índice]]
+[[Structs y typedef]] · [[Punteros en C]] · [[Carácter nulo y puntero NULL]] · [[Segmentos de memoria en C]] · [[Valgrind y sanitizers]] · [[ft_lstnew]] · [[ft_lstadd_front]] · [[ft_lstsize]] · [[ft_lstlast]] · [[ft_lstadd_back]] · [[ft_lstdelone]] · [[ft_lstclear]] · [[ft_lstiter]] · [[ft_lstmap]] · [[libft - Índice]] · [[Puntero a puntero]]
 
 ## Referencias
 

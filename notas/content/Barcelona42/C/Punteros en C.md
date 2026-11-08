@@ -117,9 +117,14 @@ Tres reglas que salen de aquí:
 
 ## Puntero a puntero
 
-Un puntero también es una variable con su propia dirección, así que puede haber un puntero que apunte a otro puntero. Aparece en dos sitios de la libft:
+> [!abstract] Explicado a fondo en [[Puntero a puntero]]
+> Cuándo una función necesita `**` y cuándo le basta `*`, con listas, los tres niveles `lst` / `*lst` / `**lst` y los dos usos de `char **`.
 
-- **Arrays de cadenas**: [[ft_split]] devuelve un `char **`, un array de `char *` terminado en `NULL`.
+Un puntero también es una variable con su propia dirección, así que puede haber un puntero que apunte a otro puntero. La regla para saber si una función lo necesita: **para cambiar una variable, la función recibe su dirección**. Si esa variable ya es un puntero (`char *`, `t_list *`), su dirección es un `char **` o un `t_list **`. Si solo quieres cambiar **lo apuntado** (las letras, los bytes, el `content`), basta un `*`.
+
+Aparece en dos sitios de la libft, **con dos significados distintos**:
+
+- **Arrays de cadenas**: [[ft_split]] devuelve un `char **`, un array de `char *` terminado en `NULL`. Aquí `**` **no** sirve para cambiar un puntero ajeno.
 - **Modificar un puntero ajeno**: [[ft_lstadd_front]], [[ft_lstadd_back]] y [[ft_lstclear]] reciben `t_list **lst`.
 
 ```c
@@ -298,7 +303,7 @@ err1.c:12:3: error: variable 'p' is uninitialized when used here [-Werror,-Wunin
 
 ## Relacionadas
 
-[[Arrays en C]] · [[Carácter nulo y puntero NULL]] · [[Segmentos de memoria en C]] · [[Structs y typedef]] · [[Listas enlazadas]] · [[Tipos enteros y conversiones]] · [[ft_split]] · [[ft_striteri]] · [[ft_lstmap]] · [[Valgrind y sanitizers]]
+[[Arrays en C]] · [[Carácter nulo y puntero NULL]] · [[Segmentos de memoria en C]] · [[Structs y typedef]] · [[Listas enlazadas]] · [[Tipos enteros y conversiones]] · [[ft_split]] · [[ft_striteri]] · [[ft_lstmap]] · [[Valgrind y sanitizers]] · [[Puntero a puntero]]
 
 ## Referencias
 
