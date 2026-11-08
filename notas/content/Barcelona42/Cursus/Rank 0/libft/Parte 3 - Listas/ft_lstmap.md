@@ -118,6 +118,6 @@ t_list *ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 
 ## Referencias
 
-- Subject de libft v19.3 (`/home/felixrod/cursus/es.subject_libft.pdf`) — descripción, parámetros y valor devuelto, copiados literalmente.
+- Subject de libft v19.3 — descripción, parámetros y valor devuelto, copiados literalmente.
 - `man 3 malloc` (Linux man-pages 5.10, Ubuntu 22.04), con traducción propia — versión en línea: [malloc(3) en man7.org](https://man7.org/linux/man-pages/man3/malloc.3.html).
 - `man 3 free` (Linux man-pages 5.10, Ubuntu 22.04), con traducción propia — versión en línea: [free(3) en man7.org](https://man7.org/linux/man-pages/man3/free.3.html).

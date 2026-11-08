@@ -35,7 +35,7 @@ Dale permiso de ejecución y lánzalo:
 ```console
 $ chmod +x hola.sh
 $ ./hola.sh
-Hola, felixrod
+Hola, tu_login
 Hoy es lunes
 ```
 
@@ -66,7 +66,7 @@ Hoy es lunes
 
 ```console
 $ echo "$PATH"
-/home/felixrod/.local/bin:/usr/local/bin:/usr/bin:/bin
+/home/tu_login/.local/bin:/usr/local/bin:/usr/bin:/bin
 $ hola.sh
 bash: hola.sh: command not found
 ```

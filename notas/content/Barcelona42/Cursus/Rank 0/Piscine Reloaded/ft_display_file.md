@@ -262,7 +262,7 @@ openat(AT_FDCWD, "noexiste.txt", O_RDONLY) = -1 ENOENT (No such file or director
 
 ## Referencias
 
-- Subject de Piscine Reloaded v2.0 (`/home/felixrod/cursus/piscine-reloaded/es.subject_piscine-reloaded.pdf`) — requisitos copiados literalmente.
+- Subject de Piscine Reloaded v2.0 — requisitos copiados literalmente.
 - [read(2) — man7.org](https://man7.org/linux/man-pages/man2/read.2.html) — "zero indicates end of file"; error `EISDIR`.
 - [open(2) — man7.org](https://man7.org/linux/man-pages/man2/open.2.html) — `O_RDONLY` y error `ENOENT`.
 - [GNU make manual](https://www.gnu.org/software/make/manual/make.html) — reglas, variables y `.PHONY`.

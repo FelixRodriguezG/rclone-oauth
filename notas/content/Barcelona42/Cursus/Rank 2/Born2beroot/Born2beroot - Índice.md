@@ -22,7 +22,7 @@ Lo comúnmente conocido del subject (parte obligatoria):
 | Seguridad | AppArmor activo en Debian (SELinux en Rocky) |
 | SSH | Solo en el puerto **4242**; prohibido entrar como `root` por SSH |
 | Cortafuegos | UFW (firewalld en Rocky) con solo el puerto 4242 abierto |
-| Hostname | Tu login seguido de `42` (p. ej. `felixrod42`) |
+| Hostname | Tu login seguido de `42` (p. ej. `tu_login42`) |
 | Usuarios | Un usuario con tu login, en los grupos `user42` y `sudo` |
 | Contraseñas | Caducidad, longitud y complejidad mínimas (ver más abajo) |
 | sudo | Intentos limitados, mensaje propio, registro de todo, TTY obligatoria, rutas restringidas |
@@ -106,7 +106,7 @@ sudo vgs ; sudo lvs         # grupos de volúmenes y volúmenes lógicos de LVM
 ```bash
 su -                                  # hazte root (solo durante la instalación)
 apt install sudo
-usermod -aG sudo felixrod             # añade tu usuario al grupo sudo
+usermod -aG sudo tu_login             # añade tu usuario al grupo sudo
 visudo -f /etc/sudoers.d/sudo_config  # fichero propio, más limpio que editar /etc/sudoers
 mkdir -p /var/log/sudo                # carpeta para los registros
 ```
@@ -148,9 +148,9 @@ PASS_WARN_AGE	7
 > [!warning] Solo afecta a usuarios nuevos
 > Según `man 5 login.defs`, estos valores **solo se aplican al crear la cuenta**. Para los usuarios que ya existen (tu usuario y `root`) usa `chage`:
 > ```bash
-> sudo chage -M 30 -m 2 -W 7 felixrod
+> sudo chage -M 30 -m 2 -W 7 tu_login
 > sudo chage -M 30 -m 2 -W 7 root
-> sudo chage -l felixrod          # comprueba los valores
+> sudo chage -l tu_login          # comprueba los valores
 > ```
 
 ### Complejidad: `libpam-pwquality`
@@ -216,7 +216,7 @@ ss -tlnp | grep 4242            # ¿hay algo escuchando en el 4242?
 En VirtualBox, con red NAT, añade un **reenvío de puertos**: puerto anfitrión 4242 → puerto invitado 4242. Luego, desde el host:
 
 ```bash
-ssh felixrod@localhost -p 4242
+ssh tu_login@localhost -p 4242
 ```
 
 ## Hostname, usuarios y grupos

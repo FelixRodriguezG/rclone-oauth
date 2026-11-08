@@ -245,7 +245,7 @@ int	main(void)
 	t_player	*pl;
 	t_player	copy;
 
-	pl = player_new("felix", 3);
+	pl = player_new("ana", 3);
 	if (!pl)
 		return (1);
 	copy = *pl;
@@ -257,7 +257,7 @@ int	main(void)
 ```
 
 ```text
-felix: hp original 3, hp copia 0
+ana: hp original 3, hp copia 0
 ```
 
 - Es el mismo patrón que [[ft_lstnew]]: `malloc(sizeof(t_list))`, comprobar `NULL`, rellenar campos con `->`, devolver el puntero.

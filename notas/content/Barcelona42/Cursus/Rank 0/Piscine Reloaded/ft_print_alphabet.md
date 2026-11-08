@@ -146,6 +146,6 @@ clang: error: linker command failed with exit code 1 (use -v to see invocation)
 
 ## Referencias
 
-- Subject de Piscine Reloaded v2.0 (`/home/felixrod/cursus/piscine-reloaded/es.subject_piscine-reloaded.pdf`) — requisitos e instrucción sobre `ft_putchar` copiados literalmente.
+- Subject de Piscine Reloaded v2.0 — requisitos e instrucción sobre `ft_putchar` copiados literalmente.
 - [ASCII — Wikipedia](https://es.wikipedia.org/wiki/ASCII) — tabla de códigos de las letras.
 - Ejemplos compilados con `cc -Wall -Wextra -Werror` (Ubuntu clang 12.0.1) en Linux x86_64.

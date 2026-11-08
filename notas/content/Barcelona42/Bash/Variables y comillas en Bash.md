@@ -49,7 +49,7 @@ rm "$archivo"        # correcto
 
 | Comillas | Qué hace | Ejemplo | Salida |
 |---|---|---|---|
-| `"..."` | Expande `$var`, `$( )` y `\` | `echo "Hola $USER"` | `Hola felixrod` |
+| `"..."` | Expande `$var`, `$( )` y `\` | `echo "Hola $USER"` | `Hola tu_login` |
 | `'...'` | Texto literal, no expande nada | `echo 'Hola $USER'` | `Hola $USER` |
 | `\` | Escapa un carácter | `echo "Cuesta \$5"` | `Cuesta $5` |
 | `$'...'` | Literal, pero entiende escapes como `\n`, `\t`, `\033` (*ANSI-C quoting*) | `echo $'a\tb'` | `a` y `b` separadas por un tab |
@@ -119,7 +119,7 @@ echo "Guardo las tareas en: $ARCHIVO"
 
 ```console
 $ ./tareas.sh
-Guardo las tareas en: /home/felixrod/.tareas.txt
+Guardo las tareas en: /home/tu_login/.tareas.txt
 $ TAREAS_ARCHIVO=/tmp/prueba.txt ./tareas.sh
 Guardo las tareas en: /tmp/prueba.txt
 ```

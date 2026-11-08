@@ -165,7 +165,7 @@ sqrt_ingenua.c:6:11: runtime error: signed integer overflow: 46341 * 46341 canno
 
 ## Referencias
 
-- Subject de Piscine Reloaded v2.0 (`/home/felixrod/cursus/piscine-reloaded/es.subject_piscine-reloaded.pdf`) — requisitos copiados literalmente.
+- Subject de Piscine Reloaded v2.0 — requisitos copiados literalmente.
 - [Integer square root — Wikipedia](https://en.wikipedia.org/wiki/Integer_square_root) — búsqueda lineal y binaria.
 - [Arithmetic operators — cppreference](https://en.cppreference.com/w/c/language/operator_arithmetic) — desbordamiento de enteros con signo.
 - Ejemplos compilados con `cc -Wall -Wextra -Werror` (Ubuntu clang 12.0.1) en Linux x86_64.

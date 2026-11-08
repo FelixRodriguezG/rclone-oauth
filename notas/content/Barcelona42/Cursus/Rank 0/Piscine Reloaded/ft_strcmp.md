@@ -179,7 +179,7 @@ Compilado con `-fno-builtin` para que `strcmp` sea de verdad la de glibc 2.35 y 
 
 ## Referencias
 
-- Subject de Piscine Reloaded v2.0 (`/home/felixrod/cursus/piscine-reloaded/es.subject_piscine-reloaded.pdf`) — requisitos copiados literalmente.
+- Subject de Piscine Reloaded v2.0 — requisitos copiados literalmente.
 - `man 3 strcmp` — Linux man-pages 5.10 (Ubuntu 22.04): las citas en inglés están copiadas literalmente del manual; la traducción es propia.
 - [strcmp(3) — man7.org](https://man7.org/linux/man-pages/man3/strcmp.3.html) — versión en línea del manual de Linux (puede ser más reciente que la de Ubuntu 22.04).
 - [strcmp — cppreference](https://en.cppreference.com/w/c/string/byte/strcmp) — el estándar C solo fija el signo del resultado.

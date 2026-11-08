@@ -199,7 +199,7 @@ real	0m3.915s
 
 ## Referencias
 
-- Subject de Piscine Reloaded v2.0 (`/home/felixrod/cursus/piscine-reloaded/es.subject_piscine-reloaded.pdf`) — requisitos copiados literalmente.
+- Subject de Piscine Reloaded v2.0 — requisitos copiados literalmente.
 - [Factorial — Wikipedia](https://es.wikipedia.org/wiki/Factorial) — definición y `0! = 1`.
 - [Arithmetic operators — cppreference](https://en.cppreference.com/w/c/language/operator_arithmetic) — desbordamiento de enteros con signo.
 - Ejemplos compilados con `cc -Wall -Wextra -Werror` (Ubuntu clang 12.0.1) en Linux x86_64.

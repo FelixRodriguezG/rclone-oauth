@@ -173,7 +173,7 @@ typedef struct s_point
 
 ## Referencias
 
-- Subject de Piscine Reloaded v2.0 (`/home/felixrod/cursus/piscine-reloaded/es.subject_piscine-reloaded.pdf`) — requisitos y `main` copiados literalmente.
+- Subject de Piscine Reloaded v2.0 — requisitos y `main` copiados literalmente.
 - [Struct declaration — cppreference](https://en.cppreference.com/w/c/language/struct) — estructuras y acceso a miembros.
 - [Typedef declaration — cppreference](https://en.cppreference.com/w/c/language/typedef) — alias de tipos.
 - Ejemplos compilados con `cc -Wall -Wextra -Werror` (Ubuntu clang 12.0.1) en Linux x86_64.

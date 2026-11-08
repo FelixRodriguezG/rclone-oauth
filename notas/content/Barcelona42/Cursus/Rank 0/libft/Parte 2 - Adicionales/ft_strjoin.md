@@ -89,5 +89,5 @@ char *ft_strjoin(char const *s1, char const *s2);
 
 ## Referencias
 
-- Subject de libft v19.3 (`/home/felixrod/cursus/es.subject_libft.pdf`) — descripción, parámetros y valor devuelto, copiados literalmente.
+- Subject de libft v19.3 — descripción, parámetros y valor devuelto, copiados literalmente.
 - `man 3 malloc` (Linux man-pages 5.10, Ubuntu 22.04), con traducción propia — versión en línea: [malloc(3) en man7.org](https://man7.org/linux/man-pages/man3/malloc.3.html).

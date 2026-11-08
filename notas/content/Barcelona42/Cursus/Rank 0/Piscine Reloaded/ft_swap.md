@@ -87,5 +87,5 @@ flowchart TD
 
 ## Referencias
 
-- Subject de Piscine Reloaded v2.0 (`/home/felixrod/cursus/piscine-reloaded/es.subject_piscine-reloaded.pdf`) — requisitos copiados literalmente.
+- Subject de Piscine Reloaded v2.0 — requisitos copiados literalmente.
 - [Pointer declaration — cppreference](https://en.cppreference.com/w/c/language/pointer) — paso de direcciones y desreferencia.

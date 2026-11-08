@@ -73,4 +73,4 @@ Modificar `lst` dentro de la función no afecta al que llama: es una copia del p
 
 ## Referencias
 
-- Subject de libft v19.3 (`/home/felixrod/cursus/es.subject_libft.pdf`) — prototipo, descripción, parámetros y valor devuelto, copiados literalmente.
+- Subject de libft v19.3 — prototipo, descripción, parámetros y valor devuelto, copiados literalmente.

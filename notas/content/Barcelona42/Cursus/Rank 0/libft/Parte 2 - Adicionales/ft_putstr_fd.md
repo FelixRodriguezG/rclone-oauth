@@ -91,5 +91,5 @@ void ft_putstr_fd(char *s, int fd);
 
 ## Referencias
 
-- Subject de libft v19.3 (`/home/felixrod/cursus/es.subject_libft.pdf`) — descripción, parámetros y valor devuelto, copiados literalmente.
+- Subject de libft v19.3 — descripción, parámetros y valor devuelto, copiados literalmente.
 - `man 2 write` (Linux man-pages 5.10, Ubuntu 22.04), con traducción propia — versión en línea: [write(2) en man7.org](https://man7.org/linux/man-pages/man2/write.2.html).

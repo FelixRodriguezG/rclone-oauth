@@ -81,4 +81,4 @@ void ft_lstiter(t_list *lst, void (*f)(void *));
 
 ## Referencias
 
-- Subject de libft v19.3 (`/home/felixrod/cursus/es.subject_libft.pdf`) — descripción, parámetros y valor devuelto, copiados literalmente.
+- Subject de libft v19.3 — descripción, parámetros y valor devuelto, copiados literalmente.

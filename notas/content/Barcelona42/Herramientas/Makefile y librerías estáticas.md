@@ -307,7 +307,7 @@ mi_proyecto/
 ```
 
 > [!warning] En libft, todo en la raíz
-> El subject de libft (v19.3) pide que **todos los archivos estén en la raíz del repositorio**, y `libft.a` también. Para libft, quita `src/` e `includes/` (sin `addprefix`, y `-I.` como en tu Makefile real). La estructura con carpetas sirve para proyectos posteriores.
+> El subject de libft (v19.3) pide que **todos los archivos estén en la raíz del repositorio**, y `libft.a` también. Para libft, quita `src/` e `includes/` (sin `addprefix`, y con `-I.` en `CFLAGS`). La estructura con carpetas sirve para proyectos posteriores.
 
 ### Código del Makefile
 

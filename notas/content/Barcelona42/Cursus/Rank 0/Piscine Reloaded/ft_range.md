@@ -237,7 +237,7 @@ malloc(17179869180) -> NULL
 
 ## Referencias
 
-- Subject de Piscine Reloaded v2.0 (`/home/felixrod/cursus/piscine-reloaded/es.subject_piscine-reloaded.pdf`) — requisitos copiados literalmente.
+- Subject de Piscine Reloaded v2.0 — requisitos copiados literalmente.
 - [malloc(3) — man7.org](https://man7.org/linux/man-pages/man3/malloc.3.html) — valor de retorno `NULL` y *overcommit*.
 - [Arithmetic operators — cppreference](https://en.cppreference.com/w/c/language/operator_arithmetic) — el desbordamiento de enteros con signo es comportamiento indefinido.
 - [Beej's Guide to C: Manual Memory Allocation](https://beej.us/guide/bgc/html/split/manual-memory-allocation.html) — `malloc`, `free` y comprobar `NULL`.

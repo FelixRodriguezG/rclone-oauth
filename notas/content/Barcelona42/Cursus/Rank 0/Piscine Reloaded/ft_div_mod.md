@@ -154,7 +154,7 @@ ft_div_mod.c:3:11: runtime error: division of -2147483648 by -1 cannot be repres
 
 ## Referencias
 
-- Subject de Piscine Reloaded v2.0 (`/home/felixrod/cursus/piscine-reloaded/es.subject_piscine-reloaded.pdf`) — requisitos copiados literalmente.
+- Subject de Piscine Reloaded v2.0 — requisitos copiados literalmente.
 - [Arithmetic operators — cppreference](https://en.cppreference.com/w/c/language/operator_arithmetic) — división entera truncada hacia cero, signo del resto y casos indefinidos.
 - [div — cppreference](https://en.cppreference.com/w/c/numeric/math/div) — equivalente de la libc.
 - Ejemplos compilados con `cc -Wall -Wextra -Werror` (Ubuntu clang 12.0.1) en Linux x86_64.

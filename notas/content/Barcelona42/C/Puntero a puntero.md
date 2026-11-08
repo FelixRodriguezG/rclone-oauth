@@ -63,7 +63,7 @@ n = strtol(texto, &resto, 10);
 n = 123, resto = "abc"
 ```
 
-`strtol` tiene que devolver dos cosas: el número (por `return`) y dónde se quedó (escribiéndolo en tu `resto`). Como `resto` es un `char *`, recibe un `char **`. Y como `free` solo recibe `void *`, no puede ponerte el puntero a `NULL`: por eso en get_next_line escribiste `ft_free(char **ptr)`.
+`strtol` tiene que devolver dos cosas: el número (por `return`) y dónde se quedó (escribiéndolo en tu `resto`). Como `resto` es un `char *`, recibe un `char **`. Y como `free` solo recibe `void *`, no puede ponerte el puntero a `NULL`: por eso en get_next_line es habitual escribir un `ft_free(char **ptr)` que libera y deja el puntero a `NULL`.
 
 El resto de esta nota aplica esta regla caso a caso.
 

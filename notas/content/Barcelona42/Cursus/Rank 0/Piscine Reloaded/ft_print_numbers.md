@@ -138,6 +138,6 @@ ft_print_numbers.c:8:3: error: implicit declaration of function 'ft_putchar' is 
 
 ## Referencias
 
-- Subject de Piscine Reloaded v2.0 (`/home/felixrod/cursus/piscine-reloaded/es.subject_piscine-reloaded.pdf`) — requisitos e instrucción sobre `ft_putchar` copiados literalmente.
+- Subject de Piscine Reloaded v2.0 — requisitos e instrucción sobre `ft_putchar` copiados literalmente.
 - [Character sets and encodings — cppreference](https://en.cppreference.com/w/c/language/charset) — los dígitos decimales son consecutivos.
 - Ejemplos compilados con `cc -Wall -Wextra -Werror` (Ubuntu clang 12.0.1) en Linux x86_64.

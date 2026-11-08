@@ -150,7 +150,7 @@ ft_recursive_factorial.c:7:13: runtime error: signed integer overflow: 13 * 4790
 
 ## Referencias
 
-- Subject de Piscine Reloaded v2.0 (`/home/felixrod/cursus/piscine-reloaded/es.subject_piscine-reloaded.pdf`) — requisitos copiados literalmente.
+- Subject de Piscine Reloaded v2.0 — requisitos copiados literalmente.
 - [Factorial — Wikipedia](https://es.wikipedia.org/wiki/Factorial) — definición recursiva.
 - [Recursión (ciencias de computación) — Wikipedia](https://es.wikipedia.org/wiki/Recursi%C3%B3n_(ciencias_de_computaci%C3%B3n))
 - Ejemplos compilados con `cc -Wall -Wextra -Werror` (Ubuntu clang 12.0.1) en Linux x86_64.

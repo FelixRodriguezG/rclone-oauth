@@ -159,7 +159,7 @@ main.c:23:35: runtime error: negation of -2147483648 cannot be represented in ty
 
 ## Referencias
 
-- Subject de Piscine Reloaded v2.0 (`/home/felixrod/cursus/piscine-reloaded/es.subject_piscine-reloaded.pdf`) — requisitos copiados literalmente.
+- Subject de Piscine Reloaded v2.0 — requisitos copiados literalmente.
 - `man 3 abs` (Ubuntu 22.04, man-pages 5.10) — nota sobre el entero más negativo.
 - [Replacing text macros — cppreference](https://en.cppreference.com/w/c/preprocessor/replace) — macros con parámetros.
 - [Macro Pitfalls — GCC CPP manual](https://gcc.gnu.org/onlinedocs/cpp/Macro-Pitfalls.html) — paréntesis y duplicación de efectos secundarios.

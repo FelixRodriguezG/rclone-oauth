@@ -69,4 +69,4 @@ Compárala con [[ft_lstsize]]: allí la condición es `lst != NULL` (contar todo
 
 ## Referencias
 
-- Subject de libft v19.3 (`/home/felixrod/cursus/es.subject_libft.pdf`) — descripción, parámetros y valor devuelto, copiados literalmente.
+- Subject de libft v19.3 — descripción, parámetros y valor devuelto, copiados literalmente.

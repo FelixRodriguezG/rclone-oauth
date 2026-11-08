@@ -816,7 +816,7 @@ flowchart TD
 
 Diagramas de elaboración propia a partir de la sección «Cómo implementarla» de cada nota.
 
-- Subject de libft v19.3 (`/home/felixrod/cursus/es.subject_libft.pdf`) — lista de funciones de la Parte 1, 2 y 3 y su comportamiento.
+- Subject de libft v19.3 — lista de funciones de la Parte 1, 2 y 3 y su comportamiento.
 - Notas de cada función (enlazadas bajo cada encabezado) — pseudocódigo del que sale cada diagrama.
 - [Mermaid: Flowchart syntax](https://mermaid.js.org/syntax/flowchart.html) — formas de nodo, aristas etiquetadas y `flowchart TD`.
 - [Obsidian Help: Advanced formatting syntax — Diagram](https://help.obsidian.md/Editing+and+formatting/Advanced+formatting+syntax#Diagram) — Obsidian renderiza bloques `mermaid` de forma nativa.

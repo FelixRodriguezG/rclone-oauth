@@ -143,7 +143,7 @@ length 0, -3 y NULL con 0: nada
 
 ## Referencias
 
-- Subject de Piscine Reloaded v2.0 (`/home/felixrod/cursus/piscine-reloaded/es.subject_piscine-reloaded.pdf`) — requisitos copiados literalmente.
+- Subject de Piscine Reloaded v2.0 — requisitos copiados literalmente.
 - [Pointer declaration — cppreference](https://en.cppreference.com/w/c/language/pointer) — sección "Pointers to functions".
 - [Beej's Guide to C — Function Pointers](https://beej.us/guide/bgc/) — capítulo "Pointers II", apartado de punteros a función.
 - Ejemplos compilados con `cc -Wall -Wextra -Werror` (Ubuntu clang 12.0.1) en Linux x86_64.

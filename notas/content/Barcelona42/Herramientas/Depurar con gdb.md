@@ -95,7 +95,7 @@ Program received signal SIGSEGV, Segmentation fault.
    make fclean
    make CFLAGS="-Wall -Wextra -Werror -I. -g"
    ```
-   Funciona porque una variable que escribes en la línea de comandos **sustituye** a la del Makefile. Por eso, si tu Makefile pone más cosas en `CFLAGS` (como `-I.` en tu libft), inclúyelas también: si no, se pierden.
+   Funciona porque una variable que escribes en la línea de comandos **sustituye** a la del Makefile. Por eso, si tu Makefile pone más cosas en `CFLAGS` (como el `-I.` de una libft con el header en la raíz), inclúyelas también: si no, se pierden.
 4. **Lo normal es no dejar `-g` en el Makefile que entregas**: usa las banderas que pida el subject (ver [[Makefile y librerías estáticas]]).
 
 ---
@@ -386,7 +386,7 @@ int	main(void)
 }
 ```
 
-Y compila **todo** con `-g`, incluida la librería (`-I.` es porque tu Makefile ya lo pone en `CFLAGS`):
+Y compila **todo** con `-g`, incluida la librería (`-I.` porque el header de libft está en la raíz y el Makefile lo pone en `CFLAGS`):
 
 ```bash
 make fclean

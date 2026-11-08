@@ -19,7 +19,7 @@ syntax on
 filetype plugin indent on
 
 " --- CONFIGURACIÓN DE 42 (datos para la cabecera :Stdheader / F1) ---
-let $USER = 'felixrod'
+let $USER = 'tu_login'
 let $MAIL = 'tu_login@student.42barcelona.com'
 
 " --- REGLAS DE LA NORMINETTE ---
