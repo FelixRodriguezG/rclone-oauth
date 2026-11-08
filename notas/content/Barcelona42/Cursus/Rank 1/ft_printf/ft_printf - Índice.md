@@ -9,7 +9,13 @@ aliases: ["ft_printf", "libftprintf"]
 > **ft_printf** consiste en reprogramar una versión reducida de [[printf]]: una función que recibe una cadena de formato y un número variable de argumentos, y escribe el resultado con `write`. Sirve para aprender [[stdarg y funciones variádicas|funciones variádicas]], conversiones de números a texto en distintas bases y a organizar un proyecto en varios ficheros.
 
 > [!warning] Comprueba el subject
-> Resumen basado en versiones públicas del subject; los detalles cambian entre versiones. Lo que manda es el PDF de tu intra.
+> Resumen basado en versiones públicas del subject; los detalles cambian entre versiones. Lo que manda es el PDF de tu intra. Los requisitos exactos de la v12.0 (`~/cursus/rank-1/es.subject_ft_printf.pdf`) están en [[ft_printf - Guía paso a paso#1. Qué te piden, en una frase|la guía]].
+
+> [!abstract] Notas de esta serie
+> 1. [[ft_printf - Guía paso a paso]]: construir ft_printf **con el bonus pensado desde el principio**, etapa a etapa.
+> 2. [[ft_printf - Funciones auxiliares]]: `ft_out_field`, `ft_utoa_base` y el resto de piezas explicadas una a una.
+> 3. [[ft_printf - Pruebas y depuración]]: tester contra `printf`, revisión del Makefile, gdb y cómo se ve cada error típico.
+> 4. **Esta nota**: el resumen del proyecto, para repasar.
 
 ## Qué se pide
 
@@ -51,7 +57,7 @@ Lo habitual en el bonus:
 Ejemplos de lo que hacen en [[printf#Ancho, precisión y banderas]].
 
 > [!tip] Haz el bonus solo si la parte obligatoria es perfecta
-> En 42 el bonus solo se evalúa si la parte obligatoria está **perfecta**. Si tu diseño no está pensado para banderas desde el principio, añadirlas después cuesta mucho. Decide antes de empezar si vas a por el bonus.
+> En 42 el bonus solo se evalúa si la parte obligatoria está **perfecta**. Si tu diseño no está pensado para banderas desde el principio, añadirlas después cuesta mucho. Decide antes de empezar si vas a por el bonus. El diseño que lo permite está en [[ft_printf - Guía paso a paso#2. El enfoque ingenuo y por qué se rompe con el bonus|la guía]].
 
 ## Conceptos que necesitas
 
@@ -70,6 +76,9 @@ Ejemplos de lo que hacen en [[printf#Ancho, precisión y banderas]].
 Funciones de libft que reutilizarás: [[ft_putchar_fd]], [[ft_putstr_fd]], [[ft_strlen]] y la idea de [[ft_putnbr_fd]] (pero ojo: esas no devuelven cuántos caracteres han escrito, y tú lo necesitas).
 
 ## Cómo organizar el código
+
+> [!note] Esta sección es el diseño solo para la obligatoria
+> Aquí cada conversión escribe directamente y devuelve cuántos caracteres ha escrito. Es lo más sencillo si **no** vas a hacer el bonus. Si vas a hacerlo, sigue el diseño de [[ft_printf - Guía paso a paso]]: las conversiones preparan las piezas y una sola función (`ft_out_field`) las escribe con ancho, `-` y `0`.
 
 Idea general: recorres `format` carácter a carácter. Si no es `%`, lo escribes. Si es `%`, miras la letra siguiente y llamas a la función que toca. **Cada función devuelve cuántos caracteres ha escrito** (o `-1` si falló `write`), y el bucle principal los va sumando.
 
@@ -272,7 +281,7 @@ Herramientas útiles:
 7. Añade `%p` con el caso `NULL`.
 8. Comprueba el `-1` de `write` en todas las funciones.
 9. Pasa norminette, valgrind y los testers.
-10. Bonus (opcional): diseña una `struct` con las banderas leídas antes de convertir. Ver [[Structs y typedef]].
+10. Bonus (opcional): diseña una `struct` con las banderas leídas antes de convertir. Ver [[Structs y typedef]]. Si vas a por el bonus, este plan cambia: sigue las etapas de [[ft_printf - Guía paso a paso#8. Construirlo por etapas|la guía]] desde el paso 3.
 
 ## Errores frecuentes que suspenden
 
@@ -309,7 +318,7 @@ Herramientas útiles:
 
 ## Relacionadas
 
-[[printf]] · [[stdarg y funciones variádicas]] · [[Tipos enteros y conversiones]] · [[Recursión]] · [[Makefile y librerías estáticas]] · [[Valgrind y sanitizers]] · [[libft - Índice]] · [[get_next_line - Índice]] · [[Born2beroot - Índice]]
+[[ft_printf - Guía paso a paso]] · [[ft_printf - Funciones auxiliares]] · [[ft_printf - Pruebas y depuración]] · [[printf]] · [[stdarg y funciones variádicas]] · [[Tipos enteros y conversiones]] · [[Recursión]] · [[Makefile y librerías estáticas]] · [[Valgrind y sanitizers]] · [[libft - Índice]] · [[get_next_line - Índice]] · [[Born2beroot - Índice]]
 
 ## Referencias
 

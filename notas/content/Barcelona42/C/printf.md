@@ -152,7 +152,7 @@ Estas banderas solo se piden en el **bonus** de ft_printf.
 
 ## Relacionadas
 
-[[ft_printf - Índice]] · [[stdarg y funciones variádicas]] · [[Tipos enteros y conversiones]] · [[Punteros en C]] · [[Control de errores en C]] · [[ft_putchar_fd]] · [[ft_putstr_fd]] · [[ft_putnbr_fd]] · [[La Norma]]
+[[ft_printf - Índice]] · [[ft_printf - Guía paso a paso]] · [[stdarg y funciones variádicas]] · [[Tipos enteros y conversiones]] · [[Punteros en C]] · [[Control de errores en C]] · [[ft_putchar_fd]] · [[ft_putstr_fd]] · [[ft_putnbr_fd]] · [[La Norma]]
 
 ## Referencias
 

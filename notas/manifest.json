@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-31T11:45:39+01:00",
+ "updated": "2026-11-08T12:50:32+01:00",
  "files": [
   {
    "path": "Barcelona42/2026-10-29.md",
@@ -428,6 +428,18 @@
   {
    "path": "Barcelona42/Cursus/Rank 0/Piscine Reloaded/Piscine Reloaded - Índice.md",
    "name": "Piscine Reloaded - Índice"
+  },
+  {
+   "path": "Barcelona42/Cursus/Rank 1/ft_printf/ft_printf - Funciones auxiliares.md",
+   "name": "ft_printf - Funciones auxiliares"
+  },
+  {
+   "path": "Barcelona42/Cursus/Rank 1/ft_printf/ft_printf - Guía paso a paso.md",
+   "name": "ft_printf - Guía paso a paso"
+  },
+  {
+   "path": "Barcelona42/Cursus/Rank 1/ft_printf/ft_printf - Pruebas y depuración.md",
+   "name": "ft_printf - Pruebas y depuración"
   },
   {
    "path": "Barcelona42/Cursus/Rank 1/ft_printf/ft_printf - Índice.md",
