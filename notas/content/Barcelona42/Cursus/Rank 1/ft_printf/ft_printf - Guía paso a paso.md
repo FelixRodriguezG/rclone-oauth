@@ -109,13 +109,101 @@ Fíjate en la última fila: **la parte obligatoria es el caso en que no hay band
 > [!example] La analogía de la caja de envío
 > El **cuerpo** es lo que envías (los dígitos). El **prefijo** es la etiqueta pegada encima (`-`, `0x`). Los **ceros** son relleno de protección que va *dentro* de la caja, pegado al contenido. El **ancho** es el tamaño de la caja. Los **espacios** son el hueco que sobra en la caja: con `-` el contenido se empuja a la izquierda y el hueco queda a la derecha; sin `-`, al revés. Y con la bandera `0`, en vez de dejar hueco lo rellenas todo de protección.
 
-Las dos únicas cuentas del proyecto:
+### Las dos únicas cuentas del proyecto
 
 ```text
 ceros    = precisión - longitud del cuerpo           (si sale positivo; solo números)
 espacios = ancho - (prefijo + ceros + cuerpo)        (si sale positivo)
 con bandera 0 (y sin '-' ni precisión): los espacios se convierten en ceros
 ```
+
+Estas tres líneas deciden **cuántos ceros y cuántos espacios** rodean al dato. Explicadas con `-42`:
+
+**Las piezas.** `-42` se divide en **prefijo** `-` (1 carácter) y **cuerpo** `42` (las cifras, 2 caracteres). El formato aporta dos números que se parecen pero no son lo mismo:
+
+| | Ejemplo | Cuenta… | Rellena con… |
+|---|---|---|---|
+| **ancho** | `%8d` → 8 | el campo **entero** (prefijo + ceros + cuerpo) | espacios |
+| **precisión** | `%.5d` → 5 | solo las **cifras** del cuerpo | ceros |
+
+Los dos son **mínimos**: dicen «al menos», nunca recortan un número.
+
+#### Cuenta 1: los ceros salen de la precisión
+
+```text
+ceros = precisión - longitud del cuerpo
+```
+
+«Quiero al menos 5 cifras y tengo 2: faltan 3 ceros». `%.5d` con `-42` → ceros = 5 - 2 = **3** → `-00042`. Los ceros van **entre el prefijo y el cuerpo**, nunca delante del signo.
+
+#### Cuenta 2: los espacios salen del ancho
+
+```text
+espacios = ancho - (prefijo + ceros + cuerpo)
+```
+
+«El campo debe medir 8: cuento lo que ya tengo (signo, ceros y cifras) y lo que falta son espacios». **El orden importa:** primero se calculan los ceros, porque también ocupan sitio.
+
+`%8.5d` con `-42`:
+
+```text
+1. ceros    = 5 - 2           = 3
+2. espacios = 8 - (1 + 3 + 2) = 2
+3. "  " + "-" + "000" + "42"  → [  -00042]
+```
+
+#### «Si sale positivo»
+
+Si una resta da negativa, no falta nada y se toma como `0`:
+
+- `%3d` con `12345`: espacios = 3 - 5 = -2 → **0** → `[12345]`. El ancho no recorta.
+- `%d`, sin ancho: ancho 0, así que espacios = 0 - 3 → **0**. Por eso la parte obligatoria usa las mismas cuentas sin enterarse: nunca sale nada que rellenar.
+
+#### Regla 3: la bandera `0`
+
+Con `%08d`, el hueco que serían espacios se llena con **ceros**, y esos ceros también van **detrás del signo**:
+
+```text
+%08d con -42:
+1. ceros    = 0                (no hay precisión)
+2. espacios = 8 - (1 + 0 + 2) = 5
+3. bandera 0 → los 5 espacios pasan a ser ceros: ceros = 5, espacios = 0
+4. "-" + "00000" + "42"        → [-0000042]
+```
+
+Hay dos casos en que la bandera `0` **se ignora**:
+
+- **Con `-`** (`%-08d`): `-` pone los espacios a la **derecha**, y ceros a la derecha del número cambiarían su valor. Gana `-` → `[-42     ]`.
+- **Con precisión** (`%08.3d`): con `.3` ya has dicho cuántos ceros quieres, así que el `0` se ignora:
+  ```text
+  1. ceros    = 3 - 2           = 1
+  2. espacios = 8 - (1 + 1 + 2) = 4
+  3. hay precisión → se quedan como espacios → [    -042]
+  ```
+
+#### Todos los casos juntos
+
+Valor `-42` salvo donde se indica. Salidas reales de `printf`:
+
+| Formato | prefijo | cuerpo | ceros | espacios | Resultado |
+|---|---|---|---|---|---|
+| `%8d` | 1 | 2 | 0 | 8 - 3 = 5 | `[     -42]` |
+| `%.5d` con `42` | 0 | 2 | 5 - 2 = 3 | 0 | `[00042]` |
+| `%8.5d` | 1 | 2 | 5 - 2 = 3 | 8 - 6 = 2 | `[  -00042]` |
+| `%08d` | 1 | 2 | 0 → **5** | 5 → **0** | `[-0000042]` |
+| `%08.3d` | 1 | 2 | 3 - 2 = 1 | 8 - 4 = 4 (el `0` se ignora) | `[    -042]` |
+| `%-08d` | 1 | 2 | 0 | 5, a la derecha (el `0` se ignora) | `[-42     ]` |
+| `%#08x` con `255` | 2 (`0x`) | 2 (`ff`) | 0 → **4** | 4 → **0** | `[0x0000ff]` |
+| `%3d` con `12345` | 0 | 5 | 0 | 3 - 5 < 0 → 0 | `[12345]` |
+
+#### Dónde está cada cuenta en el código
+
+| Cuenta | Función | Cómo |
+|---|---|---|
+| Ceros (cuenta 1) | `ft_print_number` (etapa 5) | `fl.zeros = f->precision - fl.body_len`; si hay precisión, `f->zero = 0` |
+| Espacios (cuenta 2) | `ft_out_field` (etapa 2) | `pad = f->width - prefix_len - fl->zeros - fl->body_len` |
+| Bandera `0` (regla 3) | `ft_out_field` (etapa 2) | si `f->zero`, el `pad` se suma a `zeros` y `pad = 0` |
+| `-` gana a `0` | `ft_set_flags` bonus (etapa 7) | si `minus`, `zero = 0` |
 
 ## 4. Tres estructuras
 
