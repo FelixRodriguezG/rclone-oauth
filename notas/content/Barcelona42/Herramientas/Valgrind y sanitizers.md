@@ -373,7 +373,7 @@ $ valgrind -q --track-fds=yes ./fds
 
 - **`4 open (3 std)`**: al salir había 4 fds abiertos, de los cuales 3 son los estándar (`0`, `1`, `2`), que es normal. El que sobra es el que te dice debajo.
 - Te da **el fichero** (`segv.c`) y **la línea del `open`** (`fds.c:10`).
-- Es **imprescindible en pipex y minishell**, donde cada `pipe` y cada `dup2` crean fds que hay que cerrar. Un fd de una tubería que no se cierra puede hacer que un programa se quede **colgado** esperando un final de fichero que nunca llega (ver [[Descriptores de fichero y read]]).
+- Es **imprescindible en cualquier programa que use `pipe` o `dup2`**: cada uno crea fds que hay que cerrar. Un fd de una tubería que no se cierra puede hacer que un programa se quede **colgado** esperando un final de fichero que nunca llega (ver [[Descriptores de fichero y read]]).
 
 > [!warning] fds heredados de la terminal
 > Según desde dónde lances el programa (algunos editores, `script`, tmux), puede aparecer algún fd abierto que **no es tuyo**, heredado del proceso padre. Para saber si es tuyo, mira si tiene una pila con un `open` o `pipe` de tu código. Si dice `<inherited from parent>`, no es tuyo.

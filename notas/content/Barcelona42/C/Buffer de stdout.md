@@ -119,7 +119,7 @@ $ ./exit x
 $
 ```
 
-`_exit` es la llamada al sistema directa: termina sin pasar por `<stdio.h>`. Te lo encontrarás en `pipex` y `minishell`, donde tras un `fork` el hijo debe salir con `_exit` para no escribir dos veces lo que había en el buffer del padre.
+`_exit` es la llamada al sistema directa: termina sin pasar por `<stdio.h>`. Te lo encontrarás en cualquier programa que cree procesos con `fork`: el hijo debe salir con `_exit` para no escribir dos veces lo que había en el buffer del padre.
 
 ## Cómo controlarlo
 
@@ -144,7 +144,7 @@ $ ./nobuf | cat
 - **ft_printf**: el subject dice que **no** hay que implementar el buffer de `printf`. Tu `ft_printf` escribe con `write` al momento, así que si lo comparas con `printf` en el mismo programa la salida sale desordenada. No es un fallo tuyo: usa `fflush(stdout)` tras cada `printf` o compara en ficheros separados (ver [[ft_printf - Pruebas y depuración#2. No mezcles printf y ft_printf en la terminal]]).
 - **get_next_line**: la idea es la misma, pero al leer. `read` trae bloques de `BUFFER_SIZE` y tú guardas lo que sobra (ver [[get_next_line - Guía paso a paso]]).
 - **Depurar con `printf`**: un mensaje sin `'\n'` antes de un crash no sale nunca.
-- **`fork`** (pipex, minishell): si haces `printf` sin vaciar y luego `fork`, el hijo hereda **una copia del buffer** y el texto puede salir dos veces.
+- **`fork`** (cuando un programa crea procesos): si haces `printf` sin vaciar y luego `fork`, el hijo hereda **una copia del buffer** y el texto puede salir dos veces.
 
 ## Errores frecuentes
 
