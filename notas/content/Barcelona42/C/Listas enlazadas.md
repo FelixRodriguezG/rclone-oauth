@@ -258,7 +258,7 @@ Si te olvidas del paso 3, los testers que simulan fallos de `malloc` detectarán
 
 ## Listas en los proyectos
 
-- **[[push_swap - Índice|push_swap]]**: las pilas `a` y `b` suelen implementarse como listas (a veces doblemente enlazadas, con `prev`). `sa`, `pa`, `ra` y `rra` son manipulaciones de punteros de la cabeza y el último nodo.
+- **[[push_swap - Índice|push_swap]]**: las pilas `a` y `b` suelen implementarse como listas (a veces doblemente enlazadas, con `prev`: ver [[Listas doblemente enlazadas]]). `sa`, `pa`, `ra` y `rra` son manipulaciones de punteros de la cabeza y el último nodo.
 - **[[get_next_line - Índice|get_next_line]]**: algunas soluciones guardan los trozos leídos en una lista.
 - **Leer un fichero entero**: guardar en una lista las líneas que devuelve get_next_line cuando aún no sabes cuántas hay.
 

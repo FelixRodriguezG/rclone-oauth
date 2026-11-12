@@ -1,6 +1,6 @@
 ---
 tags: [c, algoritmos, ordenacion, complejidad, push-swap]
-aliases: ["Notación O grande", "Big O", "Algoritmos de ordenación"]
+aliases: ["Algoritmos de ordenación"]
 ---
 # Algoritmos de ordenación y complejidad
 
@@ -20,6 +20,9 @@ aliases: ["Notación O grande", "Big O", "Algoritmos de ordenación"]
 | **In situ** (*in place*) | Ordena dentro del mismo array, sin otro array del mismo tamaño |
 
 ## La notación O grande, sin fórmulas
+
+> [!info] Nota propia
+> Esta sección es un resumen. La explicación completa (O, Ω y Θ, O(n√n), cómo se mide en push_swap y la cota mínima de n log n) está en [[Notación Big-O]].
 
 La idea: no importa si tu algoritmo hace `3n + 5` o `n` operaciones; lo que importa es **qué pasa al duplicar `n`**. Por eso se quedan solo con el término que más crece y se quitan las constantes: `3n + 5` es **O(n)**, `n²/2 + n` es **O(n²)**.
 
@@ -275,7 +278,7 @@ Es correcto y sencillo, pero no óptimo: hace n operaciones por cada bit, se nec
 
 ## Relacionadas
 
-[[Recursión]] · [[Operadores de bits]] · [[Listas enlazadas]] · [[Arrays en C]] · [[Tipos enteros y conversiones]] · [[ft_atoi]] · [[push_swap - Índice|push_swap]] · [[Exam Rank 02]]
+[[Notación Big-O]] · [[push_swap - Estrategias]] · [[Recursión]] · [[Operadores de bits]] · [[Listas enlazadas]] · [[Arrays en C]] · [[Tipos enteros y conversiones]] · [[ft_atoi]] · [[push_swap - Índice|push_swap]] · [[Exam Rank 02]]
 
 ## Referencias
 

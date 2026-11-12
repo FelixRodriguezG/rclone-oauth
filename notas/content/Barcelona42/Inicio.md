@@ -20,7 +20,7 @@ Todo lo de 42 está en la carpeta `Cursus/`: un subdirectorio por rank (`Rank 0`
 | 0 | **libft** | C | [[libft - Índice\|Índice de funciones]] · [[libft - Anexo comparativo\|Comparativa por uso]] · [[libft - Edge cases y tests por función\|Tests por función]] · [[libft - Diagramas de flujo\|Diagramas de flujo]] |
 | 1 | **ft_printf** | C | [[ft_printf - Índice]] |
 | 1 | **get_next_line** | C | [[get_next_line - Índice\|Índice]] · [[get_next_line - Guía paso a paso\|Guía paso a paso]] · [[get_next_line - Funciones auxiliares\|Funciones auxiliares]] · [[get_next_line - Pruebas y depuración\|Pruebas]] |
-| 1 | **push_swap** | C | [[push_swap - Índice]] |
+| 1 | **push_swap** | C | [[push_swap - Índice\|Índice]] · [[push_swap - Índice de desorden\|Desorden]] · [[push_swap - Estrategias\|Estrategias]] · [[push_swap - Catálogo de algoritmos\|Algoritmos]] · [[push_swap - Guía paso a paso\|Guía]] · [[push_swap - Pruebas y depuración\|Pruebas]] · [[push_swap - checker (bonus)\|Checker]] · [[push_swap - Defensa y evaluación\|Defensa]] |
 | 2 | **Born2beroot** | Sistemas (Debian/Rocky) | [[Born2beroot - Índice]] |
 | 2 | **Python Modules 00–10** | Python | [[Python - Índice]] |
 | 2 | **A-Maze-ing** | Python | [[A-Maze-ing - Índice]] |
@@ -44,8 +44,16 @@ Todo lo de 42 está en la carpeta `Cursus/`: un subdirectorio por rank (`Rank 0`
 - [[Tipos enteros y conversiones]]: `signed`/`unsigned`, `size_t`, límites, promociones y overflow.
 - [[Structs y typedef]]: `struct`, `typedef`, `.` vs `->` y `t_list`.
 - [[Listas enlazadas]]: nodos, recorrer, añadir y liberar sin leaks.
+- [[Listas doblemente enlazadas]]: `prev`/`next`, listas circulares y rotar en O(1).
+- [[Pilas y colas]]: LIFO y FIFO, y por qué las pilas de push_swap son anillos.
+- [[Array circular]]: rotar moviendo un índice con `%`.
 - [[Recursión]]: caso base, pila de llamadas, `ft_putnbr_fd` y flood fill.
 - [[Operadores de bits]]: `&`, `|`, `^`, `~`, desplazamientos y máscaras.
+- [[argc y argv]]: argumentos de `main`, flags y lo que hace la shell antes (bash frente a zsh).
+- [[enum en C]]: constantes con nombre, `OP_COUNT` y arrays indexados por `enum`.
+- [[División entera y módulo]]: truncar, signo del resto, dar la vuelta con `%` y redondear hacia arriba.
+- [[Decimales con enteros]]: porcentajes con dos decimales sin `float` (punto fijo).
+- [[Tablas de punteros a función]]: del texto `"rra"` a la función, sin cadenas de `if`.
 
 ### Memoria y errores
 
@@ -68,7 +76,8 @@ Todo lo de 42 está en la carpeta `Cursus/`: un subdirectorio por rank (`Rank 0`
 
 ### Algoritmos
 
-- [[Algoritmos de ordenación y complejidad]]: notación O grande, ordenaciones clásicas y radix (push_swap).
+- [[Notación Big-O]]: O, Ω y Θ, O(n√n), contar operaciones en vez de tiempo y la cota mínima de n log n.
+- [[Algoritmos de ordenación y complejidad]]: ordenaciones clásicas medidas y radix (push_swap).
 
 ## Herramientas
 

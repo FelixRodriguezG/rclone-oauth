@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-12T08:14:50+01:00",
+ "updated": "2026-11-12T19:43:50+01:00",
  "files": [
   {
    "path": "Barcelona42/2026-10-29.md",
@@ -86,6 +86,14 @@
    "name": "Algoritmos de ordenación y complejidad"
   },
   {
+   "path": "Barcelona42/C/argc y argv.md",
+   "name": "argc y argv"
+  },
+  {
+   "path": "Barcelona42/C/Array circular.md",
+   "name": "Array circular"
+  },
+  {
    "path": "Barcelona42/C/Arrays en C.md",
    "name": "Arrays en C"
   },
@@ -110,8 +118,24 @@
    "name": "Control de errores en C"
   },
   {
+   "path": "Barcelona42/C/Decimales con enteros.md",
+   "name": "Decimales con enteros"
+  },
+  {
    "path": "Barcelona42/C/Descriptores de fichero y read.md",
    "name": "Descriptores de fichero y read"
+  },
+  {
+   "path": "Barcelona42/C/División entera y módulo.md",
+   "name": "División entera y módulo"
+  },
+  {
+   "path": "Barcelona42/C/enum en C.md",
+   "name": "enum en C"
+  },
+  {
+   "path": "Barcelona42/C/Listas doblemente enlazadas.md",
+   "name": "Listas doblemente enlazadas"
   },
   {
    "path": "Barcelona42/C/Listas enlazadas.md",
@@ -122,12 +146,20 @@
    "name": "malloc y free"
   },
   {
+   "path": "Barcelona42/C/Notación Big-O.md",
+   "name": "Notación Big-O"
+  },
+  {
    "path": "Barcelona42/C/Operadores de bits.md",
    "name": "Operadores de bits"
   },
   {
    "path": "Barcelona42/C/Padding y alineación de memoria.md",
    "name": "Padding y alineación de memoria"
+  },
+  {
+   "path": "Barcelona42/C/Pilas y colas.md",
+   "name": "Pilas y colas"
   },
   {
    "path": "Barcelona42/C/Preprocesador y headers.md",
@@ -160,6 +192,10 @@
   {
    "path": "Barcelona42/C/Structs y typedef.md",
    "name": "Structs y typedef"
+  },
+  {
+   "path": "Barcelona42/C/Tablas de punteros a función.md",
+   "name": "Tablas de punteros a función"
   },
   {
    "path": "Barcelona42/C/Tipos enteros y conversiones.md",
@@ -480,6 +516,102 @@
   {
    "path": "Barcelona42/Cursus/Rank 1/get_next_line/get_next_line - Índice.md",
    "name": "get_next_line - Índice"
+  },
+  {
+   "path": "Barcelona42/Cursus/Rank 1/push_swap/Algoritmos/push_swap - Algoritmo de coste (turco).md",
+   "name": "push_swap - Algoritmo de coste (turco)"
+  },
+  {
+   "path": "Barcelona42/Cursus/Rank 1/push_swap/Algoritmos/push_swap - Buckets.md",
+   "name": "push_swap - Buckets"
+  },
+  {
+   "path": "Barcelona42/Cursus/Rank 1/push_swap/Algoritmos/push_swap - Burbuja.md",
+   "name": "push_swap - Burbuja"
+  },
+  {
+   "path": "Barcelona42/Cursus/Rank 1/push_swap/Algoritmos/push_swap - Búsqueda óptima (BFS).md",
+   "name": "push_swap - Búsqueda óptima (BFS)"
+  },
+  {
+   "path": "Barcelona42/Cursus/Rank 1/push_swap/Algoritmos/push_swap - Catálogo de algoritmos.md",
+   "name": "push_swap - Catálogo de algoritmos"
+  },
+  {
+   "path": "Barcelona42/Cursus/Rank 1/push_swap/Algoritmos/push_swap - Chunks.md",
+   "name": "push_swap - Chunks"
+  },
+  {
+   "path": "Barcelona42/Cursus/Rank 1/push_swap/Algoritmos/push_swap - Extracción de mínimo y máximo.md",
+   "name": "push_swap - Extracción de mínimo y máximo"
+  },
+  {
+   "path": "Barcelona42/Cursus/Rank 1/push_swap/Algoritmos/push_swap - Heap sort.md",
+   "name": "push_swap - Heap sort"
+  },
+  {
+   "path": "Barcelona42/Cursus/Rank 1/push_swap/Algoritmos/push_swap - Inserción.md",
+   "name": "push_swap - Inserción"
+  },
+  {
+   "path": "Barcelona42/Cursus/Rank 1/push_swap/Algoritmos/push_swap - LIS.md",
+   "name": "push_swap - LIS"
+  },
+  {
+   "path": "Barcelona42/Cursus/Rank 1/push_swap/Algoritmos/push_swap - Merge sort.md",
+   "name": "push_swap - Merge sort"
+  },
+  {
+   "path": "Barcelona42/Cursus/Rank 1/push_swap/Algoritmos/push_swap - Partición por bloques.md",
+   "name": "push_swap - Partición por bloques"
+  },
+  {
+   "path": "Barcelona42/Cursus/Rank 1/push_swap/Algoritmos/push_swap - Quicksort.md",
+   "name": "push_swap - Quicksort"
+  },
+  {
+   "path": "Barcelona42/Cursus/Rank 1/push_swap/Algoritmos/push_swap - Radix LSD.md",
+   "name": "push_swap - Radix LSD"
+  },
+  {
+   "path": "Barcelona42/Cursus/Rank 1/push_swap/Algoritmos/push_swap - Radix MSD.md",
+   "name": "push_swap - Radix MSD"
+  },
+  {
+   "path": "Barcelona42/Cursus/Rank 1/push_swap/Algoritmos/push_swap - Rangos (butterfly).md",
+   "name": "push_swap - Rangos (butterfly)"
+  },
+  {
+   "path": "Barcelona42/Cursus/Rank 1/push_swap/Algoritmos/push_swap - Selección.md",
+   "name": "push_swap - Selección"
+  },
+  {
+   "path": "Barcelona42/Cursus/Rank 1/push_swap/Algoritmos/push_swap - Árbol binario indexado.md",
+   "name": "push_swap - Árbol binario indexado"
+  },
+  {
+   "path": "Barcelona42/Cursus/Rank 1/push_swap/push_swap - checker (bonus).md",
+   "name": "push_swap - checker (bonus)"
+  },
+  {
+   "path": "Barcelona42/Cursus/Rank 1/push_swap/push_swap - Defensa y evaluación.md",
+   "name": "push_swap - Defensa y evaluación"
+  },
+  {
+   "path": "Barcelona42/Cursus/Rank 1/push_swap/push_swap - Estrategias.md",
+   "name": "push_swap - Estrategias"
+  },
+  {
+   "path": "Barcelona42/Cursus/Rank 1/push_swap/push_swap - Guía paso a paso.md",
+   "name": "push_swap - Guía paso a paso"
+  },
+  {
+   "path": "Barcelona42/Cursus/Rank 1/push_swap/push_swap - Pruebas y depuración.md",
+   "name": "push_swap - Pruebas y depuración"
+  },
+  {
+   "path": "Barcelona42/Cursus/Rank 1/push_swap/push_swap - Índice de desorden.md",
+   "name": "push_swap - Índice de desorden"
   },
   {
    "path": "Barcelona42/Cursus/Rank 1/push_swap/push_swap - Índice.md",
