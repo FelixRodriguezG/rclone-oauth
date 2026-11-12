@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-12T08:08:31+01:00",
+ "updated": "2026-11-12T08:14:50+01:00",
  "files": [
   {
    "path": "Barcelona42/2026-10-29.md",
@@ -776,6 +776,82 @@
   {
    "path": "Hackathon NASA/17 - Propuestas pendientes.md",
    "name": "17 - Propuestas pendientes"
+  },
+  {
+   "path": "Hackathon NASA/Diseños/Claude/Claude - Diseño Fase 1.md",
+   "name": "Claude - Diseño Fase 1"
+  },
+  {
+   "path": "Hackathon NASA/Diseños/Claude/claude-1-dashboard.png",
+   "name": "claude-1-dashboard.png"
+  },
+  {
+   "path": "Hackathon NASA/Diseños/Claude/claude-2-medir.png",
+   "name": "claude-2-medir.png"
+  },
+  {
+   "path": "Hackathon NASA/Diseños/Claude/claude-3-resultado-critico.png",
+   "name": "claude-3-resultado-critico.png"
+  },
+  {
+   "path": "Hackathon NASA/Diseños/Claude/claude-4-detalle-indicador.png",
+   "name": "claude-4-detalle-indicador.png"
+  },
+  {
+   "path": "Hackathon NASA/Diseños/Diseños - Índice.md",
+   "name": "Diseños - Índice"
+  },
+  {
+   "path": "Hackathon NASA/Diseños/Stitch/Stitch - Guía de estilo.md",
+   "name": "Stitch - Guía de estilo"
+  },
+  {
+   "path": "Hackathon NASA/Diseños/Stitch/Stitch - Pantallas.md",
+   "name": "Stitch - Pantallas"
+  },
+  {
+   "path": "Hackathon NASA/Diseños/Stitch/stitch-01-dashboard.png",
+   "name": "stitch-01-dashboard.png"
+  },
+  {
+   "path": "Hackathon NASA/Diseños/Stitch/stitch-02-medir-paso-1.png",
+   "name": "stitch-02-medir-paso-1.png"
+  },
+  {
+   "path": "Hackathon NASA/Diseños/Stitch/stitch-03-medir-paso-2.png",
+   "name": "stitch-03-medir-paso-2.png"
+  },
+  {
+   "path": "Hackathon NASA/Diseños/Stitch/stitch-04-medir-paso-3.png",
+   "name": "stitch-04-medir-paso-3.png"
+  },
+  {
+   "path": "Hackathon NASA/Diseños/Stitch/stitch-05-resultado-critico.png",
+   "name": "stitch-05-resultado-critico.png"
+  },
+  {
+   "path": "Hackathon NASA/Diseños/Stitch/stitch-06-detalle-frecuencia-cardiaca.png",
+   "name": "stitch-06-detalle-frecuencia-cardiaca.png"
+  },
+  {
+   "path": "Hackathon NASA/Diseños/Stitch/stitch-07-bienestar.png",
+   "name": "stitch-07-bienestar.png"
+  },
+  {
+   "path": "Hackathon NASA/Diseños/Stitch/stitch-08-canal-general-1.png",
+   "name": "stitch-08-canal-general-1.png"
+  },
+  {
+   "path": "Hackathon NASA/Diseños/Stitch/stitch-09-canal-general-2.png",
+   "name": "stitch-09-canal-general-2.png"
+  },
+  {
+   "path": "Hackathon NASA/Diseños/Stitch/stitch-10-control-tripulacion.png",
+   "name": "stitch-10-control-tripulacion.png"
+  },
+  {
+   "path": "Hackathon NASA/Diseños/Stitch/stitch-11-control-detalle-tripulante.png",
+   "name": "stitch-11-control-detalle-tripulante.png"
   }
  ]
 }
