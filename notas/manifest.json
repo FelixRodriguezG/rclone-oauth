@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-08T19:19:13+01:00",
+ "updated": "2026-11-12T08:08:31+01:00",
  "files": [
   {
    "path": "Barcelona42/2026-10-29.md",
@@ -700,6 +700,82 @@
   {
    "path": "Barcelona42/TUI/Unicode y emojis en la terminal.md",
    "name": "Unicode y emojis en la terminal"
+  },
+  {
+   "path": "Hackathon NASA/00 - Empieza aquí.md",
+   "name": "00 - Empieza aquí"
+  },
+  {
+   "path": "Hackathon NASA/00 - Resumen en 5 minutos.md",
+   "name": "00 - Resumen en 5 minutos"
+  },
+  {
+   "path": "Hackathon NASA/01 - Visión y alcance.md",
+   "name": "01 - Visión y alcance"
+  },
+  {
+   "path": "Hackathon NASA/02 - Requisitos.md",
+   "name": "02 - Requisitos"
+  },
+  {
+   "path": "Hackathon NASA/03 - Arquitectura y stack.md",
+   "name": "03 - Arquitectura y stack"
+  },
+  {
+   "path": "Hackathon NASA/04 - Modelo de datos.md",
+   "name": "04 - Modelo de datos"
+  },
+  {
+   "path": "Hackathon NASA/05 - Contrato API.md",
+   "name": "05 - Contrato API"
+  },
+  {
+   "path": "Hackathon NASA/06 - Escenarios y reglas de salud.md",
+   "name": "06 - Escenarios y reglas de salud"
+  },
+  {
+   "path": "Hackathon NASA/07 - Equipo y roles.md",
+   "name": "07 - Equipo y roles"
+  },
+  {
+   "path": "Hackathon NASA/08 - Fases y cronograma.md",
+   "name": "08 - Fases y cronograma"
+  },
+  {
+   "path": "Hackathon NASA/09 - Backlog.md",
+   "name": "09 - Backlog"
+  },
+  {
+   "path": "Hackathon NASA/10 - Riesgos y plan de rescate.md",
+   "name": "10 - Riesgos y plan de rescate"
+  },
+  {
+   "path": "Hackathon NASA/11 - Pitch y entrega.md",
+   "name": "11 - Pitch y entrega"
+  },
+  {
+   "path": "Hackathon NASA/12 - Convenciones de trabajo.md",
+   "name": "12 - Convenciones de trabajo"
+  },
+  {
+   "path": "Hackathon NASA/13 - Registro de decisiones.md",
+   "name": "13 - Registro de decisiones"
+  },
+  {
+   "path": "Hackathon NASA/14 - Diseño de la app.md",
+   "name": "14 - Diseño de la app"
+  },
+  {
+   "path": "Hackathon NASA/15 - Indicadores y umbrales.md",
+   "name": "15 - Indicadores y umbrales"
+  },
+  {
+   "path": "Hackathon NASA/16 - Uso de IA.md",
+   "name": "16 - Uso de IA"
+  },
+  {
+   "path": "Hackathon NASA/17 - Propuestas pendientes.md",
+   "name": "17 - Propuestas pendientes"
   }
  ]
 }
